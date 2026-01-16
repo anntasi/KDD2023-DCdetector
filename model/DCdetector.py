@@ -5,7 +5,15 @@ from einops import rearrange
 from .attn import DAC_structure, AttentionLayer
 from .embed import DataEmbedding, TokenEmbedding
 from .RevIN import RevIN
-from tkinter import _flatten
+#from tkinter import _flatten
+# English comment: Local replacement for tkinter._flatten to avoid GUI dependency.
+def _flatten(seq):
+    for item in seq:
+        if isinstance(item, (list, tuple)):
+            for sub in _flatten(item):
+                yield sub
+        else:
+            yield item
 
 
 class Encoder(nn.Module):

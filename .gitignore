@@ -1,0 +1,40 @@
+# generated / local runs
+checkpoints/
+result/
+dataset/
+# Byte-compiled / cache
+__pycache__/
+*.py[cod]
+*$py.class
+*.pyc
+# Virtual env
+.venv/
+venv/
+env/
+
+# Packages / build
+dist/
+build/
+*.egg-info/
+.eggs/
+
+# Testing / coverage
+.pytest_cache/
+.coverage
+coverage.xml
+htmlcov/
+
+# Tooling
+.mypy_cache/
+.pyre/
+.ruff_cache/
+.cache/
+
+# Editor / OS
+.vscode/
+.idea/
+.DS_Store
+
+# Env / secrets
+.env
+.env.*

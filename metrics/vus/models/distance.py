@@ -5,7 +5,7 @@
 import numpy as np
 # import matplotlib.pyplot as plt
 # import random
-from arch import arch_model
+#from arch import arch_model
 # import pandas as pd
 import math
 # import pmdarima as pm
@@ -15,6 +15,11 @@ import math
 # import statistics
 # from sklearn import metrics
 # import sklearn
+# English comment: Optional dependency for econometric baselines.
+try:
+    import arch
+except ImportError:
+    arch = None
 
 
 class Euclidean:

@@ -120,7 +120,7 @@ class Solver(object):
 
             loss_1.append((prior_loss - series_loss).item())
 
-        return np.average(loss_1), np.average(loss_2)
+        return np.average(loss_1), np.average(loss_1)   #原return np.average(loss_1), np.average(loss_2)
 
 
     def train(self):
@@ -187,8 +187,86 @@ class Solver(object):
                 break
             adjust_learning_rate(self.optimizer, epoch + 1, self.lr)
 
-            
+    def test_tns(self):
+        self.model.load_state_dict(
+            torch.load(os.path.join(str(self.model_save_path), str(self.data_path) + '_checkpoint.pth'),
+                    map_location=self.device)
+        )
+        self.model.eval()
+        temperature = 50
+
+        loader = self.thre_loader  # shuffle=False (by your loader), good for deterministic order
+        ds = loader.dataset        # TNSSegLoader
+
+        # ds.N is total PDU count in pdu_features.npy (after drop column)
+        N = ds.N
+        pdu_sum = np.zeros(N, dtype=np.float64)
+        pdu_cnt = np.zeros(N, dtype=np.int64)
+
+        sample_cursor = 0  # index over ds.win_index
+
+        with torch.no_grad():
+            for i, (input_data, _) in enumerate(loader):
+                input = input_data.float().to(self.device)
+                series, prior = self.model(input)
+
+                series_loss = 0.0
+                prior_loss = 0.0
+                for u in range(len(prior)):
+                    norm_prior = prior[u] / torch.unsqueeze(torch.sum(prior[u], dim=-1), dim=-1).repeat(1, 1, 1, self.win_size)
+                    if u == 0:
+                        series_loss = my_kl_loss(series[u], norm_prior.detach()) * temperature
+                        prior_loss  = my_kl_loss(norm_prior, series[u].detach()) * temperature
+                    else:
+                        series_loss += my_kl_loss(series[u], norm_prior.detach()) * temperature
+                        prior_loss  += my_kl_loss(norm_prior, series[u].detach()) * temperature
+
+                # metric: [B, win_size]
+                metric = torch.softmax((-series_loss - prior_loss), dim=-1)
+                scores = metric.detach().cpu().numpy()  # shape (B, win_size)
+
+                B = scores.shape[0]
+                for b in range(B):
+                    # Use dataset ordering to map this sample back to meta_row_indices
+                    cid, start = ds.win_index[sample_cursor]
+                    rows = ds.sessions[cid][start:start + self.win_size]  # list of meta_row_indices length win_size
+
+                    # Accumulate per-position score to each PDU row
+                    for j, r in enumerate(rows):
+                        pdu_sum[r] += float(scores[b, j])
+                        pdu_cnt[r] += 1
+
+                    sample_cursor += 1
+
+        pdu_scores = pdu_sum / np.maximum(pdu_cnt, 1)
+
+        # Session-level aggregation (max)
+        session_scores = {}
+        for cid, rows in ds.sessions.items():
+            if len(rows) == 0:
+                continue
+            session_scores[cid] = float(np.max(pdu_scores[np.array(rows, dtype=np.int64)]))
+
+        # Save outputs
+        out_dir = os.path.join("result", "TNS")
+        os.makedirs(out_dir, exist_ok=True)
+        np.save(os.path.join(out_dir, "pdu_scores.npy"), pdu_scores)
+
+        import csv
+        with open(os.path.join(out_dir, "session_scores.csv"), "w", newline="") as f:
+            w = csv.writer(f)
+            w.writerow(["conn_id", "score_max"])
+            for cid, s in session_scores.items():
+                w.writerow([cid, s])
+
+        print(f"[TNS] Saved: {os.path.join(out_dir, 'pdu_scores.npy')}")
+        print(f"[TNS] Saved: {os.path.join(out_dir, 'session_scores.csv')}")
+        return pdu_scores, session_scores
+        
     def test(self):
+        if self.dataset == 'TNS':
+            return self.test_tns()
+
         self.model.load_state_dict(
             torch.load(
                 os.path.join(str(self.model_save_path), str(self.data_path) + '_checkpoint.pth')))
