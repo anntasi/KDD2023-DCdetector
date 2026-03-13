@@ -7,7 +7,8 @@ from solver import Solver
 import time
 import warnings
 warnings.filterwarnings('ignore')
-
+import matplotlib
+matplotlib.use("Agg")
 import sys
 
 class Logger(object):
@@ -58,10 +59,10 @@ if __name__ == '__main__':
 
     # Alternative
     parser.add_argument('--win_size', type=int, default=100)
-    parser.add_argument('--patch_size', type=list, default=[5])
+    
     parser.add_argument('--lr', type=float, default=1e-4)
     parser.add_argument('--loss_fuc', type=str, default='MSE')
-    parser.add_argument('--n_heads', type=int, default=1)
+    parser.add_argument('--patch_size', nargs='+', type=int, default=[5, 10])
     parser.add_argument('--e_layers', type=int, default=3)
     parser.add_argument('--d_model', type=int, default=256)
     parser.add_argument('--rec_timeseries', action='store_true', default=True)

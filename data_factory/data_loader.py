@@ -499,7 +499,176 @@ class SWATSegLoader(Dataset):
                               index // self.step * self.win_size:index // self.step * self.win_size + self.win_size]), np.float32(
                 self.test_labels[index // self.step * self.win_size:index // self.step * self.win_size + self.win_size])
 
-        
+class TNSSegLoaderV2(Dataset):
+    """
+    Loader for fixed dataset layout:
+
+    expdata/
+        train/
+            session_train.npy
+        test_normal/
+            session_test_normal.npy
+        test_anomaly/
+            session_test_anomaly.npy
+
+    Each .npy file is one session, shape = (T, C).
+    """
+
+    def __init__(self, root_path, win_size, step=1, mode="train", drop_col_idx=None):
+        self.root_path = root_path
+        self.win_size = int(win_size)
+        self.step = int(step)
+        self.mode = str(mode).lower()
+        self.drop_col_idx = drop_col_idx
+
+        valid_modes = {"train", "val", "test", "thre"}
+        if self.mode not in valid_modes:
+            raise ValueError(f"Unsupported mode={self.mode}, expected one of {valid_modes}")
+
+        # -----------------------------
+        # 1. 決定目前 mode 要讀哪些檔案
+        # -----------------------------
+        if self.mode == "train":
+            session_files = [
+                os.path.join(root_path, "train", "session_train.npy")
+            ]
+            session_labels = [0]
+
+        elif self.mode == "val":
+            session_files = [
+                os.path.join(root_path, "test_normal", "session_test_normal.npy")
+            ]
+            session_labels = [0]
+
+        elif self.mode == "thre":
+            session_files = [
+                os.path.join(root_path, "test_normal", "session_test_normal.npy")
+            ]
+            session_labels = [0]
+
+        elif self.mode == "test":
+            session_files = [
+                os.path.join(root_path, "test_normal", "session_test_normal.npy"),
+                os.path.join(root_path, "test_anomaly", "session_test_anomaly.npy"),
+            ]
+            session_labels = [0, 1]
+
+        # 檢查檔案是否存在
+        for fp in session_files:
+            if not os.path.exists(fp):
+                raise FileNotFoundError(f"Missing session file: {fp}")
+
+        # -----------------------------
+        # 2. 用 train session fit scaler
+        # -----------------------------
+        train_fp = os.path.join(root_path, "train", "session_train.npy")
+        if not os.path.exists(train_fp):
+            raise FileNotFoundError(f"Missing training session file: {train_fp}")
+
+        train_arr = np.load(train_fp).astype(np.float32)
+
+        if train_arr.ndim != 2:
+            raise ValueError(f"{train_fp} must be 2D, got shape={train_arr.shape}")
+
+        if self.drop_col_idx is not None:
+            train_arr = np.delete(train_arr, int(self.drop_col_idx), axis=1)
+
+        train_arr = np.nan_to_num(train_arr, nan=0.0, posinf=0.0, neginf=0.0)
+
+        self.scaler = StandardScaler()
+        self.scaler.fit(train_arr)
+
+        # -----------------------------
+        # 3. 載入當前 mode 的 session，並切 windows
+        # -----------------------------
+        self.windows = []
+        self.window_labels = []#widow內的packet的label
+        self.window_packet_indices = []#每個 window 對應的 packet index
+
+        # packet-level evaluation 會用到
+        self.packet_labels_raw = []#packet 的 ground truth label
+        self.selected_packet_mask = []
+
+        global_packet_idx = 0
+
+        for session_fp, session_label in zip(session_files, session_labels):
+            arr = np.load(session_fp).astype(np.float32)
+
+            if arr.ndim != 2:
+                raise ValueError(f"{session_fp} must be 2D, got shape={arr.shape}")
+
+            if self.drop_col_idx is not None:
+                arr = np.delete(arr, int(self.drop_col_idx), axis=1)
+
+            arr = np.nan_to_num(arr, nan=0.0, posinf=0.0, neginf=0.0)
+            arr = self.scaler.transform(arr).astype(np.float32)
+
+            T, D = arr.shape
+
+            # 整個 session 的 packet label 都一樣
+            pkt_labels = np.full((T,), session_label, dtype=np.int64)
+
+            # 先收集 packet-level GT
+            self.packet_labels_raw.extend(pkt_labels.tolist())
+
+            # 這個 session 裡哪些 packet 有被 window 覆蓋到
+            local_mask = np.zeros((T,), dtype=bool)
+
+            if T >= self.win_size:
+                for start in range(0, T - self.win_size + 1, self.step):
+                    x = arr[start:start + self.win_size]          # shape = (win_size, D)
+                    y = pkt_labels[start:start + self.win_size]   # shape = (win_size,)
+
+                    pkt_idx = np.arange(
+                        global_packet_idx + start,
+                        global_packet_idx + start + self.win_size,
+                        dtype=np.int64
+                    )
+
+                    self.windows.append(x)
+                    self.window_labels.append(y.astype(np.float32))
+                    self.window_packet_indices.append(pkt_idx)
+
+                    local_mask[start:start + self.win_size] = True
+
+            self.selected_packet_mask.extend(local_mask.tolist())
+            global_packet_idx += T
+
+        # -----------------------------
+        # 4. 轉成 numpy array
+        # -----------------------------
+        if len(self.windows) == 0:
+            self.windows = np.empty((0, self.win_size, train_arr.shape[1]), dtype=np.float32)
+            self.window_labels = np.empty((0, self.win_size), dtype=np.float32)
+            self.window_packet_indices = np.empty((0, self.win_size), dtype=np.int64)
+        else:
+            self.windows = np.asarray(self.windows, dtype=np.float32)
+            self.window_labels = np.asarray(self.window_labels, dtype=np.float32)
+            self.window_packet_indices = np.asarray(self.window_packet_indices, dtype=np.int64)
+
+        self.packet_labels_raw = np.asarray(self.packet_labels_raw, dtype=np.int64)
+        self.selected_packet_mask = np.asarray(self.selected_packet_mask, dtype=bool)
+
+        print(f"[TNS_V2:{self.mode}] num_windows = {len(self.windows)}")
+        print(f"[TNS_V2:{self.mode}] total_packets = {len(self.packet_labels_raw)}")
+
+        if len(self.windows) > 0:
+            print(f"[TNS_V2:{self.mode}] first window shape = {self.windows[0].shape}")
+
+    def __len__(self):
+        return len(self.windows)
+
+    def __getitem__(self, idx):
+        x = self.windows[idx]
+        y = self.window_labels[idx]
+        pkt_idx = self.window_packet_indices[idx]
+
+        return (
+            x.astype(np.float32),
+            y.astype(np.float32),
+            pkt_idx.astype(np.int64)
+        )
+    
 def get_loader_segment(index, data_path, batch_size, win_size=100, step=100, mode='train', dataset='KDD'):
     if (dataset == 'SMD'):
         dataset = SMDSegLoader(data_path, win_size, 1, mode)
@@ -523,7 +692,14 @@ def get_loader_segment(index, data_path, batch_size, win_size=100, step=100, mod
         dataset = NIPS_TS_CCardSegLoader(data_path, win_size, 1, mode)
     elif (dataset == 'SMD_Ori'):
         dataset = SMD_OriSegLoader(index, data_path, win_size, 1, mode)
-    
+    elif dataset == 'TNS':
+        dataset = TNSSegLoaderV2(
+        root_path=data_path,
+        win_size=win_size,
+        step=1,
+        mode=mode,
+        drop_col_idx=None
+    )
     shuffle = False
     if mode == 'train':
         shuffle = True

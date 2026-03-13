@@ -5,11 +5,13 @@ import numpy as np
 import os
 import time
 from utils.utils import *
+
 from model.DCdetector import DCdetector
 from data_factory.data_loader import get_loader_segment
 from einops import rearrange
-from metrics.metrics import *
+#from metrics.metrics import *
 import warnings
+from sklearn.metrics import accuracy_score, precision_recall_fscore_support, roc_auc_score, average_precision_score
 warnings.filterwarnings('ignore')
 
 def my_kl_loss(p, q):
@@ -54,9 +56,15 @@ class EarlyStopping:
             self.counter = 0
 
     def save_checkpoint(self, val_loss, val_loss2, model, path):
-        torch.save(model.state_dict(), os.path.join(path, str(self.dataset) + '_checkpoint.pth'))
-        self.val_loss_min = val_loss
-        self.val_loss2_min = val_loss2
+            os.makedirs(path, exist_ok=True)
+
+            ckpt_path = os.path.join(path, str(self.dataset) + '_checkpoint.pth')
+            torch.save(model.state_dict(), ckpt_path)
+
+            print("[INFO] Saved checkpoint to:", ckpt_path)
+
+            self.val_loss_min = val_loss
+            self.val_loss2_min = val_loss2
 
         
 class Solver(object):
@@ -70,7 +78,23 @@ class Solver(object):
         self.vali_loader = get_loader_segment(self.index, 'dataset/'+self.data_path, batch_size=self.batch_size, win_size=self.win_size, mode='val', dataset=self.dataset)
         self.test_loader = get_loader_segment(self.index, 'dataset/'+self.data_path, batch_size=self.batch_size, win_size=self.win_size, mode='test', dataset=self.dataset)
         self.thre_loader = get_loader_segment(self.index, 'dataset/'+self.data_path, batch_size=self.batch_size, win_size=self.win_size, mode='thre', dataset=self.dataset)
+        self.win_size = config.get('win_size', 10)
+        self.input_c = config.get('input_c', 9)
+        self.output_c = config.get('output_c', 9)
 
+        self.n_heads = config.get('n_heads', 1)
+        self.d_model = config.get('d_model', 256)
+        self.e_layers = config.get('e_layers', 3)
+        self.patch_size = config.get('patch_size', [5])
+
+        self.lr = config.get('lr', 1e-4)
+        self.num_epochs = config.get('num_epochs', 10)
+        self.batch_size = config.get('batch_size', 32)
+
+        self.dataset = config.get('dataset', 'TNS')
+        self.data_path = config.get('data_path', '../expdata')
+        self.model_save_path = config.get('model_save_path', 'checkpoints')
+        self.anormly_ratio = config.get('anormly_ratio', 4.0)
         self.build_model()
         
         self.device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
@@ -89,12 +113,57 @@ class Solver(object):
             
         self.optimizer = torch.optim.Adam(self.model.parameters(), lr=self.lr)
         
-        
+    def _aggregate_window_scores_to_packets(self, window_scores, window_pkt_idx, total_packets):
+        """
+        將 window-level scores 聚合成 packet-level scores。
+
+        參數
+        ----
+        window_scores : np.ndarray, shape = (num_windows,)
+            每個 window 的分數
+
+        window_pkt_idx : np.ndarray, shape = (num_windows, win_size)
+            每個 window 對應到哪些 packet index
+
+        total_packets : int
+            這個 loader / dataset 總共有多少 packet
+
+        回傳
+        ----
+        packet_scores : np.ndarray, shape = (total_packets,)
+            每個 packet 的平均分數
+
+        valid_mask : np.ndarray, shape = (total_packets,)
+            哪些 packet 至少被一個 window 覆蓋到
+        """
+        score_sum = np.zeros(total_packets, dtype=np.float64)
+        score_count = np.zeros(total_packets, dtype=np.int64)
+
+        for w in range(window_pkt_idx.shape[0]):
+            s = float(window_scores[w])
+
+            for t in range(window_pkt_idx.shape[1]):
+                p = int(window_pkt_idx[w, t])
+
+                if 0 <= p < total_packets:
+                    score_sum[p] += s
+                    score_count[p] += 1
+
+        packet_scores = np.zeros(total_packets, dtype=np.float64)
+        valid_mask = score_count > 0
+
+        packet_scores[valid_mask] = score_sum[valid_mask] / score_count[valid_mask]
+
+        return packet_scores, valid_mask    
     def vali(self, vali_loader):
         self.model.eval()
         loss_1 = []
         loss_2 = []
-        for i, (input_data, _) in enumerate(vali_loader):
+        for i, batch in enumerate(vali_loader):
+            if len(batch) == 3:
+                input_data, _, _ = batch
+            else:
+                input_data, _ = batch
             input = input_data.float().to(self.device)
             series, prior = self.model(input)
             series_loss = 0.0
@@ -129,7 +198,7 @@ class Solver(object):
         path = self.model_save_path
         if not os.path.exists(path):
             os.makedirs(path)
-        early_stopping = EarlyStopping(patience=5, verbose=True, dataset_name=self.data_path)
+        early_stopping = EarlyStopping(patience=5, verbose=True, dataset_name=self.dataset)
         train_steps = len(self.train_loader)
 
         for epoch in range(self.num_epochs):
@@ -137,8 +206,12 @@ class Solver(object):
 
             epoch_time = time.time()
             self.model.train()
-            for i, (input_data, labels) in enumerate(self.train_loader):
-
+            
+            for i, batch in enumerate(self.train_loader):
+                if len(batch) == 3:
+                    input_data, labels, pkt_idx = batch
+                else:
+                    input_data, labels = batch
                 self.optimizer.zero_grad()
                 iter_count += 1
                 input = input_data.float().to(self.device)
@@ -191,13 +264,18 @@ class Solver(object):
     def test(self):
         self.model.load_state_dict(
             torch.load(
-                os.path.join(str(self.model_save_path), str(self.data_path) + '_checkpoint.pth')))
+                os.path.join(str(self.model_save_path), str(self.dataset) + '_checkpoint.pth')))
         self.model.eval()
         temperature = 50
 
         # (1) stastic on the train set
         attens_energy = []
-        for i, (input_data, labels) in enumerate(self.train_loader):
+        
+        for i, batch in enumerate(self.train_loader):
+            if len(batch) == 3:
+                input_data, labels, pkt_idx = batch
+            else:
+                input_data, labels = batch    
             input = input_data.float().to(self.device)
             series, prior = self.model(input)
             series_loss = 0.0
@@ -229,7 +307,14 @@ class Solver(object):
 
         # (2) find the threshold
         attens_energy = []
-        for i, (input_data, labels) in enumerate(self.thre_loader):
+        thre_pkt_idx_all = []
+        
+        for i, batch in enumerate(self.thre_loader):
+            if len(batch) == 3:
+                input_data, labels, pkt_idx = batch
+                thre_pkt_idx_all.append(pkt_idx.cpu().numpy())
+            else:
+                input_data, labels = batch
             input = input_data.float().to(self.device)
             series, prior = self.model(input)
             series_loss = 0.0
@@ -257,15 +342,22 @@ class Solver(object):
             attens_energy.append(cri)
 
         attens_energy = np.concatenate(attens_energy, axis=0).reshape(-1)
-        test_energy = np.array(attens_energy)
-        combined_energy = np.concatenate([train_energy, test_energy], axis=0)
+        thre_energy = np.array(attens_energy)
+        combined_energy = np.concatenate([train_energy, thre_energy], axis=0)
         thresh = np.percentile(combined_energy, 100 - self.anormly_ratio)
         print("Threshold :", thresh)
 
         # (3) evaluation on the test set
         test_labels = []
         attens_energy = []
-        for i, (input_data, labels) in enumerate(self.thre_loader):
+        #for i, batch in enumerate(self.thre_loader):
+        test_pkt_idx_all = []
+        for i, batch in enumerate(self.test_loader):
+            if len(batch) == 3:
+                input_data, labels, pkt_idx = batch
+                test_pkt_idx_all.append(pkt_idx.cpu().numpy())
+            else:
+                input_data, labels = batch
             input = input_data.float().to(self.device)
             series, prior = self.model(input)
             series_loss = 0.0
@@ -290,7 +382,7 @@ class Solver(object):
             metric = torch.softmax((-series_loss - prior_loss), dim=-1)
             cri = metric.detach().cpu().numpy()
             attens_energy.append(cri)
-            test_labels.append(labels)
+            test_labels.append(labels.cpu().numpy())
             
         attens_energy = np.concatenate(attens_energy, axis=0).reshape(-1)
         test_labels = np.concatenate(test_labels, axis=0).reshape(-1)
@@ -301,11 +393,12 @@ class Solver(object):
         gt = test_labels.astype(int)
         
         matrix = [self.index]
-        scores_simple = combine_all_evaluation_scores(pred, gt, test_energy)
-        for key, value in scores_simple.items():
-            matrix.append(value)
-            print('{0:21} : {1:0.4f}'.format(key, value))
-
+        # scores_simple = combine_all_evaluation_scores(pred, gt, test_energy)
+        # for key, value in scores_simple.items():
+        #     matrix.append(value)
+        #     print('{0:21} : {1:0.4f}'.format(key, value))
+        
+        
         anomaly_state = False
         for i in range(len(gt)):
             if gt[i] == 1 and pred[i] == 1 and not anomaly_state:
@@ -333,9 +426,67 @@ class Solver(object):
         from sklearn.metrics import precision_recall_fscore_support
         from sklearn.metrics import accuracy_score
 
+        
         accuracy = accuracy_score(gt, pred)
         precision, recall, f_score, support = precision_recall_fscore_support(gt, pred, average='binary')
         print("Accuracy : {:0.4f}, Precision : {:0.4f}, Recall : {:0.4f}, F-score : {:0.4f} ".format(accuracy, precision, recall, f_score))
+        
+        # =========================================================
+        # Packet-level scoring
+        # =========================================================
+        thre_pkt_idx = np.concatenate(thre_pkt_idx_all, axis=0)
+        test_pkt_idx = np.concatenate(test_pkt_idx_all, axis=0)
+
+        thre_dataset = self.thre_loader.dataset
+        test_dataset = self.test_loader.dataset
+
+        thre_packet_scores, thre_valid_mask = self._aggregate_window_scores_to_packets(
+            window_scores=thre_energy,
+            window_pkt_idx=thre_pkt_idx,
+            total_packets=len(thre_dataset.packet_labels_raw)
+        )
+
+        test_packet_scores, test_valid_mask = self._aggregate_window_scores_to_packets(
+            window_scores=test_energy,
+            window_pkt_idx=test_pkt_idx,
+            total_packets=len(test_dataset.packet_labels_raw)
+        )
+
+        # 再跟 loader 內建的 selected_packet_mask 取交集
+        thre_valid_mask = thre_valid_mask & thre_dataset.selected_packet_mask
+        test_valid_mask = test_valid_mask & test_dataset.selected_packet_mask
+
+        gt_packet = test_dataset.packet_labels_raw[test_valid_mask]
+
+        threshold_packet = np.percentile(
+            thre_packet_scores[thre_valid_mask],
+            100 - self.anormly_ratio
+        )
+
+        pred_packet = (test_packet_scores[test_valid_mask] > threshold_packet).astype(int)
+
+        accuracy_packet = accuracy_score(gt_packet, pred_packet)
+        precision_packet, recall_packet, f_score_packet, _ = precision_recall_fscore_support(
+            gt_packet,
+            pred_packet,
+            average='binary',
+            zero_division=0
+        )
+
+        print("Packet Threshold : {:0.6f}".format(threshold_packet))
+        print(
+            "Packet Accuracy : {:0.4f}, Packet Precision : {:0.4f}, Packet Recall : {:0.4f}, Packet F-score : {:0.4f}".format(
+                accuracy_packet, precision_packet, recall_packet, f_score_packet
+            )
+        )
+
+        # optional: save packet-level outputs
+        os.makedirs("packet_result", exist_ok=True)
+        np.save("packet_result/dcd_packet_scores.npy", test_packet_scores)
+        np.save("packet_result/dcd_packet_valid_mask.npy", test_valid_mask.astype(np.int64))
+        np.save("packet_result/dcd_packet_gt.npy", test_dataset.packet_labels_raw.astype(np.int64))
+
+        print("[INFO] Saved packet-level outputs to: packet_result/")
         
         if self.data_path == 'UCR' or 'UCR_AUG':
             import csv

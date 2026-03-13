@@ -1,0 +1,300 @@
+
+
+
+2026-03-13 15:38:21
+================ Hyperparameters ===============
+anormly_ratio: 4.0
+batch_size: 32
+d_model: 256
+data_path: ../expdata
+dataset: TNS
+devices: 0,1,2,3
+e_layers: 3
+gpu: 0
+index: 137
+input_c: 9
+k: 3
+loss_fuc: MSE
+lr: 0.0001
+mode: train
+model_save_path: checkpoints
+num_epochs: 10
+output_c: 9
+patch_size: [5]
+rec_timeseries: True
+use_gpu: False
+use_multi_gpu: True
+win_size: 10
+====================  Train  ===================
+[TNS_V2:train] num_windows = 591
+[TNS_V2:train] total_packets = 600
+[TNS_V2:train] first window shape = (10, 9)
+[TNS_V2:val] num_windows = 591
+[TNS_V2:val] total_packets = 600
+[TNS_V2:val] first window shape = (10, 9)
+[TNS_V2:test] num_windows = 591
+[TNS_V2:test] total_packets = 606
+[TNS_V2:test] first window shape = (10, 9)
+[TNS_V2:thre] num_windows = 591
+[TNS_V2:thre] total_packets = 600
+[TNS_V2:thre] first window shape = (10, 9)
+
+
+
+2026-03-13 15:38:58
+================ Hyperparameters ===============
+anormly_ratio: 4.0
+batch_size: 32
+d_model: 256
+data_path: ../expdata
+dataset: TNS
+devices: 0,1,2,3
+e_layers: 3
+gpu: 0
+index: 137
+input_c: 9
+k: 3
+loss_fuc: MSE
+lr: 0.0001
+mode: train
+model_save_path: checkpoints
+num_epochs: 1
+output_c: 9
+patch_size: [5]
+rec_timeseries: True
+use_gpu: False
+use_multi_gpu: True
+win_size: 10
+====================  Train  ===================
+[TNS_V2:train] num_windows = 591
+[TNS_V2:train] total_packets = 600
+[TNS_V2:train] first window shape = (10, 9)
+[TNS_V2:val] num_windows = 591
+[TNS_V2:val] total_packets = 600
+[TNS_V2:val] first window shape = (10, 9)
+[TNS_V2:test] num_windows = 591
+[TNS_V2:test] total_packets = 606
+[TNS_V2:test] first window shape = (10, 9)
+[TNS_V2:thre] num_windows = 591
+[TNS_V2:thre] total_packets = 600
+[TNS_V2:thre] first window shape = (10, 9)
+
+
+
+2026-03-13 15:48:08
+================ Hyperparameters ===============
+anormly_ratio: 4.0
+batch_size: 32
+d_model: 256
+data_path: ../expdata
+dataset: TNS
+devices: 0,1,2,3
+e_layers: 3
+gpu: 0
+index: 137
+input_c: 9
+k: 3
+loss_fuc: MSE
+lr: 0.0001
+mode: train
+model_save_path: checkpoints
+num_epochs: 1
+output_c: 9
+patch_size: [5]
+rec_timeseries: True
+use_gpu: False
+use_multi_gpu: True
+win_size: 10
+====================  Train  ===================
+[TNS_V2:train] num_windows = 591
+[TNS_V2:train] total_packets = 600
+[TNS_V2:train] first window shape = (10, 9)
+[TNS_V2:val] num_windows = 591
+[TNS_V2:val] total_packets = 600
+[TNS_V2:val] first window shape = (10, 9)
+[TNS_V2:test] num_windows = 591
+[TNS_V2:test] total_packets = 606
+[TNS_V2:test] first window shape = (10, 9)
+[TNS_V2:thre] num_windows = 591
+[TNS_V2:thre] total_packets = 600
+[TNS_V2:thre] first window shape = (10, 9)
+
+
+
+2026-03-13 15:54:35
+================ Hyperparameters ===============
+anormly_ratio: 4.0
+batch_size: 32
+d_model: 256
+data_path: ../expdata
+dataset: TNS
+devices: 0,1,2,3
+e_layers: 3
+gpu: 0
+index: 137
+input_c: 9
+k: 3
+loss_fuc: MSE
+lr: 0.0001
+mode: train
+model_save_path: checkpoints
+num_epochs: 1
+output_c: 9
+patch_size: [5]
+rec_timeseries: True
+use_gpu: False
+use_multi_gpu: True
+win_size: 10
+====================  Train  ===================
+[TNS_V2:train] num_windows = 591
+[TNS_V2:train] total_packets = 600
+[TNS_V2:train] first window shape = (10, 9)
+[TNS_V2:val] num_windows = 591
+[TNS_V2:val] total_packets = 600
+[TNS_V2:val] first window shape = (10, 9)
+[TNS_V2:test] num_windows = 591
+[TNS_V2:test] total_packets = 606
+[TNS_V2:test] first window shape = (10, 9)
+[TNS_V2:thre] num_windows = 591
+[TNS_V2:thre] total_packets = 600
+[TNS_V2:thre] first window shape = (10, 9)
+Epoch: 1, Cost time: 5.116s 
+
+
+
+2026-03-13 16:28:48
+================ Hyperparameters ===============
+anormly_ratio: 4.0
+batch_size: 32
+d_model: 256
+data_path: ../expdata
+dataset: TNS
+devices: 0,1,2,3
+e_layers: 3
+gpu: 0
+index: 137
+input_c: 9
+k: 3
+loss_fuc: MSE
+lr: 0.0001
+mode: train
+model_save_path: checkpoints
+num_epochs: 1
+output_c: 9
+patch_size: [5]
+rec_timeseries: True
+use_gpu: False
+use_multi_gpu: True
+win_size: 10
+====================  Train  ===================
+[TNS_V2:train] num_windows = 591
+[TNS_V2:train] total_packets = 600
+[TNS_V2:train] first window shape = (10, 9)
+[TNS_V2:val] num_windows = 591
+[TNS_V2:val] total_packets = 600
+[TNS_V2:val] first window shape = (10, 9)
+[TNS_V2:test] num_windows = 591
+[TNS_V2:test] total_packets = 606
+[TNS_V2:test] first window shape = (10, 9)
+[TNS_V2:thre] num_windows = 591
+[TNS_V2:thre] total_packets = 600
+[TNS_V2:thre] first window shape = (10, 9)
+
+
+
+2026-03-13 16:29:07
+================ Hyperparameters ===============
+anormly_ratio: 4.0
+batch_size: 32
+d_model: 256
+data_path: ../expdata
+dataset: TNS
+devices: 0,1,2,3
+e_layers: 3
+gpu: 0
+index: 137
+input_c: 9
+k: 3
+loss_fuc: MSE
+lr: 0.0001
+mode: train
+model_save_path: checkpoints
+num_epochs: 1
+output_c: 9
+patch_size: [5]
+rec_timeseries: True
+use_gpu: False
+use_multi_gpu: True
+win_size: 10
+====================  Train  ===================
+[TNS_V2:train] num_windows = 591
+[TNS_V2:train] total_packets = 600
+[TNS_V2:train] first window shape = (10, 9)
+[TNS_V2:val] num_windows = 591
+[TNS_V2:val] total_packets = 600
+[TNS_V2:val] first window shape = (10, 9)
+[TNS_V2:test] num_windows = 591
+[TNS_V2:test] total_packets = 606
+[TNS_V2:test] first window shape = (10, 9)
+[TNS_V2:thre] num_windows = 591
+[TNS_V2:thre] total_packets = 600
+[TNS_V2:thre] first window shape = (10, 9)
+Epoch: 1, Cost time: 4.583s 
+[INFO] Saved checkpoint to: checkpoints/TNS_checkpoint.pth
+[TNS_V2:train] num_windows = 591
+[TNS_V2:train] total_packets = 600
+[TNS_V2:train] first window shape = (10, 9)
+[TNS_V2:val] num_windows = 591
+[TNS_V2:val] total_packets = 600
+[TNS_V2:val] first window shape = (10, 9)
+[TNS_V2:test] num_windows = 591
+[TNS_V2:test] total_packets = 606
+[TNS_V2:test] first window shape = (10, 9)
+[TNS_V2:thre] num_windows = 591
+[TNS_V2:thre] total_packets = 600
+[TNS_V2:thre] first window shape = (10, 9)
+Threshold : 0.5416749644279479
+[TNS_V2:train] num_windows = 591
+[TNS_V2:train] total_packets = 600
+[TNS_V2:train] first window shape = (10, 9)
+[TNS_V2:val] num_windows = 591
+[TNS_V2:val] total_packets = 600
+[TNS_V2:val] first window shape = (10, 9)
+[TNS_V2:test] num_windows = 591
+[TNS_V2:test] total_packets = 606
+[TNS_V2:test] first window shape = (10, 9)
+[TNS_V2:thre] num_windows = 591
+[TNS_V2:thre] total_packets = 600
+[TNS_V2:thre] first window shape = (10, 9)
+Threshold : 0.5448151636123656
+[TNS_V2:train] num_windows = 591
+[TNS_V2:train] total_packets = 600
+[TNS_V2:train] first window shape = (10, 9)
+[TNS_V2:val] num_windows = 591
+[TNS_V2:val] total_packets = 600
+[TNS_V2:val] first window shape = (10, 9)
+[TNS_V2:test] num_windows = 591
+[TNS_V2:test] total_packets = 606
+[TNS_V2:test] first window shape = (10, 9)
+[TNS_V2:thre] num_windows = 591
+[TNS_V2:thre] total_packets = 600
+[TNS_V2:thre] first window shape = (10, 9)
+Threshold : 0.5448151636123656
+Accuracy : 0.9587, Precision : 0.0000, Recall : 0.0000, F-score : 0.0000 
+[TNS_V2:train] num_windows = 591
+[TNS_V2:train] total_packets = 600
+[TNS_V2:train] first window shape = (10, 9)
+[TNS_V2:val] num_windows = 591
+[TNS_V2:val] total_packets = 600
+[TNS_V2:val] first window shape = (10, 9)
+[TNS_V2:test] num_windows = 591
+[TNS_V2:test] total_packets = 606
+[TNS_V2:test] first window shape = (10, 9)
+[TNS_V2:thre] num_windows = 591
+[TNS_V2:thre] total_packets = 600
+[TNS_V2:thre] first window shape = (10, 9)
+Threshold : 0.5302067852020262
+Accuracy : 0.9554, Precision : 0.0000, Recall : 0.0000, F-score : 0.0000 
+Packet Threshold : 0.190318
+Packet Accuracy : 0.9590, Packet Precision : 0.0000, Packet Recall : 0.0000, Packet F-score : 0.0000
+[INFO] Saved packet-level outputs to: packet_result/

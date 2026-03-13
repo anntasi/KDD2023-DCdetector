@@ -5,9 +5,20 @@ from einops import rearrange
 from .attn import DAC_structure, AttentionLayer
 from .embed import DataEmbedding, TokenEmbedding
 from .RevIN import RevIN
-from tkinter import _flatten
 
 
+def _flatten(items):
+    """
+    將巢狀 list / tuple 攤平成單層 list。
+    這裡是取代 tkinter._flatten，避免依賴 tkinter。
+    """
+    result = []
+    for x in items:
+        if isinstance(x, (list, tuple)):
+            result.extend(_flatten(x))
+        else:
+            result.append(x)
+    return result
 class Encoder(nn.Module):
     def __init__(self, attn_layers, norm_layer=None):
         super(Encoder, self).__init__()
