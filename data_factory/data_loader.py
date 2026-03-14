@@ -592,8 +592,9 @@ class TNSSegLoaderV2(Dataset):
         global_packet_idx = 0
 
         for session_fp, session_label in zip(session_files, session_labels):
+           
             arr = np.load(session_fp).astype(np.float32)
-
+            session_window_count = 0
             if arr.ndim != 2:
                 raise ValueError(f"{session_fp} must be 2D, got shape={arr.shape}")
 
@@ -616,6 +617,8 @@ class TNSSegLoaderV2(Dataset):
 
             if T >= self.win_size:
                 for start in range(0, T - self.win_size + 1, self.step):
+                    session_window_count += 1
+
                     x = arr[start:start + self.win_size]          # shape = (win_size, D)
                     y = pkt_labels[start:start + self.win_size]   # shape = (win_size,)
 
@@ -630,7 +633,19 @@ class TNSSegLoaderV2(Dataset):
                     self.window_packet_indices.append(pkt_idx)
 
                     local_mask[start:start + self.win_size] = True
+            print(
+            f"[DEBUG][{self.mode}] session={os.path.basename(session_fp)} "
+            f"T={T} label={session_label} windows_added={session_window_count} "
+            f"local_mask_sum={local_mask.sum()} "
+            f"global_idx_range=({global_packet_idx},{global_packet_idx + T - 1})",
+            flush=True
+        )
 
+            if session_window_count > 0:
+                print(
+                    f"[DEBUG][{self.mode}] last window pkt_idx = {pkt_idx}",
+                    flush=True
+                )
             self.selected_packet_mask.extend(local_mask.tolist())
             global_packet_idx += T
 
@@ -704,9 +719,13 @@ def get_loader_segment(index, data_path, batch_size, win_size=100, step=100, mod
     if mode == 'train':
         shuffle = True
 
+    if mode == 'train':
+        drop_last = True
+    else:
+        drop_last = False
     data_loader = DataLoader(dataset=dataset,
                              batch_size=batch_size,
                              shuffle=shuffle,
                              num_workers=8,
-                             drop_last=True)
+                             drop_last=drop_last)
     return data_loader

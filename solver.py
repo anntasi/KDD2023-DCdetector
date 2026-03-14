@@ -262,6 +262,9 @@ class Solver(object):
 
             
     def test(self):
+        print("dataset window_labels shape =", self.test_loader.dataset.window_labels.shape, flush=True)
+        print("dataset last window label =", self.test_loader.dataset.window_labels[-1], flush=True)
+        print("dataset last window pkt_idx =", self.test_loader.dataset.window_packet_indices[-1], flush=True)
         self.model.load_state_dict(
             torch.load(
                 os.path.join(str(self.model_save_path), str(self.dataset) + '_checkpoint.pth')))
@@ -353,6 +356,11 @@ class Solver(object):
         #for i, batch in enumerate(self.thre_loader):
         test_pkt_idx_all = []
         for i, batch in enumerate(self.test_loader):
+            print(f"[DEBUG][test_loop] batch={i} input_shape={input_data.shape} labels_shape={labels.shape}", flush=True)
+            print(f"[DEBUG][test_loop] labels sum in batch = {labels.sum().item() if hasattr(labels, 'sum') else np.sum(labels)}", flush=True)
+
+            if len(batch) == 3:
+                print(f"[DEBUG][test_loop] pkt_idx first={pkt_idx[0].cpu().numpy()} last={pkt_idx[-1].cpu().numpy()}", flush=True)
             if len(batch) == 3:
                 input_data, labels, pkt_idx = batch
                 test_pkt_idx_all.append(pkt_idx.cpu().numpy())
@@ -386,11 +394,15 @@ class Solver(object):
             
         attens_energy = np.concatenate(attens_energy, axis=0).reshape(-1)
         test_labels = np.concatenate(test_labels, axis=0).reshape(-1)
+        print("test_labels shape =", test_labels.shape, flush=True)
+        print("test_labels sum =", test_labels.sum(), flush=True)
+        print("test_labels tail 30 =", test_labels[-30:], flush=True)
         test_energy = np.array(attens_energy)
         test_labels = np.array(test_labels)
 
         pred = (test_energy > thresh).astype(int)
         gt = test_labels.astype(int)
+        
         
         matrix = [self.index]
         # scores_simple = combine_all_evaluation_scores(pred, gt, test_energy)
@@ -426,7 +438,15 @@ class Solver(object):
         from sklearn.metrics import precision_recall_fscore_support
         from sklearn.metrics import accuracy_score
 
-        
+        TP = np.sum((pred == 1) & (gt == 1))
+        FP = np.sum((pred == 1) & (gt == 0))
+        FN = np.sum((pred == 0) & (gt == 1))
+        TN = np.sum((pred == 0) & (gt == 0))
+        print("===========window level==============")
+        print("TP =", TP, flush=True)
+        print("FP =", FP, flush=True)
+        print("FN =", FN, flush=True)
+        print("TN =", TN, flush=True)
         accuracy = accuracy_score(gt, pred)
         precision, recall, f_score, support = precision_recall_fscore_support(gt, pred, average='binary')
         print("Accuracy : {:0.4f}, Precision : {:0.4f}, Recall : {:0.4f}, F-score : {:0.4f} ".format(accuracy, precision, recall, f_score))
@@ -451,19 +471,43 @@ class Solver(object):
             window_pkt_idx=test_pkt_idx,
             total_packets=len(test_dataset.packet_labels_raw)
         )
-
+       
         # 再跟 loader 內建的 selected_packet_mask 取交集
         thre_valid_mask = thre_valid_mask & thre_dataset.selected_packet_mask
         test_valid_mask = test_valid_mask & test_dataset.selected_packet_mask
-
+       
+        anom_idx_raw = np.where(test_dataset.packet_labels_raw == 1)[0]
+        print("raw anomaly packet idx =", anom_idx_raw, flush=True)
+        print("valid mask on anomaly idx =", test_valid_mask[anom_idx_raw], flush=True)
+        selected_idx = np.where(test_dataset.selected_packet_mask)[0]
+        print("selected packet idx head/tail =", selected_idx[:20], selected_idx[-20:], flush=True)
+        
         gt_packet = test_dataset.packet_labels_raw[test_valid_mask]
+        
+        print("true anomaly after test_valid_mask =", gt_packet.sum(), flush=True)
+        print("num anomaly removed by valid mask =",
+      test_dataset.packet_labels_raw.sum() - gt_packet.sum(),
+      flush=True)
 
+        print("num_valid_test_packets =", test_valid_mask.sum(), flush=True)
+        print("num_valid_thre_packets =", thre_valid_mask.sum(), flush=True)
+        
         threshold_packet = np.percentile(
             thre_packet_scores[thre_valid_mask],
             100 - self.anormly_ratio
         )
 
         pred_packet = (test_packet_scores[test_valid_mask] > threshold_packet).astype(int)
+
+        TP = np.sum((pred_packet == 1) & (gt_packet == 1))
+        FP = np.sum((pred_packet == 1) & (gt_packet == 0))
+        FN = np.sum((pred_packet == 0) & (gt_packet == 1))
+        TN = np.sum((pred_packet == 0) & (gt_packet == 0))
+        print("=========packet level=============")
+        print("TP =", TP, flush=True)
+        print("FP =", FP, flush=True)
+        print("FN =", FN, flush=True)
+        print("TN =", TN, flush=True)
 
         accuracy_packet = accuracy_score(gt_packet, pred_packet)
         precision_packet, recall_packet, f_score_packet, _ = precision_recall_fscore_support(
