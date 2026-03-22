@@ -1,0 +1,2 @@
+epoch,epoch_time_sec,vali_loss1,vali_loss2,learning_rate
+1,16.17050075531006,0.0,0.0,0.0001

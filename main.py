@@ -11,23 +11,28 @@ import matplotlib
 matplotlib.use("Agg")
 import sys
 
+import os
+import sys
+
 class Logger(object):
     def __init__(self, filename='default.log', add_flag=True, stream=sys.stdout):
         self.terminal = stream
         self.filename = filename
         self.add_flag = add_flag
 
+        # 確保目錄存在
+        log_dir = os.path.dirname(self.filename)
+        if log_dir != "":
+            os.makedirs(log_dir, exist_ok=True)
+
     def write(self, message):
-        if self.add_flag:
-            with open(self.filename, 'a+') as log:
-                self.terminal.write(message)
-                log.write(message)
-        else:
-            with open(self.filename, 'w') as log:
-                self.terminal.write(message)
-                log.write(message)
+        mode = 'a+' if self.add_flag else 'w'
+        with open(self.filename, mode) as log:
+            self.terminal.write(message)
+            log.write(message)
 
     def flush(self):
+        # 為了相容 Python logging / print
         pass
 
 
@@ -114,7 +119,14 @@ if __name__ == '__main__':
         config.gpu = config.device_ids[0]
     
     
-    sys.stdout = Logger("result/"+ config.data_path +".log", sys.stdout)
+    os.makedirs("result", exist_ok=True)
+
+    log_name = os.path.basename(os.path.normpath(config.data_path))
+
+    sys.stdout = Logger(
+        os.path.join("result", log_name + ".log"),
+        stream=sys.stdout
+    )
     if config.mode == 'train':
         print("\n\n")
         print(time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()))

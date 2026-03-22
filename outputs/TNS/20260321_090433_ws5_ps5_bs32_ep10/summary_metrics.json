@@ -1,0 +1,22 @@
+{
+  "window_level": {
+    "accuracy": 0.9345637583892618,
+    "precision": 0.0,
+    "recall": 0.0,
+    "f1": 0.0,
+    "TP": 0,
+    "FP": 11,
+    "FN": 28,
+    "TN": 557
+  },
+  "packet_level": {
+    "accuracy": 0.9883333333333333,
+    "precision": 0.0,
+    "recall": 0.0,
+    "f1": 0.0,
+    "TP": 0,
+    "FP": 1,
+    "FN": 6,
+    "TN": 593
+  }
+}

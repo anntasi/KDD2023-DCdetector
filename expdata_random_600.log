@@ -1,0 +1,150 @@
+
+
+
+2026-03-18 13:56:40
+================ Hyperparameters ===============
+anormly_ratio: 4.0
+batch_size: 32
+d_model: 256
+data_path: ../expdata_random_600
+dataset: TNS
+devices: 0,1,2,3
+e_layers: 3
+gpu: 0
+index: 137
+input_c: 9
+k: 3
+loss_fuc: MSE
+lr: 0.0001
+mode: train
+model_save_path: checkpoints
+num_epochs: 50
+output_c: 9
+patch_size: [5]
+rec_timeseries: True
+use_gpu: False
+use_multi_gpu: True
+win_size: 5
+====================  Train  ===================
+[DEBUG][train] session=session_train.npy T=600 label=0 windows_added=596 local_mask_sum=600 global_idx_range=(0,599)
+[DEBUG][train] last window pkt_idx = [595 596 597 598 599]
+[TNS_V2:train] num_windows = 596
+[TNS_V2:train] total_packets = 600
+[TNS_V2:train] first window shape = (5, 9)
+[DEBUG][val] session=session_test_normal.npy T=600 label=0 windows_added=596 local_mask_sum=600 global_idx_range=(0,599)
+[DEBUG][val] last window pkt_idx = [595 596 597 598 599]
+[TNS_V2:val] num_windows = 596
+[TNS_V2:val] total_packets = 600
+[TNS_V2:val] first window shape = (5, 9)
+[DEBUG][test] session=session_test_normal.npy T=600 label=0 windows_added=596 local_mask_sum=600 global_idx_range=(0,599)
+[DEBUG][test] last window pkt_idx = [595 596 597 598 599]
+[DEBUG][test] session=session_test_anomaly.npy T=6 label=1 windows_added=2 local_mask_sum=6 global_idx_range=(600,605)
+[DEBUG][test] last window pkt_idx = [601 602 603 604 605]
+[TNS_V2:test] num_windows = 598
+[TNS_V2:test] total_packets = 606
+[TNS_V2:test] first window shape = (5, 9)
+[DEBUG][thre] session=session_test_normal.npy T=600 label=0 windows_added=596 local_mask_sum=600 global_idx_range=(0,599)
+[DEBUG][thre] last window pkt_idx = [595 596 597 598 599]
+[TNS_V2:thre] num_windows = 596
+[TNS_V2:thre] total_packets = 600
+[TNS_V2:thre] first window shape = (5, 9)
+Epoch: 1, Cost time: 4.063s 
+[INFO] Saved checkpoint to: checkpoints/TNS_checkpoint.pth
+Epoch: 2, Cost time: 4.412s 
+[INFO] Saved checkpoint to: checkpoints/TNS_checkpoint.pth
+Epoch: 3, Cost time: 4.296s 
+[INFO] Saved checkpoint to: checkpoints/TNS_checkpoint.pth
+Epoch: 4, Cost time: 3.198s 
+[INFO] Saved checkpoint to: checkpoints/TNS_checkpoint.pth
+Epoch: 5, Cost time: 4.063s 
+[INFO] Saved checkpoint to: checkpoints/TNS_checkpoint.pth
+Epoch: 6, Cost time: 4.130s 
+[INFO] Saved checkpoint to: checkpoints/TNS_checkpoint.pth
+Epoch: 7, Cost time: 3.895s 
+[INFO] Saved checkpoint to: checkpoints/TNS_checkpoint.pth
+Epoch: 8, Cost time: 4.116s 
+[INFO] Saved checkpoint to: checkpoints/TNS_checkpoint.pth
+Epoch: 9, Cost time: 3.601s 
+[INFO] Saved checkpoint to: checkpoints/TNS_checkpoint.pth
+Epoch: 10, Cost time: 4.435s 
+[INFO] Saved checkpoint to: checkpoints/TNS_checkpoint.pth
+Epoch: 11, Cost time: 4.093s 
+[INFO] Saved checkpoint to: checkpoints/TNS_checkpoint.pth
+Epoch: 12, Cost time: 4.541s 
+[INFO] Saved checkpoint to: checkpoints/TNS_checkpoint.pth
+Epoch: 13, Cost time: 3.649s 
+[INFO] Saved checkpoint to: checkpoints/TNS_checkpoint.pth
+Epoch: 14, Cost time: 3.468s 
+[INFO] Saved checkpoint to: checkpoints/TNS_checkpoint.pth
+Epoch: 15, Cost time: 3.791s 
+[INFO] Saved checkpoint to: checkpoints/TNS_checkpoint.pth
+Epoch: 16, Cost time: 3.827s 
+[INFO] Saved checkpoint to: checkpoints/TNS_checkpoint.pth
+Epoch: 17, Cost time: 3.534s 
+[INFO] Saved checkpoint to: checkpoints/TNS_checkpoint.pth
+Epoch: 18, Cost time: 3.566s 
+[INFO] Saved checkpoint to: checkpoints/TNS_checkpoint.pth
+Epoch: 19, Cost time: 4.440s 
+[INFO] Saved checkpoint to: checkpoints/TNS_checkpoint.pth
+Epoch: 20, Cost time: 3.630s 
+[INFO] Saved checkpoint to: checkpoints/TNS_checkpoint.pth
+Epoch: 21, Cost time: 4.050s 
+[INFO] Saved checkpoint to: checkpoints/TNS_checkpoint.pth
+Epoch: 22, Cost time: 3.962s 
+[INFO] Saved checkpoint to: checkpoints/TNS_checkpoint.pth
+Epoch: 23, Cost time: 4.300s 
+[INFO] Saved checkpoint to: checkpoints/TNS_checkpoint.pth
+Epoch: 24, Cost time: 3.709s 
+[INFO] Saved checkpoint to: checkpoints/TNS_checkpoint.pth
+Epoch: 25, Cost time: 4.543s 
+[INFO] Saved checkpoint to: checkpoints/TNS_checkpoint.pth
+Epoch: 26, Cost time: 4.498s 
+[INFO] Saved checkpoint to: checkpoints/TNS_checkpoint.pth
+Epoch: 27, Cost time: 3.420s 
+[INFO] Saved checkpoint to: checkpoints/TNS_checkpoint.pth
+Epoch: 28, Cost time: 4.123s 
+[INFO] Saved checkpoint to: checkpoints/TNS_checkpoint.pth
+Epoch: 29, Cost time: 3.771s 
+[INFO] Saved checkpoint to: checkpoints/TNS_checkpoint.pth
+Epoch: 30, Cost time: 4.150s 
+[INFO] Saved checkpoint to: checkpoints/TNS_checkpoint.pth
+Epoch: 31, Cost time: 3.486s 
+[INFO] Saved checkpoint to: checkpoints/TNS_checkpoint.pth
+Epoch: 32, Cost time: 3.930s 
+[INFO] Saved checkpoint to: checkpoints/TNS_checkpoint.pth
+Epoch: 33, Cost time: 3.902s 
+[INFO] Saved checkpoint to: checkpoints/TNS_checkpoint.pth
+Epoch: 34, Cost time: 4.493s 
+[INFO] Saved checkpoint to: checkpoints/TNS_checkpoint.pth
+Epoch: 35, Cost time: 3.784s 
+[INFO] Saved checkpoint to: checkpoints/TNS_checkpoint.pth
+Epoch: 36, Cost time: 3.824s 
+[INFO] Saved checkpoint to: checkpoints/TNS_checkpoint.pth
+Epoch: 37, Cost time: 4.475s 
+[INFO] Saved checkpoint to: checkpoints/TNS_checkpoint.pth
+Epoch: 38, Cost time: 3.795s 
+[INFO] Saved checkpoint to: checkpoints/TNS_checkpoint.pth
+Epoch: 39, Cost time: 4.407s 
+[INFO] Saved checkpoint to: checkpoints/TNS_checkpoint.pth
+Epoch: 40, Cost time: 4.602s 
+[INFO] Saved checkpoint to: checkpoints/TNS_checkpoint.pth
+Epoch: 41, Cost time: 3.745s 
+[INFO] Saved checkpoint to: checkpoints/TNS_checkpoint.pth
+Epoch: 42, Cost time: 4.273s 
+[INFO] Saved checkpoint to: checkpoints/TNS_checkpoint.pth
+Epoch: 43, Cost time: 3.914s 
+[INFO] Saved checkpoint to: checkpoints/TNS_checkpoint.pth
+Epoch: 44, Cost time: 4.272s 
+[INFO] Saved checkpoint to: checkpoints/TNS_checkpoint.pth
+Epoch: 45, Cost time: 3.755s 
+[INFO] Saved checkpoint to: checkpoints/TNS_checkpoint.pth
+Epoch: 46, Cost time: 3.367s 
+[INFO] Saved checkpoint to: checkpoints/TNS_checkpoint.pth
+Epoch: 47, Cost time: 4.334s 
+[INFO] Saved checkpoint to: checkpoints/TNS_checkpoint.pth
+Epoch: 48, Cost time: 3.764s 
+[INFO] Saved checkpoint to: checkpoints/TNS_checkpoint.pth
+Epoch: 49, Cost time: 3.995s 
+[INFO] Saved checkpoint to: checkpoints/TNS_checkpoint.pth
+Epoch: 50, Cost time: 3.996s 
+[INFO] Saved checkpoint to: checkpoints/TNS_checkpoint.pth

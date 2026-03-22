@@ -1,0 +1,658 @@
+
+
+
+2026-03-18 11:51:39
+================ Hyperparameters ===============
+anormly_ratio: 4.0
+batch_size: 32
+d_model: 256
+data_path: ../expdata_random_train4775
+dataset: TNS
+devices: 0,1,2,3
+e_layers: 3
+gpu: 0
+index: 137
+input_c: 9
+k: 3
+loss_fuc: MSE
+lr: 0.0001
+mode: train
+model_save_path: checkpoints
+num_epochs: 10
+output_c: 9
+patch_size: [5]
+rec_timeseries: True
+use_gpu: False
+use_multi_gpu: True
+win_size: 5
+====================  Train  ===================
+[DEBUG][train] session=session_train.npy T=4755 label=0 windows_added=4751 local_mask_sum=4755 global_idx_range=(0,4754)
+[DEBUG][train] last window pkt_idx = [4750 4751 4752 4753 4754]
+[TNS_V2:train] num_windows = 4751
+[TNS_V2:train] total_packets = 4755
+[TNS_V2:train] first window shape = (5, 9)
+[DEBUG][val] session=session_test_normal.npy T=600 label=0 windows_added=596 local_mask_sum=600 global_idx_range=(0,599)
+[DEBUG][val] last window pkt_idx = [595 596 597 598 599]
+[TNS_V2:val] num_windows = 596
+[TNS_V2:val] total_packets = 600
+[TNS_V2:val] first window shape = (5, 9)
+[DEBUG][test] session=session_test_normal.npy T=600 label=0 windows_added=596 local_mask_sum=600 global_idx_range=(0,599)
+[DEBUG][test] last window pkt_idx = [595 596 597 598 599]
+[DEBUG][test] session=session_test_anomaly.npy T=10 label=1 windows_added=6 local_mask_sum=10 global_idx_range=(600,609)
+[DEBUG][test] last window pkt_idx = [605 606 607 608 609]
+[TNS_V2:test] num_windows = 602
+[TNS_V2:test] total_packets = 610
+[TNS_V2:test] first window shape = (5, 9)
+[DEBUG][thre] session=session_test_normal.npy T=600 label=0 windows_added=596 local_mask_sum=600 global_idx_range=(0,599)
+[DEBUG][thre] last window pkt_idx = [595 596 597 598 599]
+[TNS_V2:thre] num_windows = 596
+[TNS_V2:thre] total_packets = 600
+[TNS_V2:thre] first window shape = (5, 9)
+	speed: 0.0970s/iter; left time: 134.0000s
+Epoch: 1, Cost time: 15.234s 
+[INFO] Saved checkpoint to: checkpoints/TNS_checkpoint.pth
+	speed: 0.1451s/iter; left time: 178.9168s
+Epoch: 2, Cost time: 15.717s 
+[INFO] Saved checkpoint to: checkpoints/TNS_checkpoint.pth
+	speed: 0.1737s/iter; left time: 188.5078s
+Epoch: 3, Cost time: 16.094s 
+[INFO] Saved checkpoint to: checkpoints/TNS_checkpoint.pth
+	speed: 0.1606s/iter; left time: 150.4870s
+Epoch: 4, Cost time: 15.136s 
+[INFO] Saved checkpoint to: checkpoints/TNS_checkpoint.pth
+	speed: 0.1286s/iter; left time: 101.4709s
+Epoch: 5, Cost time: 15.112s 
+[INFO] Saved checkpoint to: checkpoints/TNS_checkpoint.pth
+	speed: 0.1635s/iter; left time: 104.7883s
+Epoch: 6, Cost time: 14.274s 
+[INFO] Saved checkpoint to: checkpoints/TNS_checkpoint.pth
+	speed: 0.1451s/iter; left time: 71.5204s
+Epoch: 7, Cost time: 15.329s 
+[INFO] Saved checkpoint to: checkpoints/TNS_checkpoint.pth
+	speed: 0.1586s/iter; left time: 54.7189s
+Epoch: 8, Cost time: 14.783s 
+[INFO] Saved checkpoint to: checkpoints/TNS_checkpoint.pth
+	speed: 0.1605s/iter; left time: 31.6163s
+Epoch: 9, Cost time: 16.175s 
+[INFO] Saved checkpoint to: checkpoints/TNS_checkpoint.pth
+	speed: 0.1332s/iter; left time: 6.5246s
+Epoch: 10, Cost time: 13.930s 
+[INFO] Saved checkpoint to: checkpoints/TNS_checkpoint.pth
+
+
+
+2026-03-18 12:02:56
+================ Hyperparameters ===============
+anormly_ratio: 4.0
+batch_size: 32
+d_model: 256
+data_path: ../expdata_random_train4775
+dataset: TNS
+devices: 0,1,2,3
+e_layers: 3
+gpu: 0
+index: 137
+input_c: 9
+k: 3
+loss_fuc: MSE
+lr: 0.0001
+mode: train
+model_save_path: checkpoints
+num_epochs: 50
+output_c: 9
+patch_size: [5]
+rec_timeseries: True
+use_gpu: False
+use_multi_gpu: True
+win_size: 5
+====================  Train  ===================
+[DEBUG][train] session=session_train.npy T=4755 label=0 windows_added=4751 local_mask_sum=4755 global_idx_range=(0,4754)
+[DEBUG][train] last window pkt_idx = [4750 4751 4752 4753 4754]
+[TNS_V2:train] num_windows = 4751
+[TNS_V2:train] total_packets = 4755
+[TNS_V2:train] first window shape = (5, 9)
+[DEBUG][val] session=session_test_normal.npy T=600 label=0 windows_added=596 local_mask_sum=600 global_idx_range=(0,599)
+[DEBUG][val] last window pkt_idx = [595 596 597 598 599]
+[TNS_V2:val] num_windows = 596
+[TNS_V2:val] total_packets = 600
+[TNS_V2:val] first window shape = (5, 9)
+[DEBUG][test] session=session_test_normal.npy T=600 label=0 windows_added=596 local_mask_sum=600 global_idx_range=(0,599)
+[DEBUG][test] last window pkt_idx = [595 596 597 598 599]
+[DEBUG][test] session=session_test_anomaly.npy T=10 label=1 windows_added=6 local_mask_sum=10 global_idx_range=(600,609)
+[DEBUG][test] last window pkt_idx = [605 606 607 608 609]
+[TNS_V2:test] num_windows = 602
+[TNS_V2:test] total_packets = 610
+[TNS_V2:test] first window shape = (5, 9)
+[DEBUG][thre] session=session_test_normal.npy T=600 label=0 windows_added=596 local_mask_sum=600 global_idx_range=(0,599)
+[DEBUG][thre] last window pkt_idx = [595 596 597 598 599]
+[TNS_V2:thre] num_windows = 596
+[TNS_V2:thre] total_packets = 600
+[TNS_V2:thre] first window shape = (5, 9)
+	speed: 0.1049s/iter; left time: 765.5843s
+Epoch: 1, Cost time: 15.754s 
+[INFO] Saved checkpoint to: checkpoints/TNS_checkpoint.pth
+	speed: 0.1635s/iter; left time: 1169.4443s
+Epoch: 2, Cost time: 16.796s 
+[INFO] Saved checkpoint to: checkpoints/TNS_checkpoint.pth
+	speed: 0.1580s/iter; left time: 1106.4821s
+Epoch: 3, Cost time: 15.561s 
+[INFO] Saved checkpoint to: checkpoints/TNS_checkpoint.pth
+	speed: 0.1562s/iter; left time: 1070.8151s
+Epoch: 4, Cost time: 15.700s 
+[INFO] Saved checkpoint to: checkpoints/TNS_checkpoint.pth
+	speed: 0.1415s/iter; left time: 949.1459s
+Epoch: 5, Cost time: 14.744s 
+[INFO] Saved checkpoint to: checkpoints/TNS_checkpoint.pth
+	speed: 0.1761s/iter; left time: 1155.2813s
+Epoch: 6, Cost time: 17.624s 
+[INFO] Saved checkpoint to: checkpoints/TNS_checkpoint.pth
+	speed: 0.1669s/iter; left time: 1070.4192s
+Epoch: 7, Cost time: 17.936s 
+[INFO] Saved checkpoint to: checkpoints/TNS_checkpoint.pth
+	speed: 0.1684s/iter; left time: 1054.7572s
+Epoch: 8, Cost time: 13.751s 
+[INFO] Saved checkpoint to: checkpoints/TNS_checkpoint.pth
+	speed: 0.1336s/iter; left time: 817.5202s
+Epoch: 9, Cost time: 14.438s 
+[INFO] Saved checkpoint to: checkpoints/TNS_checkpoint.pth
+	speed: 0.1625s/iter; left time: 970.1050s
+Epoch: 10, Cost time: 15.102s 
+[INFO] Saved checkpoint to: checkpoints/TNS_checkpoint.pth
+	speed: 0.1275s/iter; left time: 742.3783s
+Epoch: 11, Cost time: 12.810s 
+[INFO] Saved checkpoint to: checkpoints/TNS_checkpoint.pth
+	speed: 0.1351s/iter; left time: 766.3665s
+Epoch: 12, Cost time: 12.601s 
+[INFO] Saved checkpoint to: checkpoints/TNS_checkpoint.pth
+	speed: 0.1315s/iter; left time: 726.7126s
+Epoch: 13, Cost time: 13.299s 
+[INFO] Saved checkpoint to: checkpoints/TNS_checkpoint.pth
+	speed: 0.1272s/iter; left time: 684.1191s
+Epoch: 14, Cost time: 13.798s 
+[INFO] Saved checkpoint to: checkpoints/TNS_checkpoint.pth
+	speed: 0.1481s/iter; left time: 774.6106s
+Epoch: 15, Cost time: 14.780s 
+[INFO] Saved checkpoint to: checkpoints/TNS_checkpoint.pth
+	speed: 0.1440s/iter; left time: 731.6126s
+Epoch: 16, Cost time: 14.581s 
+[INFO] Saved checkpoint to: checkpoints/TNS_checkpoint.pth
+	speed: 0.1418s/iter; left time: 699.5844s
+Epoch: 17, Cost time: 13.970s 
+[INFO] Saved checkpoint to: checkpoints/TNS_checkpoint.pth
+	speed: 0.1541s/iter; left time: 737.4204s
+Epoch: 18, Cost time: 15.342s 
+[INFO] Saved checkpoint to: checkpoints/TNS_checkpoint.pth
+	speed: 0.1813s/iter; left time: 840.5170s
+Epoch: 19, Cost time: 18.814s 
+[INFO] Saved checkpoint to: checkpoints/TNS_checkpoint.pth
+	speed: 0.1611s/iter; left time: 722.9974s
+Epoch: 20, Cost time: 15.484s 
+[INFO] Saved checkpoint to: checkpoints/TNS_checkpoint.pth
+	speed: 0.1558s/iter; left time: 676.4772s
+Epoch: 21, Cost time: 15.223s 
+[INFO] Saved checkpoint to: checkpoints/TNS_checkpoint.pth
+	speed: 0.1526s/iter; left time: 639.9135s
+Epoch: 22, Cost time: 16.183s 
+[INFO] Saved checkpoint to: checkpoints/TNS_checkpoint.pth
+	speed: 0.1618s/iter; left time: 654.6161s
+Epoch: 23, Cost time: 15.564s 
+[INFO] Saved checkpoint to: checkpoints/TNS_checkpoint.pth
+	speed: 0.2170s/iter; left time: 845.8064s
+Epoch: 24, Cost time: 21.284s 
+[INFO] Saved checkpoint to: checkpoints/TNS_checkpoint.pth
+	speed: 0.1394s/iter; left time: 522.5207s
+Epoch: 25, Cost time: 13.297s 
+[INFO] Saved checkpoint to: checkpoints/TNS_checkpoint.pth
+	speed: 0.1384s/iter; left time: 498.5352s
+Epoch: 26, Cost time: 13.535s 
+[INFO] Saved checkpoint to: checkpoints/TNS_checkpoint.pth
+	speed: 0.1456s/iter; left time: 502.6878s
+Epoch: 27, Cost time: 14.567s 
+[INFO] Saved checkpoint to: checkpoints/TNS_checkpoint.pth
+	speed: 0.1467s/iter; left time: 484.8499s
+Epoch: 28, Cost time: 15.407s 
+[INFO] Saved checkpoint to: checkpoints/TNS_checkpoint.pth
+	speed: 0.1742s/iter; left time: 550.0469s
+Epoch: 29, Cost time: 16.360s 
+[INFO] Saved checkpoint to: checkpoints/TNS_checkpoint.pth
+	speed: 0.1379s/iter; left time: 414.9528s
+Epoch: 30, Cost time: 13.763s 
+[INFO] Saved checkpoint to: checkpoints/TNS_checkpoint.pth
+	speed: 0.1281s/iter; left time: 366.5163s
+Epoch: 31, Cost time: 12.961s 
+[INFO] Saved checkpoint to: checkpoints/TNS_checkpoint.pth
+	speed: 0.1301s/iter; left time: 352.9404s
+Epoch: 32, Cost time: 13.344s 
+[INFO] Saved checkpoint to: checkpoints/TNS_checkpoint.pth
+	speed: 0.1410s/iter; left time: 361.6058s
+Epoch: 33, Cost time: 13.206s 
+[INFO] Saved checkpoint to: checkpoints/TNS_checkpoint.pth
+	speed: 0.1504s/iter; left time: 363.4801s
+Epoch: 34, Cost time: 15.325s 
+[INFO] Saved checkpoint to: checkpoints/TNS_checkpoint.pth
+	speed: 0.1415s/iter; left time: 321.1569s
+Epoch: 35, Cost time: 14.240s 
+[INFO] Saved checkpoint to: checkpoints/TNS_checkpoint.pth
+	speed: 0.1234s/iter; left time: 261.7545s
+Epoch: 36, Cost time: 11.800s 
+[INFO] Saved checkpoint to: checkpoints/TNS_checkpoint.pth
+	speed: 0.1380s/iter; left time: 272.3389s
+Epoch: 37, Cost time: 14.660s 
+[INFO] Saved checkpoint to: checkpoints/TNS_checkpoint.pth
+	speed: 0.1439s/iter; left time: 262.5984s
+Epoch: 38, Cost time: 14.288s 
+[INFO] Saved checkpoint to: checkpoints/TNS_checkpoint.pth
+	speed: 0.1481s/iter; left time: 248.2974s
+Epoch: 39, Cost time: 13.829s 
+[INFO] Saved checkpoint to: checkpoints/TNS_checkpoint.pth
+	speed: 0.1422s/iter; left time: 217.4689s
+Epoch: 40, Cost time: 14.488s 
+[INFO] Saved checkpoint to: checkpoints/TNS_checkpoint.pth
+	speed: 0.1430s/iter; left time: 197.5520s
+Epoch: 41, Cost time: 15.341s 
+[INFO] Saved checkpoint to: checkpoints/TNS_checkpoint.pth
+	speed: 0.1417s/iter; left time: 174.7302s
+Epoch: 42, Cost time: 13.203s 
+[INFO] Saved checkpoint to: checkpoints/TNS_checkpoint.pth
+	speed: 0.1516s/iter; left time: 164.4327s
+Epoch: 43, Cost time: 14.569s 
+[INFO] Saved checkpoint to: checkpoints/TNS_checkpoint.pth
+	speed: 0.1381s/iter; left time: 129.3804s
+Epoch: 44, Cost time: 14.362s 
+[INFO] Saved checkpoint to: checkpoints/TNS_checkpoint.pth
+	speed: 0.1526s/iter; left time: 120.4151s
+Epoch: 45, Cost time: 15.236s 
+[INFO] Saved checkpoint to: checkpoints/TNS_checkpoint.pth
+	speed: 0.1492s/iter; left time: 95.6244s
+Epoch: 46, Cost time: 15.790s 
+[INFO] Saved checkpoint to: checkpoints/TNS_checkpoint.pth
+	speed: 0.1573s/iter; left time: 77.5310s
+Epoch: 47, Cost time: 15.003s 
+[INFO] Saved checkpoint to: checkpoints/TNS_checkpoint.pth
+	speed: 0.1361s/iter; left time: 46.9394s
+Epoch: 48, Cost time: 14.203s 
+[INFO] Saved checkpoint to: checkpoints/TNS_checkpoint.pth
+	speed: 0.1659s/iter; left time: 32.6835s
+Epoch: 49, Cost time: 14.968s 
+[INFO] Saved checkpoint to: checkpoints/TNS_checkpoint.pth
+	speed: 0.1525s/iter; left time: 7.4725s
+Epoch: 50, Cost time: 15.831s 
+[INFO] Saved checkpoint to: checkpoints/TNS_checkpoint.pth
+[DEBUG][train] session=session_train.npy T=4755 label=0 windows_added=4751 local_mask_sum=4755 global_idx_range=(0,4754)
+[DEBUG][train] last window pkt_idx = [4750 4751 4752 4753 4754]
+[TNS_V2:train] num_windows = 4751
+[TNS_V2:train] total_packets = 4755
+[TNS_V2:train] first window shape = (5, 9)
+[DEBUG][val] session=session_test_normal.npy T=600 label=0 windows_added=596 local_mask_sum=600 global_idx_range=(0,599)
+[DEBUG][val] last window pkt_idx = [595 596 597 598 599]
+[TNS_V2:val] num_windows = 596
+[TNS_V2:val] total_packets = 600
+[TNS_V2:val] first window shape = (5, 9)
+[DEBUG][test] session=session_test_normal.npy T=600 label=0 windows_added=596 local_mask_sum=600 global_idx_range=(0,599)
+[DEBUG][test] last window pkt_idx = [595 596 597 598 599]
+[DEBUG][test] session=session_test_anomaly.npy T=10 label=1 windows_added=6 local_mask_sum=10 global_idx_range=(600,609)
+[DEBUG][test] last window pkt_idx = [605 606 607 608 609]
+[TNS_V2:test] num_windows = 602
+[TNS_V2:test] total_packets = 610
+[TNS_V2:test] first window shape = (5, 9)
+[DEBUG][thre] session=session_test_normal.npy T=600 label=0 windows_added=596 local_mask_sum=600 global_idx_range=(0,599)
+[DEBUG][thre] last window pkt_idx = [595 596 597 598 599]
+[TNS_V2:thre] num_windows = 596
+[TNS_V2:thre] total_packets = 600
+[TNS_V2:thre] first window shape = (5, 9)
+dataset window_labels shape = (602, 5)
+dataset last window pkt_idx = [605 606 607 608 609]
+Threshold : 0.20029310882091522
+[DEBUG][test_loop] batch=0 input_shape=torch.Size([32, 5, 9]) labels_shape=torch.Size([32, 5])
+[DEBUG][test_loop] labels sum in batch = 0.0
+[DEBUG][test_loop] pkt_idx first=[0 1 2 3 4] last=[31 32 33 34 35]
+[DEBUG][test_loop] batch=1 input_shape=torch.Size([32, 5, 9]) labels_shape=torch.Size([32, 5])
+[DEBUG][test_loop] labels sum in batch = 0.0
+[DEBUG][test_loop] pkt_idx first=[32 33 34 35 36] last=[63 64 65 66 67]
+[DEBUG][test_loop] batch=2 input_shape=torch.Size([32, 5, 9]) labels_shape=torch.Size([32, 5])
+[DEBUG][test_loop] labels sum in batch = 0.0
+[DEBUG][test_loop] pkt_idx first=[64 65 66 67 68] last=[95 96 97 98 99]
+[DEBUG][test_loop] batch=3 input_shape=torch.Size([32, 5, 9]) labels_shape=torch.Size([32, 5])
+[DEBUG][test_loop] labels sum in batch = 0.0
+[DEBUG][test_loop] pkt_idx first=[ 96  97  98  99 100] last=[127 128 129 130 131]
+[DEBUG][test_loop] batch=4 input_shape=torch.Size([32, 5, 9]) labels_shape=torch.Size([32, 5])
+[DEBUG][test_loop] labels sum in batch = 0.0
+[DEBUG][test_loop] pkt_idx first=[128 129 130 131 132] last=[159 160 161 162 163]
+[DEBUG][test_loop] batch=5 input_shape=torch.Size([32, 5, 9]) labels_shape=torch.Size([32, 5])
+[DEBUG][test_loop] labels sum in batch = 0.0
+[DEBUG][test_loop] pkt_idx first=[160 161 162 163 164] last=[191 192 193 194 195]
+[DEBUG][test_loop] batch=6 input_shape=torch.Size([32, 5, 9]) labels_shape=torch.Size([32, 5])
+[DEBUG][test_loop] labels sum in batch = 0.0
+[DEBUG][test_loop] pkt_idx first=[192 193 194 195 196] last=[223 224 225 226 227]
+[DEBUG][test_loop] batch=7 input_shape=torch.Size([32, 5, 9]) labels_shape=torch.Size([32, 5])
+[DEBUG][test_loop] labels sum in batch = 0.0
+[DEBUG][test_loop] pkt_idx first=[224 225 226 227 228] last=[255 256 257 258 259]
+[DEBUG][test_loop] batch=8 input_shape=torch.Size([32, 5, 9]) labels_shape=torch.Size([32, 5])
+[DEBUG][test_loop] labels sum in batch = 0.0
+[DEBUG][test_loop] pkt_idx first=[256 257 258 259 260] last=[287 288 289 290 291]
+[DEBUG][test_loop] batch=9 input_shape=torch.Size([32, 5, 9]) labels_shape=torch.Size([32, 5])
+[DEBUG][test_loop] labels sum in batch = 0.0
+[DEBUG][test_loop] pkt_idx first=[288 289 290 291 292] last=[319 320 321 322 323]
+[DEBUG][test_loop] batch=10 input_shape=torch.Size([32, 5, 9]) labels_shape=torch.Size([32, 5])
+[DEBUG][test_loop] labels sum in batch = 0.0
+[DEBUG][test_loop] pkt_idx first=[320 321 322 323 324] last=[351 352 353 354 355]
+[DEBUG][test_loop] batch=11 input_shape=torch.Size([32, 5, 9]) labels_shape=torch.Size([32, 5])
+[DEBUG][test_loop] labels sum in batch = 0.0
+[DEBUG][test_loop] pkt_idx first=[352 353 354 355 356] last=[383 384 385 386 387]
+[DEBUG][test_loop] batch=12 input_shape=torch.Size([32, 5, 9]) labels_shape=torch.Size([32, 5])
+[DEBUG][test_loop] labels sum in batch = 0.0
+[DEBUG][test_loop] pkt_idx first=[384 385 386 387 388] last=[415 416 417 418 419]
+[DEBUG][test_loop] batch=13 input_shape=torch.Size([32, 5, 9]) labels_shape=torch.Size([32, 5])
+[DEBUG][test_loop] labels sum in batch = 0.0
+[DEBUG][test_loop] pkt_idx first=[416 417 418 419 420] last=[447 448 449 450 451]
+[DEBUG][test_loop] batch=14 input_shape=torch.Size([32, 5, 9]) labels_shape=torch.Size([32, 5])
+[DEBUG][test_loop] labels sum in batch = 0.0
+[DEBUG][test_loop] pkt_idx first=[448 449 450 451 452] last=[479 480 481 482 483]
+[DEBUG][test_loop] batch=15 input_shape=torch.Size([32, 5, 9]) labels_shape=torch.Size([32, 5])
+[DEBUG][test_loop] labels sum in batch = 0.0
+[DEBUG][test_loop] pkt_idx first=[480 481 482 483 484] last=[511 512 513 514 515]
+[DEBUG][test_loop] batch=16 input_shape=torch.Size([32, 5, 9]) labels_shape=torch.Size([32, 5])
+[DEBUG][test_loop] labels sum in batch = 0.0
+[DEBUG][test_loop] pkt_idx first=[512 513 514 515 516] last=[543 544 545 546 547]
+[DEBUG][test_loop] batch=17 input_shape=torch.Size([32, 5, 9]) labels_shape=torch.Size([32, 5])
+[DEBUG][test_loop] labels sum in batch = 0.0
+[DEBUG][test_loop] pkt_idx first=[544 545 546 547 548] last=[575 576 577 578 579]
+[DEBUG][test_loop] batch=18 input_shape=torch.Size([26, 5, 9]) labels_shape=torch.Size([26, 5])
+[DEBUG][test_loop] labels sum in batch = 30.0
+[DEBUG][test_loop] pkt_idx first=[576 577 578 579 580] last=[605 606 607 608 609]
+test_labels shape = (3010,)
+test_labels sum = 30.0
+test_labels tail 30 = [1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1.
+ 1. 1. 1. 1. 1. 1.]
+num normal windows = 2980
+num anomaly windows = 30
+normal window score: min=0.199030, max=0.200672, mean=0.200000, std=0.000198
+anomaly window score: min=0.199573, max=0.200562, mean=0.200000, std=0.000204
+[INFO] Saved window score analysis to analysis_result/
+===========window level==============
+TP = 30
+FP = 153
+FN = 0
+TN = 2827
+Accuracy : 0.9492, Precision : 0.1639, Recall : 1.0000, F-score : 0.2817 
+raw anomaly packet idx = [600 601 602 603 604 605 606 607 608 609]
+valid mask on anomaly idx = [ True  True  True  True  True  True  True  True  True  True]
+selected packet idx head/tail = [ 0  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15 16 17 18 19] [590 591 592 593 594 595 596 597 598 599 600 601 602 603 604 605 606 607
+ 608 609]
+true anomaly after test_valid_mask = 10
+num anomaly removed by valid mask = 0
+num_valid_test_packets = 610
+num_valid_thre_packets = 600
+=========packet level=============
+num normal packets = 600
+num anomaly packets = 10
+normal packet score: min=0.199798, max=0.200347, mean=0.200001, std=0.000049
+anomaly packet score: min=0.199468, max=0.200068, mean=0.199872, std=0.000150
+[INFO] Saved packet score analysis to analysis_result/
+TP = 0
+FP = 24
+FN = 10
+TN = 576
+Packet Threshold : 0.200089
+Packet Accuracy : 0.9443, Packet Precision : 0.0000, Packet Recall : 0.0000, Packet F-score : 0.0000
+[INFO] Saved packet-level outputs to: packet_result/
+[DEBUG][train] session=session_train.npy T=4755 label=0 windows_added=4751 local_mask_sum=4755 global_idx_range=(0,4754)
+[DEBUG][train] last window pkt_idx = [4750 4751 4752 4753 4754]
+[TNS_V2:train] num_windows = 4751
+[TNS_V2:train] total_packets = 4755
+[TNS_V2:train] first window shape = (5, 9)
+[DEBUG][val] session=session_test_normal.npy T=600 label=0 windows_added=596 local_mask_sum=600 global_idx_range=(0,599)
+[DEBUG][val] last window pkt_idx = [595 596 597 598 599]
+[TNS_V2:val] num_windows = 596
+[TNS_V2:val] total_packets = 600
+[TNS_V2:val] first window shape = (5, 9)
+[DEBUG][test] session=session_test_normal.npy T=600 label=0 windows_added=596 local_mask_sum=600 global_idx_range=(0,599)
+[DEBUG][test] last window pkt_idx = [595 596 597 598 599]
+[DEBUG][test] session=session_test_anomaly.npy T=6 label=1 windows_added=2 local_mask_sum=6 global_idx_range=(600,605)
+[DEBUG][test] last window pkt_idx = [601 602 603 604 605]
+[TNS_V2:test] num_windows = 598
+[TNS_V2:test] total_packets = 606
+[TNS_V2:test] first window shape = (5, 9)
+[DEBUG][thre] session=session_test_normal.npy T=600 label=0 windows_added=596 local_mask_sum=600 global_idx_range=(0,599)
+[DEBUG][thre] last window pkt_idx = [595 596 597 598 599]
+[TNS_V2:thre] num_windows = 596
+[TNS_V2:thre] total_packets = 600
+[TNS_V2:thre] first window shape = (5, 9)
+dataset window_labels shape = (598, 5)
+dataset last window pkt_idx = [601 602 603 604 605]
+[DEBUG][train] session=session_train.npy T=4755 label=0 windows_added=4751 local_mask_sum=4755 global_idx_range=(0,4754)
+[DEBUG][train] last window pkt_idx = [4750 4751 4752 4753 4754]
+[TNS_V2:train] num_windows = 4751
+[TNS_V2:train] total_packets = 4755
+[TNS_V2:train] first window shape = (5, 9)
+[DEBUG][val] session=session_test_normal.npy T=600 label=0 windows_added=596 local_mask_sum=600 global_idx_range=(0,599)
+[DEBUG][val] last window pkt_idx = [595 596 597 598 599]
+[TNS_V2:val] num_windows = 596
+[TNS_V2:val] total_packets = 600
+[TNS_V2:val] first window shape = (5, 9)
+[DEBUG][test] session=session_test_normal.npy T=600 label=0 windows_added=596 local_mask_sum=600 global_idx_range=(0,599)
+[DEBUG][test] last window pkt_idx = [595 596 597 598 599]
+[DEBUG][test] session=session_test_anomaly.npy T=6 label=1 windows_added=2 local_mask_sum=6 global_idx_range=(600,605)
+[DEBUG][test] last window pkt_idx = [601 602 603 604 605]
+[TNS_V2:test] num_windows = 598
+[TNS_V2:test] total_packets = 606
+[TNS_V2:test] first window shape = (5, 9)
+[DEBUG][thre] session=session_test_normal.npy T=600 label=0 windows_added=596 local_mask_sum=600 global_idx_range=(0,599)
+[DEBUG][thre] last window pkt_idx = [595 596 597 598 599]
+[TNS_V2:thre] num_windows = 596
+[TNS_V2:thre] total_packets = 600
+[TNS_V2:thre] first window shape = (5, 9)
+dataset window_labels shape = (598, 5)
+dataset last window pkt_idx = [601 602 603 604 605]
+Threshold : 0.20029310882091522
+[DEBUG][test_loop] batch=0 input_shape=torch.Size([32, 5, 9]) labels_shape=torch.Size([32, 5])
+[DEBUG][test_loop] labels sum in batch = 0.0
+[DEBUG][test_loop] pkt_idx first=[0 1 2 3 4] last=[31 32 33 34 35]
+[DEBUG][test_loop] batch=1 input_shape=torch.Size([32, 5, 9]) labels_shape=torch.Size([32, 5])
+[DEBUG][test_loop] labels sum in batch = 0.0
+[DEBUG][test_loop] pkt_idx first=[32 33 34 35 36] last=[63 64 65 66 67]
+[DEBUG][test_loop] batch=2 input_shape=torch.Size([32, 5, 9]) labels_shape=torch.Size([32, 5])
+[DEBUG][test_loop] labels sum in batch = 0.0
+[DEBUG][test_loop] pkt_idx first=[64 65 66 67 68] last=[95 96 97 98 99]
+[DEBUG][test_loop] batch=3 input_shape=torch.Size([32, 5, 9]) labels_shape=torch.Size([32, 5])
+[DEBUG][test_loop] labels sum in batch = 0.0
+[DEBUG][test_loop] pkt_idx first=[ 96  97  98  99 100] last=[127 128 129 130 131]
+[DEBUG][test_loop] batch=4 input_shape=torch.Size([32, 5, 9]) labels_shape=torch.Size([32, 5])
+[DEBUG][test_loop] labels sum in batch = 0.0
+[DEBUG][test_loop] pkt_idx first=[128 129 130 131 132] last=[159 160 161 162 163]
+[DEBUG][test_loop] batch=5 input_shape=torch.Size([32, 5, 9]) labels_shape=torch.Size([32, 5])
+[DEBUG][test_loop] labels sum in batch = 0.0
+[DEBUG][test_loop] pkt_idx first=[160 161 162 163 164] last=[191 192 193 194 195]
+[DEBUG][test_loop] batch=6 input_shape=torch.Size([32, 5, 9]) labels_shape=torch.Size([32, 5])
+[DEBUG][test_loop] labels sum in batch = 0.0
+[DEBUG][test_loop] pkt_idx first=[192 193 194 195 196] last=[223 224 225 226 227]
+[DEBUG][test_loop] batch=7 input_shape=torch.Size([32, 5, 9]) labels_shape=torch.Size([32, 5])
+[DEBUG][test_loop] labels sum in batch = 0.0
+[DEBUG][test_loop] pkt_idx first=[224 225 226 227 228] last=[255 256 257 258 259]
+[DEBUG][test_loop] batch=8 input_shape=torch.Size([32, 5, 9]) labels_shape=torch.Size([32, 5])
+[DEBUG][test_loop] labels sum in batch = 0.0
+[DEBUG][test_loop] pkt_idx first=[256 257 258 259 260] last=[287 288 289 290 291]
+[DEBUG][test_loop] batch=9 input_shape=torch.Size([32, 5, 9]) labels_shape=torch.Size([32, 5])
+[DEBUG][test_loop] labels sum in batch = 0.0
+[DEBUG][test_loop] pkt_idx first=[288 289 290 291 292] last=[319 320 321 322 323]
+[DEBUG][test_loop] batch=10 input_shape=torch.Size([32, 5, 9]) labels_shape=torch.Size([32, 5])
+[DEBUG][test_loop] labels sum in batch = 0.0
+[DEBUG][test_loop] pkt_idx first=[320 321 322 323 324] last=[351 352 353 354 355]
+[DEBUG][test_loop] batch=11 input_shape=torch.Size([32, 5, 9]) labels_shape=torch.Size([32, 5])
+[DEBUG][test_loop] labels sum in batch = 0.0
+[DEBUG][test_loop] pkt_idx first=[352 353 354 355 356] last=[383 384 385 386 387]
+[DEBUG][test_loop] batch=12 input_shape=torch.Size([32, 5, 9]) labels_shape=torch.Size([32, 5])
+[DEBUG][test_loop] labels sum in batch = 0.0
+[DEBUG][test_loop] pkt_idx first=[384 385 386 387 388] last=[415 416 417 418 419]
+[DEBUG][test_loop] batch=13 input_shape=torch.Size([32, 5, 9]) labels_shape=torch.Size([32, 5])
+[DEBUG][test_loop] labels sum in batch = 0.0
+[DEBUG][test_loop] pkt_idx first=[416 417 418 419 420] last=[447 448 449 450 451]
+[DEBUG][test_loop] batch=14 input_shape=torch.Size([32, 5, 9]) labels_shape=torch.Size([32, 5])
+[DEBUG][test_loop] labels sum in batch = 0.0
+[DEBUG][test_loop] pkt_idx first=[448 449 450 451 452] last=[479 480 481 482 483]
+[DEBUG][test_loop] batch=15 input_shape=torch.Size([32, 5, 9]) labels_shape=torch.Size([32, 5])
+[DEBUG][test_loop] labels sum in batch = 0.0
+[DEBUG][test_loop] pkt_idx first=[480 481 482 483 484] last=[511 512 513 514 515]
+[DEBUG][test_loop] batch=16 input_shape=torch.Size([32, 5, 9]) labels_shape=torch.Size([32, 5])
+[DEBUG][test_loop] labels sum in batch = 0.0
+[DEBUG][test_loop] pkt_idx first=[512 513 514 515 516] last=[543 544 545 546 547]
+[DEBUG][test_loop] batch=17 input_shape=torch.Size([32, 5, 9]) labels_shape=torch.Size([32, 5])
+[DEBUG][test_loop] labels sum in batch = 0.0
+[DEBUG][test_loop] pkt_idx first=[544 545 546 547 548] last=[575 576 577 578 579]
+[DEBUG][test_loop] batch=18 input_shape=torch.Size([22, 5, 9]) labels_shape=torch.Size([22, 5])
+[DEBUG][test_loop] labels sum in batch = 10.0
+[DEBUG][test_loop] pkt_idx first=[576 577 578 579 580] last=[601 602 603 604 605]
+test_labels shape = (2990,)
+test_labels sum = 10.0
+test_labels tail 30 = [0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 1. 1. 1. 1.
+ 1. 1. 1. 1. 1. 1.]
+num normal windows = 2980
+num anomaly windows = 10
+normal window score: min=0.199030, max=0.200672, mean=0.200000, std=0.000198
+anomaly window score: min=0.199788, max=0.200349, mean=0.200000, std=0.000159
+[INFO] Saved window score analysis to analysis_result/
+===========window level==============
+TP = 10
+FP = 153
+FN = 0
+TN = 2827
+Accuracy : 0.9488, Precision : 0.0613, Recall : 1.0000, F-score : 0.1156 
+raw anomaly packet idx = [600 601 602 603 604 605]
+valid mask on anomaly idx = [ True  True  True  True  True  True]
+selected packet idx head/tail = [ 0  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15 16 17 18 19] [586 587 588 589 590 591 592 593 594 595 596 597 598 599 600 601 602 603
+ 604 605]
+true anomaly after test_valid_mask = 6
+num anomaly removed by valid mask = 0
+num_valid_test_packets = 606
+num_valid_thre_packets = 600
+=========packet level=============
+num normal packets = 600
+num anomaly packets = 6
+normal packet score: min=0.199798, max=0.200347, mean=0.200001, std=0.000049
+anomaly packet score: min=0.199468, max=0.200200, mean=0.199834, std=0.000211
+[INFO] Saved packet score analysis to analysis_result/
+TP = 1
+FP = 24
+FN = 5
+TN = 576
+Packet Threshold : 0.200089
+Packet Accuracy : 0.9521, Packet Precision : 0.0400, Packet Recall : 0.1667, Packet F-score : 0.0645
+[INFO] Saved packet-level outputs to: packet_result/
+[DEBUG][train] session=session_train.npy T=4755 label=0 windows_added=4751 local_mask_sum=4755 global_idx_range=(0,4754)
+[DEBUG][train] last window pkt_idx = [4750 4751 4752 4753 4754]
+[TNS_V2:train] num_windows = 4751
+[TNS_V2:train] total_packets = 4755
+[TNS_V2:train] first window shape = (5, 9)
+[DEBUG][val] session=session_test_normal.npy T=600 label=0 windows_added=596 local_mask_sum=600 global_idx_range=(0,599)
+[DEBUG][val] last window pkt_idx = [595 596 597 598 599]
+[TNS_V2:val] num_windows = 596
+[TNS_V2:val] total_packets = 600
+[TNS_V2:val] first window shape = (5, 9)
+[DEBUG][test] session=session_test_normal.npy T=600 label=0 windows_added=596 local_mask_sum=600 global_idx_range=(0,599)
+[DEBUG][test] last window pkt_idx = [595 596 597 598 599]
+[DEBUG][test] session=session_test_anomaly.npy T=6 label=1 windows_added=2 local_mask_sum=6 global_idx_range=(600,605)
+[DEBUG][test] last window pkt_idx = [601 602 603 604 605]
+[TNS_V2:test] num_windows = 598
+[TNS_V2:test] total_packets = 606
+[TNS_V2:test] first window shape = (5, 9)
+[DEBUG][thre] session=session_test_normal.npy T=600 label=0 windows_added=596 local_mask_sum=600 global_idx_range=(0,599)
+[DEBUG][thre] last window pkt_idx = [595 596 597 598 599]
+[TNS_V2:thre] num_windows = 596
+[TNS_V2:thre] total_packets = 600
+[TNS_V2:thre] first window shape = (5, 9)
+dataset window_labels shape = (598, 5)
+dataset last window pkt_idx = [601 602 603 604 605]
+Threshold : 0.20447845160961153
+[DEBUG][test_loop] batch=0 input_shape=torch.Size([32, 5, 9]) labels_shape=torch.Size([32, 5])
+[DEBUG][test_loop] labels sum in batch = 0.0
+[DEBUG][test_loop] pkt_idx first=[0 1 2 3 4] last=[31 32 33 34 35]
+[DEBUG][test_loop] batch=1 input_shape=torch.Size([32, 5, 9]) labels_shape=torch.Size([32, 5])
+[DEBUG][test_loop] labels sum in batch = 0.0
+[DEBUG][test_loop] pkt_idx first=[32 33 34 35 36] last=[63 64 65 66 67]
+[DEBUG][test_loop] batch=2 input_shape=torch.Size([32, 5, 9]) labels_shape=torch.Size([32, 5])
+[DEBUG][test_loop] labels sum in batch = 0.0
+[DEBUG][test_loop] pkt_idx first=[64 65 66 67 68] last=[95 96 97 98 99]
+[DEBUG][test_loop] batch=3 input_shape=torch.Size([32, 5, 9]) labels_shape=torch.Size([32, 5])
+[DEBUG][test_loop] labels sum in batch = 0.0
+[DEBUG][test_loop] pkt_idx first=[ 96  97  98  99 100] last=[127 128 129 130 131]
+[DEBUG][test_loop] batch=4 input_shape=torch.Size([32, 5, 9]) labels_shape=torch.Size([32, 5])
+[DEBUG][test_loop] labels sum in batch = 0.0
+[DEBUG][test_loop] pkt_idx first=[128 129 130 131 132] last=[159 160 161 162 163]
+[DEBUG][test_loop] batch=5 input_shape=torch.Size([32, 5, 9]) labels_shape=torch.Size([32, 5])
+[DEBUG][test_loop] labels sum in batch = 0.0
+[DEBUG][test_loop] pkt_idx first=[160 161 162 163 164] last=[191 192 193 194 195]
+[DEBUG][test_loop] batch=6 input_shape=torch.Size([32, 5, 9]) labels_shape=torch.Size([32, 5])
+[DEBUG][test_loop] labels sum in batch = 0.0
+[DEBUG][test_loop] pkt_idx first=[192 193 194 195 196] last=[223 224 225 226 227]
+[DEBUG][test_loop] batch=7 input_shape=torch.Size([32, 5, 9]) labels_shape=torch.Size([32, 5])
+[DEBUG][test_loop] labels sum in batch = 0.0
+[DEBUG][test_loop] pkt_idx first=[224 225 226 227 228] last=[255 256 257 258 259]
+[DEBUG][test_loop] batch=8 input_shape=torch.Size([32, 5, 9]) labels_shape=torch.Size([32, 5])
+[DEBUG][test_loop] labels sum in batch = 0.0
+[DEBUG][test_loop] pkt_idx first=[256 257 258 259 260] last=[287 288 289 290 291]
+[DEBUG][test_loop] batch=9 input_shape=torch.Size([32, 5, 9]) labels_shape=torch.Size([32, 5])
+[DEBUG][test_loop] labels sum in batch = 0.0
+[DEBUG][test_loop] pkt_idx first=[288 289 290 291 292] last=[319 320 321 322 323]
+[DEBUG][test_loop] batch=10 input_shape=torch.Size([32, 5, 9]) labels_shape=torch.Size([32, 5])
+[DEBUG][test_loop] labels sum in batch = 0.0
+[DEBUG][test_loop] pkt_idx first=[320 321 322 323 324] last=[351 352 353 354 355]
+[DEBUG][test_loop] batch=11 input_shape=torch.Size([32, 5, 9]) labels_shape=torch.Size([32, 5])
+[DEBUG][test_loop] labels sum in batch = 0.0
+[DEBUG][test_loop] pkt_idx first=[352 353 354 355 356] last=[383 384 385 386 387]
+[DEBUG][test_loop] batch=12 input_shape=torch.Size([32, 5, 9]) labels_shape=torch.Size([32, 5])
+[DEBUG][test_loop] labels sum in batch = 0.0
+[DEBUG][test_loop] pkt_idx first=[384 385 386 387 388] last=[415 416 417 418 419]
+[DEBUG][test_loop] batch=13 input_shape=torch.Size([32, 5, 9]) labels_shape=torch.Size([32, 5])
+[DEBUG][test_loop] labels sum in batch = 0.0
+[DEBUG][test_loop] pkt_idx first=[416 417 418 419 420] last=[447 448 449 450 451]
+[DEBUG][test_loop] batch=14 input_shape=torch.Size([32, 5, 9]) labels_shape=torch.Size([32, 5])
+[DEBUG][test_loop] labels sum in batch = 0.0
+[DEBUG][test_loop] pkt_idx first=[448 449 450 451 452] last=[479 480 481 482 483]
+[DEBUG][test_loop] batch=15 input_shape=torch.Size([32, 5, 9]) labels_shape=torch.Size([32, 5])
+[DEBUG][test_loop] labels sum in batch = 0.0
+[DEBUG][test_loop] pkt_idx first=[480 481 482 483 484] last=[511 512 513 514 515]
+[DEBUG][test_loop] batch=16 input_shape=torch.Size([32, 5, 9]) labels_shape=torch.Size([32, 5])
+[DEBUG][test_loop] labels sum in batch = 0.0
+[DEBUG][test_loop] pkt_idx first=[512 513 514 515 516] last=[543 544 545 546 547]
+[DEBUG][test_loop] batch=17 input_shape=torch.Size([32, 5, 9]) labels_shape=torch.Size([32, 5])
+[DEBUG][test_loop] labels sum in batch = 0.0
+[DEBUG][test_loop] pkt_idx first=[544 545 546 547 548] last=[575 576 577 578 579]
+[DEBUG][test_loop] batch=18 input_shape=torch.Size([22, 5, 9]) labels_shape=torch.Size([22, 5])
+[DEBUG][test_loop] labels sum in batch = 10.0
+[DEBUG][test_loop] pkt_idx first=[576 577 578 579 580] last=[601 602 603 604 605]
+test_labels shape = (2990,)
+test_labels sum = 10.0
+test_labels tail 30 = [0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 1. 1. 1. 1.
+ 1. 1. 1. 1. 1. 1.]
+num normal windows = 2980
+num anomaly windows = 10
+normal window score: min=0.187788, max=0.209996, mean=0.200000, std=0.002971
+anomaly window score: min=0.197473, max=0.202428, mean=0.200000, std=0.001538
+[INFO] Saved window score analysis to analysis_result/
+===========window level==============
+TP = 0
+FP = 144
+FN = 10
+TN = 2836
+Accuracy : 0.9485, Precision : 0.0000, Recall : 0.0000, F-score : 0.0000 
+raw anomaly packet idx = [600 601 602 603 604 605]
+valid mask on anomaly idx = [ True  True  True  True  True  True]
+selected packet idx head/tail = [ 0  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15 16 17 18 19] [586 587 588 589 590 591 592 593 594 595 596 597 598 599 600 601 602 603
+ 604 605]
+true anomaly after test_valid_mask = 6
+num anomaly removed by valid mask = 0
+num_valid_test_packets = 606
+num_valid_thre_packets = 600
+=========packet level=============
+num normal packets = 600
+num anomaly packets = 6
+normal packet score: min=0.195524, max=0.202391, mean=0.199992, std=0.000722
+anomaly packet score: min=0.196433, max=0.200785, mean=0.198609, std=0.001256
+[INFO] Saved packet score analysis to analysis_result/
+TP = 0
+FP = 24
+FN = 6
+TN = 576
+Packet Threshold : 0.201264
+Packet Accuracy : 0.9505, Packet Precision : 0.0000, Packet Recall : 0.0000, Packet F-score : 0.0000
+[INFO] Saved packet-level outputs to: packet_result/

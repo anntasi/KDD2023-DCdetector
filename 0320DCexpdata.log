@@ -1,0 +1,137 @@
+[TNS_V2:train] split=train
+[TNS_V2:train] total_packets=3900
+[TNS_V2:train] num_windows=3896
+[TNS_V2:train] anomaly_packets=0
+[TNS_V2:train] first window shape=(5, 9)
+[TNS_V2:train] first pkt_idx=[0 1 2 3 4]
+[TNS_V2:val] split=val
+[TNS_V2:val] total_packets=500
+[TNS_V2:val] num_windows=496
+[TNS_V2:val] anomaly_packets=0
+[TNS_V2:val] first window shape=(5, 9)
+[TNS_V2:val] first pkt_idx=[0 1 2 3 4]
+[TNS_V2:test] split=test_mixed
+[TNS_V2:test] total_packets=600
+[TNS_V2:test] num_windows=596
+[TNS_V2:test] anomaly_packets=6
+[TNS_V2:test] first window shape=(5, 9)
+[TNS_V2:test] first pkt_idx=[0 1 2 3 4]
+[TNS_V2:thre] split=val
+[TNS_V2:thre] total_packets=500
+[TNS_V2:thre] num_windows=496
+[TNS_V2:thre] anomaly_packets=0
+[TNS_V2:thre] first window shape=(5, 9)
+[TNS_V2:thre] first pkt_idx=[0 1 2 3 4]
+[INFO] Output directory: outputs/TNS/20260321_023534_ws5_ps5_bs32_ep10
+dataset window_labels shape = (596, 5)
+dataset last window pkt_idx = [595 596 597 598 599]
+
+
+
+2026-03-21 02:38:24
+================ Hyperparameters ===============
+anormly_ratio: 4.0
+batch_size: 32
+d_model: 256
+data_path: ../0320DCexpdata
+dataset: TNS
+devices: 0,1,2,3
+e_layers: 3
+gpu: 0
+index: 137
+input_c: 9
+k: 3
+loss_fuc: MSE
+lr: 0.0001
+mode: train
+model_save_path: checkpoints
+num_epochs: 10
+output_c: 9
+patch_size: [5]
+rec_timeseries: True
+use_gpu: False
+use_multi_gpu: True
+win_size: 5
+====================  Train  ===================
+[TNS_V2:train] split=train
+[TNS_V2:train] total_packets=3900
+[TNS_V2:train] num_windows=3896
+[TNS_V2:train] anomaly_packets=0
+[TNS_V2:train] first window shape=(5, 9)
+[TNS_V2:train] first pkt_idx=[0 1 2 3 4]
+[TNS_V2:val] split=val
+[TNS_V2:val] total_packets=500
+[TNS_V2:val] num_windows=496
+[TNS_V2:val] anomaly_packets=0
+[TNS_V2:val] first window shape=(5, 9)
+[TNS_V2:val] first pkt_idx=[0 1 2 3 4]
+[TNS_V2:test] split=test_mixed
+[TNS_V2:test] total_packets=600
+[TNS_V2:test] num_windows=596
+[TNS_V2:test] anomaly_packets=6
+[TNS_V2:test] first window shape=(5, 9)
+[TNS_V2:test] first pkt_idx=[0 1 2 3 4]
+[TNS_V2:thre] split=val
+[TNS_V2:thre] total_packets=500
+[TNS_V2:thre] num_windows=496
+[TNS_V2:thre] anomaly_packets=0
+[TNS_V2:thre] first window shape=(5, 9)
+[TNS_V2:thre] first pkt_idx=[0 1 2 3 4]
+[INFO] Output directory: outputs/TNS/20260321_023824_ws5_ps5_bs32_ep10
+	speed: 0.1060s/iter; left time: 117.7548s
+Epoch: 1, Cost time: 14.501s 
+[INFO] Saved checkpoint to: outputs/TNS/20260321_023824_ws5_ps5_bs32_ep10/checkpoints/TNS_checkpoint.pth
+	speed: 0.1484s/iter; left time: 146.9051s
+Epoch: 2, Cost time: 14.420s 
+[INFO] Saved checkpoint to: outputs/TNS/20260321_023824_ws5_ps5_bs32_ep10/checkpoints/TNS_checkpoint.pth
+	speed: 0.1326s/iter; left time: 115.1873s
+Epoch: 3, Cost time: 12.816s 
+[INFO] Saved checkpoint to: outputs/TNS/20260321_023824_ws5_ps5_bs32_ep10/checkpoints/TNS_checkpoint.pth
+	speed: 0.1366s/iter; left time: 102.1710s
+Epoch: 4, Cost time: 13.554s 
+[INFO] Saved checkpoint to: outputs/TNS/20260321_023824_ws5_ps5_bs32_ep10/checkpoints/TNS_checkpoint.pth
+	speed: 0.1329s/iter; left time: 83.3205s
+Epoch: 5, Cost time: 13.397s 
+[INFO] Saved checkpoint to: outputs/TNS/20260321_023824_ws5_ps5_bs32_ep10/checkpoints/TNS_checkpoint.pth
+	speed: 0.1424s/iter; left time: 72.0482s
+Epoch: 6, Cost time: 13.991s 
+[INFO] Saved checkpoint to: outputs/TNS/20260321_023824_ws5_ps5_bs32_ep10/checkpoints/TNS_checkpoint.pth
+	speed: 0.1261s/iter; left time: 48.5448s
+Epoch: 7, Cost time: 12.058s 
+[INFO] Saved checkpoint to: outputs/TNS/20260321_023824_ws5_ps5_bs32_ep10/checkpoints/TNS_checkpoint.pth
+	speed: 0.1325s/iter; left time: 34.9821s
+Epoch: 8, Cost time: 14.309s 
+[INFO] Saved checkpoint to: outputs/TNS/20260321_023824_ws5_ps5_bs32_ep10/checkpoints/TNS_checkpoint.pth
+	speed: 0.1302s/iter; left time: 18.6246s
+Epoch: 9, Cost time: 12.678s 
+[INFO] Saved checkpoint to: outputs/TNS/20260321_023824_ws5_ps5_bs32_ep10/checkpoints/TNS_checkpoint.pth
+	speed: 0.1408s/iter; left time: 3.0980s
+Epoch: 10, Cost time: 13.377s 
+[INFO] Saved checkpoint to: outputs/TNS/20260321_023824_ws5_ps5_bs32_ep10/checkpoints/TNS_checkpoint.pth
+[TNS_V2:train] split=train
+[TNS_V2:train] total_packets=3900
+[TNS_V2:train] num_windows=3896
+[TNS_V2:train] anomaly_packets=0
+[TNS_V2:train] first window shape=(5, 9)
+[TNS_V2:train] first pkt_idx=[0 1 2 3 4]
+[TNS_V2:val] split=val
+[TNS_V2:val] total_packets=500
+[TNS_V2:val] num_windows=496
+[TNS_V2:val] anomaly_packets=0
+[TNS_V2:val] first window shape=(5, 9)
+[TNS_V2:val] first pkt_idx=[0 1 2 3 4]
+[TNS_V2:test] split=test_mixed
+[TNS_V2:test] total_packets=600
+[TNS_V2:test] num_windows=596
+[TNS_V2:test] anomaly_packets=6
+[TNS_V2:test] first window shape=(5, 9)
+[TNS_V2:test] first pkt_idx=[0 1 2 3 4]
+[TNS_V2:thre] split=val
+[TNS_V2:thre] total_packets=500
+[TNS_V2:thre] num_windows=496
+[TNS_V2:thre] anomaly_packets=0
+[TNS_V2:thre] first window shape=(5, 9)
+[TNS_V2:thre] first pkt_idx=[0 1 2 3 4]
+[INFO] Output directory: outputs/TNS/20260321_072800_ws5_ps5_bs32_ep10
+dataset window_labels shape = (596, 5)
+dataset last window pkt_idx = [595 596 597 598 599]

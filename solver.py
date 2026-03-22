@@ -1,3 +1,6 @@
+from matplotlib import pyplot as plt
+import pandas as pd
+
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
@@ -5,7 +8,8 @@ import numpy as np
 import os
 import time
 from utils.utils import *
-
+import json
+from datetime import datetime
 from model.DCdetector import DCdetector
 from data_factory.data_loader import get_loader_segment
 from einops import rearrange
@@ -58,7 +62,7 @@ class EarlyStopping:
     def save_checkpoint(self, val_loss, val_loss2, model, path):
             os.makedirs(path, exist_ok=True)
 
-            ckpt_path = os.path.join(path, str(self.dataset) + '_checkpoint.pth')
+            ckpt_path = os.path.join(path, 'checkpoint.pth')
             torch.save(model.state_dict(), ckpt_path)
 
             print("[INFO] Saved checkpoint to:", ckpt_path)
@@ -68,16 +72,19 @@ class EarlyStopping:
 
         
 class Solver(object):
-    DEFAULTS = {}
+    DEFAULTS = {
+        'loss_fuc': 'MSE',
+        'model_save_path': 'checkpoints',
+    }
 
     def __init__(self, config):
 
         self.__dict__.update(Solver.DEFAULTS, **config)
 
-        self.train_loader = get_loader_segment(self.index, 'dataset/'+self.data_path, batch_size=self.batch_size, win_size=self.win_size, mode='train', dataset=self.dataset, )
-        self.vali_loader = get_loader_segment(self.index, 'dataset/'+self.data_path, batch_size=self.batch_size, win_size=self.win_size, mode='val', dataset=self.dataset)
-        self.test_loader = get_loader_segment(self.index, 'dataset/'+self.data_path, batch_size=self.batch_size, win_size=self.win_size, mode='test', dataset=self.dataset)
-        self.thre_loader = get_loader_segment(self.index, 'dataset/'+self.data_path, batch_size=self.batch_size, win_size=self.win_size, mode='thre', dataset=self.dataset)
+        self.train_loader = get_loader_segment(self.index, self.data_path, batch_size=self.batch_size, win_size=self.win_size, mode='train', dataset=self.dataset, )
+        self.vali_loader = get_loader_segment(self.index, self.data_path, batch_size=self.batch_size, win_size=self.win_size, mode='val', dataset=self.dataset)
+        self.test_loader = get_loader_segment(self.index, self.data_path, batch_size=self.batch_size, win_size=self.win_size, mode='test', dataset=self.dataset)
+        self.thre_loader = get_loader_segment(self.index, self.data_path, batch_size=self.batch_size, win_size=self.win_size, mode='thre', dataset=self.dataset)
         self.win_size = config.get('win_size', 10)
         self.input_c = config.get('input_c', 9)
         self.output_c = config.get('output_c', 9)
@@ -86,17 +93,16 @@ class Solver(object):
         self.d_model = config.get('d_model', 256)
         self.e_layers = config.get('e_layers', 3)
         self.patch_size = config.get('patch_size', [5])
-
+        
         self.lr = config.get('lr', 1e-4)
         self.num_epochs = config.get('num_epochs', 10)
         self.batch_size = config.get('batch_size', 32)
 
         self.dataset = config.get('dataset', 'TNS')
         self.data_path = config.get('data_path', '../expdata')
-        self.model_save_path = config.get('model_save_path', 'checkpoints')
         self.anormly_ratio = config.get('anormly_ratio', 4.0)
         self.build_model()
-        
+        self._init_output_dirs()
         self.device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
         
         if self.loss_fuc == 'MAE':
@@ -104,7 +110,50 @@ class Solver(object):
         elif self.loss_fuc == 'MSE':
             self.criterion = nn.MSELoss()
         
+    def _init_output_dirs(self):
+        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
 
+        patch_str = "-".join(map(str, self.patch_size)) if isinstance(self.patch_size, (list, tuple)) else str(self.patch_size)
+
+        self.run_name = f"{timestamp}_ws{self.win_size}_ps{patch_str}_bs{self.batch_size}_ep{self.num_epochs}"
+        self.output_root = os.path.join("outputs", self.dataset, self.run_name)
+
+        self.checkpoint_dir = os.path.join("outputs", self.dataset, "shared_checkpoints")
+        self.analysis_dir = os.path.join(self.output_root, "analysis")
+        self.inference_dir = os.path.join(self.output_root, "inference")
+
+        os.makedirs(self.output_root, exist_ok=True)
+        os.makedirs(self.checkpoint_dir, exist_ok=True)
+        os.makedirs(self.analysis_dir, exist_ok=True)
+        os.makedirs(self.inference_dir, exist_ok=True)
+
+        self.train_history = []
+
+        config_to_save = {
+            "dataset": self.dataset,
+            "data_path": self.data_path,
+            "index": self.index,
+            "win_size": self.win_size,
+            "input_c": self.input_c,
+            "output_c": self.output_c,
+            "n_heads": self.n_heads,
+            "d_model": self.d_model,
+            "e_layers": self.e_layers,
+            "patch_size": self.patch_size,
+            "lr": self.lr,
+            "num_epochs": self.num_epochs,
+            "batch_size": self.batch_size,
+            "anormly_ratio": self.anormly_ratio,
+            "model_save_path": self.model_save_path,
+        }
+
+        with open(os.path.join(self.output_root, "config.json"), "w", encoding="utf-8") as f:
+            json.dump(config_to_save, f, indent=2, ensure_ascii=False)
+
+        print("[INFO] Output directory:", self.output_root)
+        
+        
+        
     def build_model(self):
         self.model = DCdetector(win_size=self.win_size, enc_in=self.input_c, c_out=self.output_c, n_heads=self.n_heads, d_model=self.d_model, e_layers=self.e_layers, patch_size=self.patch_size, channel=self.input_c)
         
@@ -189,13 +238,14 @@ class Solver(object):
 
             loss_1.append((prior_loss - series_loss).item())
 
-        return np.average(loss_1), np.average(loss_2)
+        return np.average(loss_1), 0.0
+        #return np.average(loss_1), np.average(loss_2)
 
 
     def train(self):
 
         time_now = time.time()
-        path = self.model_save_path
+        path = self.checkpoint_dir
         if not os.path.exists(path):
             os.makedirs(path)
         early_stopping = EarlyStopping(patience=5, verbose=True, dataset_name=self.dataset)
@@ -250,11 +300,25 @@ class Solver(object):
                 loss.backward()
                 self.optimizer.step()
 
-            vali_loss1, vali_loss2 = self.vali(self.test_loader)
+            vali_loss1, vali_loss2 = self.vali(self.vali_loader)
 
             print(
                 "Epoch: {0}, Cost time: {1:.3f}s ".format(
                     epoch + 1, time.time() - epoch_time))
+            
+            epoch_record = {
+                "epoch": epoch + 1,
+                "epoch_time_sec": time.time() - epoch_time,
+                "vali_loss1": float(vali_loss1),
+                "vali_loss2": float(vali_loss2),
+                "learning_rate": float(self.optimizer.param_groups[0]["lr"]),
+            }
+            self.train_history.append(epoch_record)
+
+            pd.DataFrame(self.train_history).to_csv(
+                os.path.join(self.output_root, "train_history.csv"),
+                index=False
+            )
             early_stopping(vali_loss1, vali_loss2, self.model, path)
             if early_stopping.early_stop:
                 break
@@ -263,27 +327,26 @@ class Solver(object):
             
     def test(self):
         print("dataset window_labels shape =", self.test_loader.dataset.window_labels.shape, flush=True)
-        print("dataset last window label =", self.test_loader.dataset.window_labels[-1], flush=True)
-        print("dataset last window pkt_idx =", self.test_loader.dataset.window_packet_indices[-1], flush=True)
+        print("dataset last window pkt_idx =", self.test_loader.dataset.window_packet_indices[-1], flush=True)#[-1] 是最後一個
         self.model.load_state_dict(
-            torch.load(
-                os.path.join(str(self.model_save_path), str(self.dataset) + '_checkpoint.pth')))
-        self.model.eval()
+            torch.load(os.path.join(self.checkpoint_dir, 'checkpoint.pth')))#把之前 training 存的 model weights 載入回來
+        self.model.eval()#把模型切到 evaluation mode。
         temperature = 50
 
-        # (1) stastic on the train set
+        # (1) stastic on the train set:用 train set 蒐集一批「正常資料的 score」
         attens_energy = []
-        
+        train_pkt_idx_all = []
         for i, batch in enumerate(self.train_loader):
             if len(batch) == 3:
                 input_data, labels, pkt_idx = batch
+                train_pkt_idx_all.append(pkt_idx.cpu().numpy())
             else:
                 input_data, labels = batch    
             input = input_data.float().to(self.device)
-            series, prior = self.model(input)
-            series_loss = 0.0
+            series, prior = self.model(input)#series：模型從資料學到的 attention / relation
+            series_loss = 0.0                #prior：另一個對照的 attention / relation後面你是拿它們做 KL divergence，比較兩者差異。
             prior_loss = 0.0
-            for u in range(len(prior)):
+            for u in range(len(prior)):#prior 和 series 應該不是單一 tensor，而是 多層 / 多個 attention map。所以你要對每一層都算 loss，再累加。
                 if u == 0:
                     series_loss = my_kl_loss(series[u], (
                             prior[u] / torch.unsqueeze(torch.sum(prior[u], dim=-1), dim=-1).repeat(1, 1, 1,
@@ -301,13 +364,24 @@ class Solver(object):
                                                                                                 self.win_size)),
                         series[u].detach()) * temperature
 
-            metric = torch.softmax((-series_loss - prior_loss), dim=-1)
-            cri = metric.detach().cpu().numpy()
-            attens_energy.append(cri)
+            # metric = torch.softmax((-series_loss - prior_loss), dim=-1)
+            # cri = metric.detach().cpu().numpy()
+            cri = (-series_loss - prior_loss).detach().cpu().numpy()
+            cri_window = cri.mean(axis=1)
+            attens_energy.append(cri_window)
 
         attens_energy = np.concatenate(attens_energy, axis=0).reshape(-1)
-        train_energy = np.array(attens_energy)
+        train_energy = np.array(attens_energy)#train set 所有 window 的 score
+        train_pkt_idx = np.concatenate(train_pkt_idx_all, axis=0)
+        train_dataset = self.train_loader.dataset
 
+        train_packet_scores, train_valid_mask = self._aggregate_window_scores_to_packets(
+            window_scores=train_energy,
+            window_pkt_idx=train_pkt_idx,
+            total_packets=len(train_dataset.packet_labels_raw)
+        )
+
+        train_valid_mask = train_valid_mask & train_dataset.selected_packet_mask
         # (2) find the threshold
         attens_energy = []
         thre_pkt_idx_all = []
@@ -340,14 +414,16 @@ class Solver(object):
                                                                                                 self.win_size)),
                         series[u].detach()) * temperature
 
-            metric = torch.softmax((-series_loss - prior_loss), dim=-1)
-            cri = metric.detach().cpu().numpy()
-            attens_energy.append(cri)
+            # metric = torch.softmax((-series_loss - prior_loss), dim=-1)
+            # cri = metric.detach().cpu().numpy()
+            cri = (-series_loss - prior_loss).detach().cpu().numpy()
+            cri_window = cri.mean(axis=1)
+            attens_energy.append(cri_window)
 
         attens_energy = np.concatenate(attens_energy, axis=0).reshape(-1)
         thre_energy = np.array(attens_energy)
         combined_energy = np.concatenate([train_energy, thre_energy], axis=0)
-        thresh = np.percentile(combined_energy, 100 - self.anormly_ratio)
+        thresh = np.percentile(combined_energy, 100 - self.anormly_ratio)#只有分數最高的 self.anormly_ratio% 會被當成 anomaly
         print("Threshold :", thresh)
 
         # (3) evaluation on the test set
@@ -355,17 +431,17 @@ class Solver(object):
         attens_energy = []
         #for i, batch in enumerate(self.thre_loader):
         test_pkt_idx_all = []
-        for i, batch in enumerate(self.test_loader):
-            print(f"[DEBUG][test_loop] batch={i} input_shape={input_data.shape} labels_shape={labels.shape}", flush=True)
-            print(f"[DEBUG][test_loop] labels sum in batch = {labels.sum().item() if hasattr(labels, 'sum') else np.sum(labels)}", flush=True)
-
-            if len(batch) == 3:
-                print(f"[DEBUG][test_loop] pkt_idx first={pkt_idx[0].cpu().numpy()} last={pkt_idx[-1].cpu().numpy()}", flush=True)
+        for i, batch in enumerate(self.test_loader):#一個batch有batch size個window
             if len(batch) == 3:
                 input_data, labels, pkt_idx = batch
+                print(f"[DEBUG][test_loop] batch={i} input_shape={input_data.shape} labels_shape={labels.shape}", flush=True)
+                print(f"[DEBUG][test_loop] labels sum in batch = {labels.sum().item()}", flush=True)
+                print(f"[DEBUG][test_loop] pkt_idx first={pkt_idx[0].cpu().numpy()} last={pkt_idx[-1].cpu().numpy()}", flush=True)
                 test_pkt_idx_all.append(pkt_idx.cpu().numpy())
             else:
                 input_data, labels = batch
+                print(f"[DEBUG][test_loop] batch={i} input_shape={input_data.shape} labels_shape={labels.shape}", flush=True)
+                print(f"[DEBUG][test_loop] labels sum in batch = {labels.sum().item()}", flush=True)
             input = input_data.float().to(self.device)
             series, prior = self.model(input)
             series_loss = 0.0
@@ -387,30 +463,109 @@ class Solver(object):
                         (prior[u] / torch.unsqueeze(torch.sum(prior[u], dim=-1), dim=-1).repeat(1, 1, 1,
                                                                                                 self.win_size)),
                         series[u].detach()) * temperature
-            metric = torch.softmax((-series_loss - prior_loss), dim=-1)
-            cri = metric.detach().cpu().numpy()
-            attens_energy.append(cri)
-            test_labels.append(labels.cpu().numpy())
+            # metric = torch.softmax((-series_loss - prior_loss), dim=-1)
+            
+            # cri = metric.detach().cpu().numpy()
+            cri = (-series_loss - prior_loss).detach().cpu().numpy()
+            print("cri.shape before agg =", cri.shape, flush=True)
+
+            cri_window = cri.mean(axis=1)   # 每個 window 聚合成一個 score
+            print("cri_window.shape =", cri_window.shape, flush=True)
+
+            attens_energy.append(cri_window)
+
+            window_labels = labels.max(dim=1)[0]
+            test_labels.append(window_labels.cpu().numpy())
             
         attens_energy = np.concatenate(attens_energy, axis=0).reshape(-1)
-        test_labels = np.concatenate(test_labels, axis=0).reshape(-1)
+        test_labels = np.concatenate(test_labels, axis=0).reshape(-1)#每個 test window 的 true label
         print("test_labels shape =", test_labels.shape, flush=True)
         print("test_labels sum =", test_labels.sum(), flush=True)
         print("test_labels tail 30 =", test_labels[-30:], flush=True)
         test_energy = np.array(attens_energy)
         test_labels = np.array(test_labels)
+        print("len(test_energy) =", len(test_energy), flush=True)
+        print("len(test_labels) =", len(test_labels), flush=True)
+        print("test_energy shape =", np.array(test_energy).shape, flush=True)
+        print("test_labels shape =", np.array(test_labels).shape, flush=True)
+        # =========================================================
+        # Window-level score analysis
+        # =========================================================
+        normal_window_scores = test_energy[test_labels == 0]
+        anomaly_window_scores = test_energy[test_labels == 1]
 
-        pred = (test_energy > thresh).astype(int)
+        print("num normal windows =", len(normal_window_scores), flush=True)
+        print("num anomaly windows =", len(anomaly_window_scores), flush=True)
+
+        if len(normal_window_scores) > 0:
+            print("normal window score: min={:.6f}, max={:.6f}, mean={:.6f}, std={:.6f}".format(
+                normal_window_scores.min(),
+                normal_window_scores.max(),
+                normal_window_scores.mean(),
+                normal_window_scores.std()
+            ), flush=True)
+
+        if len(anomaly_window_scores) > 0:
+            print("anomaly window score: min={:.6f}, max={:.6f}, mean={:.6f}, std={:.6f}".format(
+                anomaly_window_scores.min(),
+                anomaly_window_scores.max(),
+                anomaly_window_scores.mean(),
+                anomaly_window_scores.std()
+            ), flush=True)
+
+        
+
+        plt.figure(figsize=(8, 5))
+        plt.hist(normal_window_scores, bins=50, alpha=0.5, label="normal window")
+        plt.hist(anomaly_window_scores, bins=50, alpha=0.5, label="anomaly window")
+        plt.axvline(thresh, linestyle='--', label=f'window threshold={thresh:.4f}')
+        plt.xlabel("window anomaly score")
+        plt.ylabel("count")
+        plt.title("Window Score Distribution")
+        plt.legend()
+        plt.tight_layout()
+        plt.savefig(os.path.join(self.analysis_dir, "window_score_distribution.png"), dpi=200)
+        plt.close()
+
+        window_df = pd.DataFrame({
+            "score": test_energy,
+            "label": test_labels
+        })
+        window_df.to_csv(os.path.join(self.analysis_dir, "window_scores.csv"), index=False)
+        print(f"[INFO] Saved window score analysis to {self.analysis_dir}", flush=True)
+
+        
+
+
+
+        pred = (test_energy > thresh).astype(int)#score > threshold → anomaly (1);否則 → normal (0)
         gt = test_labels.astype(int)
         
-        
         matrix = [self.index]
+        
+        window_pred_df = pd.DataFrame({
+            "window_idx": np.arange(len(test_energy)),
+            "window_score": test_energy,
+            "window_label": gt,
+            "window_pred": pred,
+        })
+        window_pred_df.to_csv(
+            os.path.join(self.inference_dir, "window_predictions.csv"),
+            index=False
+        )
         # scores_simple = combine_all_evaluation_scores(pred, gt, test_energy)
         # for key, value in scores_simple.items():
         #     matrix.append(value)
         #     print('{0:21} : {1:0.4f}'.format(key, value))
         
         
+        
+        # 這是在做「point adjustment」
+        # 這是 anomaly detection 論文裡很常見的後處理。
+        # 概念是：
+        # 如果某一段連續 ground truth anomaly 區間裡
+        # 模型只抓到其中一個點
+        # 那就把整段 anomaly 區間都算成有抓到
         anomaly_state = False
         for i in range(len(gt)):
             if gt[i] == 1 and pred[i] == 1 and not anomaly_state:
@@ -438,15 +593,15 @@ class Solver(object):
         from sklearn.metrics import precision_recall_fscore_support
         from sklearn.metrics import accuracy_score
 
-        TP = np.sum((pred == 1) & (gt == 1))
-        FP = np.sum((pred == 1) & (gt == 0))
-        FN = np.sum((pred == 0) & (gt == 1))
-        TN = np.sum((pred == 0) & (gt == 0))
+        window_TP = np.sum((pred == 1) & (gt == 1))
+        window_FP = np.sum((pred == 1) & (gt == 0))
+        window_FN = np.sum((pred == 0) & (gt == 1))
+        window_TN = np.sum((pred == 0) & (gt == 0))
         print("===========window level==============")
-        print("TP =", TP, flush=True)
-        print("FP =", FP, flush=True)
-        print("FN =", FN, flush=True)
-        print("TN =", TN, flush=True)
+        print("TP =", window_TP, flush=True)
+        print("FP =", window_FP, flush=True)
+        print("FN =", window_FN, flush=True)
+        print("TN =", window_TN, flush=True)
         accuracy = accuracy_score(gt, pred)
         precision, recall, f_score, support = precision_recall_fscore_support(gt, pred, average='binary')
         print("Accuracy : {:0.4f}, Precision : {:0.4f}, Recall : {:0.4f}, F-score : {:0.4f} ".format(accuracy, precision, recall, f_score))
@@ -475,7 +630,22 @@ class Solver(object):
         # 再跟 loader 內建的 selected_packet_mask 取交集
         thre_valid_mask = thre_valid_mask & thre_dataset.selected_packet_mask
         test_valid_mask = test_valid_mask & test_dataset.selected_packet_mask
-       
+        packet_threshold_source = np.concatenate([
+            train_packet_scores[train_valid_mask],
+            thre_packet_scores[thre_valid_mask]
+        ], axis=0)
+        threshold_packet = np.percentile(
+            packet_threshold_source,
+            100 - self.anormly_ratio
+        )
+        thresholds_dict = {
+            "window_threshold": float(thresh),
+            "packet_threshold": float(threshold_packet),
+            "anormly_ratio": float(self.anormly_ratio),
+        }
+
+        with open(os.path.join(self.inference_dir, "thresholds.json"), "w", encoding="utf-8") as f:
+            json.dump(thresholds_dict, f, indent=2, ensure_ascii=False)
         anom_idx_raw = np.where(test_dataset.packet_labels_raw == 1)[0]
         print("raw anomaly packet idx =", anom_idx_raw, flush=True)
         print("valid mask on anomaly idx =", test_valid_mask[anom_idx_raw], flush=True)
@@ -492,22 +662,78 @@ class Solver(object):
         print("num_valid_test_packets =", test_valid_mask.sum(), flush=True)
         print("num_valid_thre_packets =", thre_valid_mask.sum(), flush=True)
         
-        threshold_packet = np.percentile(
-            thre_packet_scores[thre_valid_mask],
-            100 - self.anormly_ratio
-        )
+        
+        
 
-        pred_packet = (test_packet_scores[test_valid_mask] > threshold_packet).astype(int)
-
-        TP = np.sum((pred_packet == 1) & (gt_packet == 1))
-        FP = np.sum((pred_packet == 1) & (gt_packet == 0))
-        FN = np.sum((pred_packet == 0) & (gt_packet == 1))
-        TN = np.sum((pred_packet == 0) & (gt_packet == 0))
+        
+        # =========================================================
+        # Packet-level score analysis
+        # =========================================================
+        valid_test_packet_scores = test_packet_scores[test_valid_mask]
+        normal_packet_scores = valid_test_packet_scores[gt_packet == 0]
+        anomaly_packet_scores = valid_test_packet_scores[gt_packet == 1]
         print("=========packet level=============")
-        print("TP =", TP, flush=True)
-        print("FP =", FP, flush=True)
-        print("FN =", FN, flush=True)
-        print("TN =", TN, flush=True)
+        print("num normal packets =", len(normal_packet_scores), flush=True)
+        print("num anomaly packets =", len(anomaly_packet_scores), flush=True)
+
+        if len(normal_packet_scores) > 0:
+            print("normal packet score: min={:.6f}, max={:.6f}, mean={:.6f}, std={:.6f}".format(
+                normal_packet_scores.min(),
+                normal_packet_scores.max(),
+                normal_packet_scores.mean(),
+                normal_packet_scores.std()
+            ), flush=True)
+
+        if len(anomaly_packet_scores) > 0:
+            print("anomaly packet score: min={:.6f}, max={:.6f}, mean={:.6f}, std={:.6f}".format(
+                anomaly_packet_scores.min(),
+                anomaly_packet_scores.max(),
+                anomaly_packet_scores.mean(),
+                anomaly_packet_scores.std()
+            ), flush=True)
+
+        plt.figure(figsize=(8, 5))
+        plt.hist(normal_packet_scores, bins=50, alpha=0.5, label="normal packet")
+        plt.hist(anomaly_packet_scores, bins=50, alpha=0.5, label="anomaly packet")
+        plt.axvline(threshold_packet, linestyle='--', label=f'packet threshold={threshold_packet:.4f}')
+        plt.xlabel("packet anomaly score")
+        plt.ylabel("count")
+        plt.title("Packet Score Distribution")
+        plt.legend()
+        plt.tight_layout()
+        plt.savefig(os.path.join(self.analysis_dir, "packet_score_distribution.png"), dpi=200)
+        plt.close()
+
+        packet_df = pd.DataFrame({
+            "score": valid_test_packet_scores,
+            "label": gt_packet
+        })
+        packet_df.to_csv(os.path.join(self.analysis_dir, "packet_scores_valid_only.csv"), index=False)
+        
+        print(f"[INFO] Saved packet score analysis to {self.analysis_dir}", flush=True)
+        pred_packet = (test_packet_scores[test_valid_mask] > threshold_packet).astype(int)
+        valid_packet_idx = np.where(test_valid_mask)[0]
+
+        packet_pred_df = pd.DataFrame({
+            "packet_idx": valid_packet_idx,
+            "packet_score": test_packet_scores[test_valid_mask],
+            "packet_label": gt_packet,
+            "packet_pred": pred_packet,
+        })
+        packet_pred_df.to_csv(
+            os.path.join(self.inference_dir, "packet_predictions.csv"),
+            index=False
+        )
+        
+        packet_TP = np.sum((pred_packet == 1) & (gt_packet == 1))
+        packet_FP = np.sum((pred_packet == 1) & (gt_packet == 0))
+        packet_FN = np.sum((pred_packet == 0) & (gt_packet == 1))
+        packet_TN = np.sum((pred_packet == 0) & (gt_packet == 0))
+       
+        print("TP =", packet_TP, flush=True)
+        print("FP =", packet_FP, flush=True)
+        print("FN =", packet_FN, flush=True)
+        print("TN =", packet_TN, flush=True)
 
         accuracy_packet = accuracy_score(gt_packet, pred_packet)
         precision_packet, recall_packet, f_score_packet, _ = precision_recall_fscore_support(
@@ -523,16 +749,37 @@ class Solver(object):
                 accuracy_packet, precision_packet, recall_packet, f_score_packet
             )
         )
-
-        # optional: save packet-level outputs
-        os.makedirs("packet_result", exist_ok=True)
-        np.save("packet_result/dcd_packet_scores.npy", test_packet_scores)
-        np.save("packet_result/dcd_packet_valid_mask.npy", test_valid_mask.astype(np.int64))
-        np.save("packet_result/dcd_packet_gt.npy", test_dataset.packet_labels_raw.astype(np.int64))
-
-        print("[INFO] Saved packet-level outputs to: packet_result/")
         
-        if self.data_path == 'UCR' or 'UCR_AUG':
+        np.save(os.path.join(self.inference_dir, "dcd_packet_scores.npy"), test_packet_scores)
+        np.save(os.path.join(self.inference_dir, "dcd_packet_valid_mask.npy"), test_valid_mask.astype(np.int64))
+        np.save(os.path.join(self.inference_dir, "dcd_packet_gt.npy"), test_dataset.packet_labels_raw.astype(np.int64))
+        summary_metrics = {
+            "window_level": {
+                "accuracy": float(accuracy),
+                "precision": float(precision),
+                "recall": float(recall),
+                "f1": float(f_score),
+                "TP": int(window_TP),
+                "FP": int(window_FP),
+                "FN": int(window_FN),
+                "TN": int(window_TN),
+            },
+            "packet_level": {
+                "accuracy": float(accuracy_packet),
+                "precision": float(precision_packet),
+                "recall": float(recall_packet),
+                "f1": float(f_score_packet),
+                "TP": int(packet_TP),
+                "FP": int(packet_FP),
+                "FN": int(packet_FN),
+                "TN": int(packet_TN),
+            }
+        }
+
+        with open(os.path.join(self.output_root, "summary_metrics.json"), "w", encoding="utf-8") as f:
+            json.dump(summary_metrics, f, indent=2, ensure_ascii=False)
+            
+        if self.data_path in ['UCR', 'UCR_AUG']:
             import csv
             with open('result/'+self.data_path+'.csv', 'a+') as f:
                 writer = csv.writer(f)
