@@ -794,3 +794,504 @@ FN = 6
 TN = 593
 Packet Threshold : -965.426282
 Packet Accuracy : 0.9883, Packet Precision : 0.0000, Packet Recall : 0.0000, Packet F-score : 0.0000
+[TNS_V2:train] split=train
+[TNS_V2:train] total_packets=3900
+[TNS_V2:train] num_windows=3896
+[TNS_V2:train] anomaly_packets=0
+[TNS_V2:train] first window shape=(5, 9)
+[TNS_V2:train] first pkt_idx=[0 1 2 3 4]
+[TNS_V2:val] split=val
+[TNS_V2:val] total_packets=500
+[TNS_V2:val] num_windows=496
+[TNS_V2:val] anomaly_packets=0
+[TNS_V2:val] first window shape=(5, 9)
+[TNS_V2:val] first pkt_idx=[0 1 2 3 4]
+[TNS_V2:test] split=test_mixed
+[TNS_V2:test] total_packets=600
+[TNS_V2:test] num_windows=596
+[TNS_V2:test] anomaly_packets=6
+[TNS_V2:test] first window shape=(5, 9)
+[TNS_V2:test] first pkt_idx=[0 1 2 3 4]
+[TNS_V2:thre] split=val
+[TNS_V2:thre] total_packets=500
+[TNS_V2:thre] num_windows=496
+[TNS_V2:thre] anomaly_packets=0
+[TNS_V2:thre] first window shape=(5, 9)
+[TNS_V2:thre] first pkt_idx=[0 1 2 3 4]
+[INFO] Output directory: outputs/TNS/20260323_162018_ws5_ps5_bs32_ep10
+dataset window_labels shape = (596, 5)
+dataset last window pkt_idx = [595 596 597 598 599]
+Threshold : -965.4255981445312
+[DEBUG][test_loop] batch=0 input_shape=torch.Size([32, 5, 9]) labels_shape=torch.Size([32, 5])
+[DEBUG][test_loop] labels sum in batch = 0.0
+[DEBUG][test_loop] pkt_idx first=[0 1 2 3 4] last=[31 32 33 34 35]
+cri.shape before agg = (32, 5)
+cri_window.shape = (32,)
+[DEBUG][test_loop] batch=1 input_shape=torch.Size([32, 5, 9]) labels_shape=torch.Size([32, 5])
+[DEBUG][test_loop] labels sum in batch = 5.0
+[DEBUG][test_loop] pkt_idx first=[32 33 34 35 36] last=[63 64 65 66 67]
+cri.shape before agg = (32, 5)
+cri_window.shape = (32,)
+[DEBUG][test_loop] batch=2 input_shape=torch.Size([32, 5, 9]) labels_shape=torch.Size([32, 5])
+[DEBUG][test_loop] labels sum in batch = 0.0
+[DEBUG][test_loop] pkt_idx first=[64 65 66 67 68] last=[95 96 97 98 99]
+cri.shape before agg = (32, 5)
+cri_window.shape = (32,)
+[DEBUG][test_loop] batch=3 input_shape=torch.Size([32, 5, 9]) labels_shape=torch.Size([32, 5])
+[DEBUG][test_loop] labels sum in batch = 0.0
+[DEBUG][test_loop] pkt_idx first=[ 96  97  98  99 100] last=[127 128 129 130 131]
+cri.shape before agg = (32, 5)
+cri_window.shape = (32,)
+[DEBUG][test_loop] batch=4 input_shape=torch.Size([32, 5, 9]) labels_shape=torch.Size([32, 5])
+[DEBUG][test_loop] labels sum in batch = 0.0
+[DEBUG][test_loop] pkt_idx first=[128 129 130 131 132] last=[159 160 161 162 163]
+cri.shape before agg = (32, 5)
+cri_window.shape = (32,)
+[DEBUG][test_loop] batch=5 input_shape=torch.Size([32, 5, 9]) labels_shape=torch.Size([32, 5])
+[DEBUG][test_loop] labels sum in batch = 0.0
+[DEBUG][test_loop] pkt_idx first=[160 161 162 163 164] last=[191 192 193 194 195]
+cri.shape before agg = (32, 5)
+cri_window.shape = (32,)
+[DEBUG][test_loop] batch=6 input_shape=torch.Size([32, 5, 9]) labels_shape=torch.Size([32, 5])
+[DEBUG][test_loop] labels sum in batch = 0.0
+[DEBUG][test_loop] pkt_idx first=[192 193 194 195 196] last=[223 224 225 226 227]
+cri.shape before agg = (32, 5)
+cri_window.shape = (32,)
+[DEBUG][test_loop] batch=7 input_shape=torch.Size([32, 5, 9]) labels_shape=torch.Size([32, 5])
+[DEBUG][test_loop] labels sum in batch = 1.0
+[DEBUG][test_loop] pkt_idx first=[224 225 226 227 228] last=[255 256 257 258 259]
+cri.shape before agg = (32, 5)
+cri_window.shape = (32,)
+[DEBUG][test_loop] batch=8 input_shape=torch.Size([32, 5, 9]) labels_shape=torch.Size([32, 5])
+[DEBUG][test_loop] labels sum in batch = 9.0
+[DEBUG][test_loop] pkt_idx first=[256 257 258 259 260] last=[287 288 289 290 291]
+cri.shape before agg = (32, 5)
+cri_window.shape = (32,)
+[DEBUG][test_loop] batch=9 input_shape=torch.Size([32, 5, 9]) labels_shape=torch.Size([32, 5])
+[DEBUG][test_loop] labels sum in batch = 0.0
+[DEBUG][test_loop] pkt_idx first=[288 289 290 291 292] last=[319 320 321 322 323]
+cri.shape before agg = (32, 5)
+cri_window.shape = (32,)
+[DEBUG][test_loop] batch=10 input_shape=torch.Size([32, 5, 9]) labels_shape=torch.Size([32, 5])
+[DEBUG][test_loop] labels sum in batch = 0.0
+[DEBUG][test_loop] pkt_idx first=[320 321 322 323 324] last=[351 352 353 354 355]
+cri.shape before agg = (32, 5)
+cri_window.shape = (32,)
+[DEBUG][test_loop] batch=11 input_shape=torch.Size([32, 5, 9]) labels_shape=torch.Size([32, 5])
+[DEBUG][test_loop] labels sum in batch = 0.0
+[DEBUG][test_loop] pkt_idx first=[352 353 354 355 356] last=[383 384 385 386 387]
+cri.shape before agg = (32, 5)
+cri_window.shape = (32,)
+[DEBUG][test_loop] batch=12 input_shape=torch.Size([32, 5, 9]) labels_shape=torch.Size([32, 5])
+[DEBUG][test_loop] labels sum in batch = 5.0
+[DEBUG][test_loop] pkt_idx first=[384 385 386 387 388] last=[415 416 417 418 419]
+cri.shape before agg = (32, 5)
+cri_window.shape = (32,)
+[DEBUG][test_loop] batch=13 input_shape=torch.Size([32, 5, 9]) labels_shape=torch.Size([32, 5])
+[DEBUG][test_loop] labels sum in batch = 0.0
+[DEBUG][test_loop] pkt_idx first=[416 417 418 419 420] last=[447 448 449 450 451]
+cri.shape before agg = (32, 5)
+cri_window.shape = (32,)
+[DEBUG][test_loop] batch=14 input_shape=torch.Size([32, 5, 9]) labels_shape=torch.Size([32, 5])
+[DEBUG][test_loop] labels sum in batch = 5.0
+[DEBUG][test_loop] pkt_idx first=[448 449 450 451 452] last=[479 480 481 482 483]
+cri.shape before agg = (32, 5)
+cri_window.shape = (32,)
+[DEBUG][test_loop] batch=15 input_shape=torch.Size([32, 5, 9]) labels_shape=torch.Size([32, 5])
+[DEBUG][test_loop] labels sum in batch = 1.0
+[DEBUG][test_loop] pkt_idx first=[480 481 482 483 484] last=[511 512 513 514 515]
+cri.shape before agg = (32, 5)
+cri_window.shape = (32,)
+[DEBUG][test_loop] batch=16 input_shape=torch.Size([32, 5, 9]) labels_shape=torch.Size([32, 5])
+[DEBUG][test_loop] labels sum in batch = 4.0
+[DEBUG][test_loop] pkt_idx first=[512 513 514 515 516] last=[543 544 545 546 547]
+cri.shape before agg = (32, 5)
+cri_window.shape = (32,)
+[DEBUG][test_loop] batch=17 input_shape=torch.Size([32, 5, 9]) labels_shape=torch.Size([32, 5])
+[DEBUG][test_loop] labels sum in batch = 0.0
+[DEBUG][test_loop] pkt_idx first=[544 545 546 547 548] last=[575 576 577 578 579]
+cri.shape before agg = (32, 5)
+cri_window.shape = (32,)
+[DEBUG][test_loop] batch=18 input_shape=torch.Size([20, 5, 9]) labels_shape=torch.Size([20, 5])
+[DEBUG][test_loop] labels sum in batch = 0.0
+[DEBUG][test_loop] pkt_idx first=[576 577 578 579 580] last=[595 596 597 598 599]
+cri.shape before agg = (20, 5)
+cri_window.shape = (20,)
+len(test_energy) = 596
+test_energy shape = (596,)
+raw anomaly packet idx = [ 53 259 262 390 461 515]
+valid mask on anomaly idx = [ True  True  True  True  True  True]
+selected packet idx head/tail = [ 0  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15 16 17 18 19] [580 581 582 583 584 585 586 587 588 589 590 591 592 593 594 595 596 597
+ 598 599]
+true anomaly after test_valid_mask = 6
+num anomaly removed by valid mask = 0
+num_valid_test_packets = 600
+num_valid_thre_packets = 500
+=========packet level=============
+num normal packets = 594
+num anomaly packets = 6
+normal packet score: min=-965.436011, max=-965.426038, mean=-965.428505, std=0.001597
+anomaly packet score: min=-965.430176, max=-965.426648, mean=-965.428200, std=0.001393
+[INFO] Saved packet score analysis to outputs/TNS/20260323_162018_ws5_ps5_bs32_ep10/analysis
+TP = 0
+FP = 1
+FN = 6
+TN = 593
+Packet Threshold : -965.426293
+Packet Accuracy : 0.9883, Packet Precision : 0.0000, Packet Recall : 0.0000, Packet F-score : 0.0000
+[TNS_V2:train] split=train
+[TNS_V2:train] total_packets=3900
+[TNS_V2:train] num_windows=3896
+[TNS_V2:train] anomaly_packets=0
+[TNS_V2:train] first window shape=(5, 9)
+[TNS_V2:train] first pkt_idx=[0 1 2 3 4]
+[TNS_V2:val] split=val
+[TNS_V2:val] total_packets=500
+[TNS_V2:val] num_windows=496
+[TNS_V2:val] anomaly_packets=0
+[TNS_V2:val] first window shape=(5, 9)
+[TNS_V2:val] first pkt_idx=[0 1 2 3 4]
+[TNS_V2:test] split=test_mixed
+[TNS_V2:test] total_packets=600
+[TNS_V2:test] num_windows=596
+[TNS_V2:test] anomaly_packets=6
+[TNS_V2:test] first window shape=(5, 9)
+[TNS_V2:test] first pkt_idx=[0 1 2 3 4]
+[TNS_V2:thre] split=val
+[TNS_V2:thre] total_packets=500
+[TNS_V2:thre] num_windows=496
+[TNS_V2:thre] anomaly_packets=0
+[TNS_V2:thre] first window shape=(5, 9)
+[TNS_V2:thre] first pkt_idx=[0 1 2 3 4]
+[INFO] Output directory: outputs/TNS/20260323_163611_ws5_ps5_bs32_ep10
+dataset window_labels shape = (596, 5)
+dataset last window pkt_idx = [595 596 597 598 599]
+Threshold : 0.20147109150886536
+[DEBUG][test_loop] batch=0 input_shape=torch.Size([32, 5, 9]) labels_shape=torch.Size([32, 5])
+[DEBUG][test_loop] labels sum in batch = 0.0
+[DEBUG][test_loop] pkt_idx first=[0 1 2 3 4] last=[31 32 33 34 35]
+cri.shape before agg = (32, 5)
+cri_window.shape = (32,)
+[DEBUG][test_loop] batch=1 input_shape=torch.Size([32, 5, 9]) labels_shape=torch.Size([32, 5])
+[DEBUG][test_loop] labels sum in batch = 5.0
+[DEBUG][test_loop] pkt_idx first=[32 33 34 35 36] last=[63 64 65 66 67]
+cri.shape before agg = (32, 5)
+cri_window.shape = (32,)
+[DEBUG][test_loop] batch=2 input_shape=torch.Size([32, 5, 9]) labels_shape=torch.Size([32, 5])
+[DEBUG][test_loop] labels sum in batch = 0.0
+[DEBUG][test_loop] pkt_idx first=[64 65 66 67 68] last=[95 96 97 98 99]
+cri.shape before agg = (32, 5)
+cri_window.shape = (32,)
+[DEBUG][test_loop] batch=3 input_shape=torch.Size([32, 5, 9]) labels_shape=torch.Size([32, 5])
+[DEBUG][test_loop] labels sum in batch = 0.0
+[DEBUG][test_loop] pkt_idx first=[ 96  97  98  99 100] last=[127 128 129 130 131]
+cri.shape before agg = (32, 5)
+cri_window.shape = (32,)
+[DEBUG][test_loop] batch=4 input_shape=torch.Size([32, 5, 9]) labels_shape=torch.Size([32, 5])
+[DEBUG][test_loop] labels sum in batch = 0.0
+[DEBUG][test_loop] pkt_idx first=[128 129 130 131 132] last=[159 160 161 162 163]
+cri.shape before agg = (32, 5)
+cri_window.shape = (32,)
+[DEBUG][test_loop] batch=5 input_shape=torch.Size([32, 5, 9]) labels_shape=torch.Size([32, 5])
+[DEBUG][test_loop] labels sum in batch = 0.0
+[DEBUG][test_loop] pkt_idx first=[160 161 162 163 164] last=[191 192 193 194 195]
+cri.shape before agg = (32, 5)
+cri_window.shape = (32,)
+[DEBUG][test_loop] batch=6 input_shape=torch.Size([32, 5, 9]) labels_shape=torch.Size([32, 5])
+[DEBUG][test_loop] labels sum in batch = 0.0
+[DEBUG][test_loop] pkt_idx first=[192 193 194 195 196] last=[223 224 225 226 227]
+cri.shape before agg = (32, 5)
+cri_window.shape = (32,)
+[DEBUG][test_loop] batch=7 input_shape=torch.Size([32, 5, 9]) labels_shape=torch.Size([32, 5])
+[DEBUG][test_loop] labels sum in batch = 1.0
+[DEBUG][test_loop] pkt_idx first=[224 225 226 227 228] last=[255 256 257 258 259]
+cri.shape before agg = (32, 5)
+cri_window.shape = (32,)
+[DEBUG][test_loop] batch=8 input_shape=torch.Size([32, 5, 9]) labels_shape=torch.Size([32, 5])
+[DEBUG][test_loop] labels sum in batch = 9.0
+[DEBUG][test_loop] pkt_idx first=[256 257 258 259 260] last=[287 288 289 290 291]
+cri.shape before agg = (32, 5)
+cri_window.shape = (32,)
+[DEBUG][test_loop] batch=9 input_shape=torch.Size([32, 5, 9]) labels_shape=torch.Size([32, 5])
+[DEBUG][test_loop] labels sum in batch = 0.0
+[DEBUG][test_loop] pkt_idx first=[288 289 290 291 292] last=[319 320 321 322 323]
+cri.shape before agg = (32, 5)
+cri_window.shape = (32,)
+[DEBUG][test_loop] batch=10 input_shape=torch.Size([32, 5, 9]) labels_shape=torch.Size([32, 5])
+[DEBUG][test_loop] labels sum in batch = 0.0
+[DEBUG][test_loop] pkt_idx first=[320 321 322 323 324] last=[351 352 353 354 355]
+cri.shape before agg = (32, 5)
+cri_window.shape = (32,)
+[DEBUG][test_loop] batch=11 input_shape=torch.Size([32, 5, 9]) labels_shape=torch.Size([32, 5])
+[DEBUG][test_loop] labels sum in batch = 0.0
+[DEBUG][test_loop] pkt_idx first=[352 353 354 355 356] last=[383 384 385 386 387]
+cri.shape before agg = (32, 5)
+cri_window.shape = (32,)
+[DEBUG][test_loop] batch=12 input_shape=torch.Size([32, 5, 9]) labels_shape=torch.Size([32, 5])
+[DEBUG][test_loop] labels sum in batch = 5.0
+[DEBUG][test_loop] pkt_idx first=[384 385 386 387 388] last=[415 416 417 418 419]
+cri.shape before agg = (32, 5)
+cri_window.shape = (32,)
+[DEBUG][test_loop] batch=13 input_shape=torch.Size([32, 5, 9]) labels_shape=torch.Size([32, 5])
+[DEBUG][test_loop] labels sum in batch = 0.0
+[DEBUG][test_loop] pkt_idx first=[416 417 418 419 420] last=[447 448 449 450 451]
+cri.shape before agg = (32, 5)
+cri_window.shape = (32,)
+[DEBUG][test_loop] batch=14 input_shape=torch.Size([32, 5, 9]) labels_shape=torch.Size([32, 5])
+[DEBUG][test_loop] labels sum in batch = 5.0
+[DEBUG][test_loop] pkt_idx first=[448 449 450 451 452] last=[479 480 481 482 483]
+cri.shape before agg = (32, 5)
+cri_window.shape = (32,)
+[DEBUG][test_loop] batch=15 input_shape=torch.Size([32, 5, 9]) labels_shape=torch.Size([32, 5])
+[DEBUG][test_loop] labels sum in batch = 1.0
+[DEBUG][test_loop] pkt_idx first=[480 481 482 483 484] last=[511 512 513 514 515]
+cri.shape before agg = (32, 5)
+cri_window.shape = (32,)
+[DEBUG][test_loop] batch=16 input_shape=torch.Size([32, 5, 9]) labels_shape=torch.Size([32, 5])
+[DEBUG][test_loop] labels sum in batch = 4.0
+[DEBUG][test_loop] pkt_idx first=[512 513 514 515 516] last=[543 544 545 546 547]
+cri.shape before agg = (32, 5)
+cri_window.shape = (32,)
+[DEBUG][test_loop] batch=17 input_shape=torch.Size([32, 5, 9]) labels_shape=torch.Size([32, 5])
+[DEBUG][test_loop] labels sum in batch = 0.0
+[DEBUG][test_loop] pkt_idx first=[544 545 546 547 548] last=[575 576 577 578 579]
+cri.shape before agg = (32, 5)
+cri_window.shape = (32,)
+[DEBUG][test_loop] batch=18 input_shape=torch.Size([20, 5, 9]) labels_shape=torch.Size([20, 5])
+[DEBUG][test_loop] labels sum in batch = 0.0
+[DEBUG][test_loop] pkt_idx first=[576 577 578 579 580] last=[595 596 597 598 599]
+cri.shape before agg = (20, 5)
+cri_window.shape = (20,)
+len(test_energy) = 596
+test_energy shape = (596,)
+raw anomaly packet idx = [ 53 259 262 390 461 515]
+valid mask on anomaly idx = [ True  True  True  True  True  True]
+selected packet idx head/tail = [ 0  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15 16 17 18 19] [580 581 582 583 584 585 586 587 588 589 590 591 592 593 594 595 596 597
+ 598 599]
+true anomaly after test_valid_mask = 6
+num anomaly removed by valid mask = 0
+num_valid_test_packets = 600
+num_valid_thre_packets = 500
+=========packet level=============
+num normal packets = 594
+num anomaly packets = 6
+normal packet score: min=0.200129, max=0.201977, mean=0.200634, std=0.000331
+anomaly packet score: min=0.200193, max=0.201007, mean=0.200529, std=0.000319
+[INFO] Saved packet score analysis to outputs/TNS/20260323_163611_ws5_ps5_bs32_ep10/analysis
+TP = 0
+FP = 13
+FN = 6
+TN = 581
+Packet Threshold : 0.201268
+Packet Accuracy : 0.9683, Packet Precision : 0.0000, Packet Recall : 0.0000, Packet F-score : 0.0000
+[TNS_V2:train] split=train
+[TNS_V2:train] total_packets=3900
+[TNS_V2:train] num_windows=3896
+[TNS_V2:train] anomaly_packets=0
+[TNS_V2:train] first window shape=(5, 9)
+[TNS_V2:train] first pkt_idx=[0 1 2 3 4]
+[TNS_V2:val] split=val
+[TNS_V2:val] total_packets=500
+[TNS_V2:val] num_windows=496
+[TNS_V2:val] anomaly_packets=0
+[TNS_V2:val] first window shape=(5, 9)
+[TNS_V2:val] first pkt_idx=[0 1 2 3 4]
+[TNS_V2:test] split=test_mixed
+[TNS_V2:test] total_packets=600
+[TNS_V2:test] num_windows=596
+[TNS_V2:test] anomaly_packets=6
+[TNS_V2:test] first window shape=(5, 9)
+[TNS_V2:test] first pkt_idx=[0 1 2 3 4]
+[TNS_V2:thre] split=val
+[TNS_V2:thre] total_packets=500
+[TNS_V2:thre] num_windows=496
+[TNS_V2:thre] anomaly_packets=0
+[TNS_V2:thre] first window shape=(5, 9)
+[TNS_V2:thre] first pkt_idx=[0 1 2 3 4]
+[INFO] Output directory: outputs/TNS/20260323_164646_ws5_ps5_bs32_ep10
+dataset window_labels shape = (596, 5)
+dataset last window pkt_idx = [595 596 597 598 599]
+Threshold : 0.20147202134132386
+[DEBUG][test_loop] batch=0 input_shape=torch.Size([32, 5, 9]) labels_shape=torch.Size([32, 5])
+[DEBUG][test_loop] labels sum in batch = 0.0
+[DEBUG][test_loop] pkt_idx first=[0 1 2 3 4] last=[31 32 33 34 35]
+cri.shape before agg = (32, 5)
+cri_window.shape = (32,)
+[DEBUG][test_loop] batch=1 input_shape=torch.Size([32, 5, 9]) labels_shape=torch.Size([32, 5])
+[DEBUG][test_loop] labels sum in batch = 5.0
+[DEBUG][test_loop] pkt_idx first=[32 33 34 35 36] last=[63 64 65 66 67]
+cri.shape before agg = (32, 5)
+cri_window.shape = (32,)
+[DEBUG][test_loop] batch=2 input_shape=torch.Size([32, 5, 9]) labels_shape=torch.Size([32, 5])
+[DEBUG][test_loop] labels sum in batch = 0.0
+[DEBUG][test_loop] pkt_idx first=[64 65 66 67 68] last=[95 96 97 98 99]
+cri.shape before agg = (32, 5)
+cri_window.shape = (32,)
+[DEBUG][test_loop] batch=3 input_shape=torch.Size([32, 5, 9]) labels_shape=torch.Size([32, 5])
+[DEBUG][test_loop] labels sum in batch = 0.0
+[DEBUG][test_loop] pkt_idx first=[ 96  97  98  99 100] last=[127 128 129 130 131]
+cri.shape before agg = (32, 5)
+cri_window.shape = (32,)
+[DEBUG][test_loop] batch=4 input_shape=torch.Size([32, 5, 9]) labels_shape=torch.Size([32, 5])
+[DEBUG][test_loop] labels sum in batch = 0.0
+[DEBUG][test_loop] pkt_idx first=[128 129 130 131 132] last=[159 160 161 162 163]
+cri.shape before agg = (32, 5)
+cri_window.shape = (32,)
+[DEBUG][test_loop] batch=5 input_shape=torch.Size([32, 5, 9]) labels_shape=torch.Size([32, 5])
+[DEBUG][test_loop] labels sum in batch = 0.0
+[DEBUG][test_loop] pkt_idx first=[160 161 162 163 164] last=[191 192 193 194 195]
+cri.shape before agg = (32, 5)
+cri_window.shape = (32,)
+[DEBUG][test_loop] batch=6 input_shape=torch.Size([32, 5, 9]) labels_shape=torch.Size([32, 5])
+[DEBUG][test_loop] labels sum in batch = 0.0
+[DEBUG][test_loop] pkt_idx first=[192 193 194 195 196] last=[223 224 225 226 227]
+cri.shape before agg = (32, 5)
+cri_window.shape = (32,)
+[DEBUG][test_loop] batch=7 input_shape=torch.Size([32, 5, 9]) labels_shape=torch.Size([32, 5])
+[DEBUG][test_loop] labels sum in batch = 1.0
+[DEBUG][test_loop] pkt_idx first=[224 225 226 227 228] last=[255 256 257 258 259]
+cri.shape before agg = (32, 5)
+cri_window.shape = (32,)
+[DEBUG][test_loop] batch=8 input_shape=torch.Size([32, 5, 9]) labels_shape=torch.Size([32, 5])
+[DEBUG][test_loop] labels sum in batch = 9.0
+[DEBUG][test_loop] pkt_idx first=[256 257 258 259 260] last=[287 288 289 290 291]
+cri.shape before agg = (32, 5)
+cri_window.shape = (32,)
+[DEBUG][test_loop] batch=9 input_shape=torch.Size([32, 5, 9]) labels_shape=torch.Size([32, 5])
+[DEBUG][test_loop] labels sum in batch = 0.0
+[DEBUG][test_loop] pkt_idx first=[288 289 290 291 292] last=[319 320 321 322 323]
+cri.shape before agg = (32, 5)
+cri_window.shape = (32,)
+[DEBUG][test_loop] batch=10 input_shape=torch.Size([32, 5, 9]) labels_shape=torch.Size([32, 5])
+[DEBUG][test_loop] labels sum in batch = 0.0
+[DEBUG][test_loop] pkt_idx first=[320 321 322 323 324] last=[351 352 353 354 355]
+cri.shape before agg = (32, 5)
+cri_window.shape = (32,)
+[DEBUG][test_loop] batch=11 input_shape=torch.Size([32, 5, 9]) labels_shape=torch.Size([32, 5])
+[DEBUG][test_loop] labels sum in batch = 0.0
+[DEBUG][test_loop] pkt_idx first=[352 353 354 355 356] last=[383 384 385 386 387]
+cri.shape before agg = (32, 5)
+cri_window.shape = (32,)
+[DEBUG][test_loop] batch=12 input_shape=torch.Size([32, 5, 9]) labels_shape=torch.Size([32, 5])
+[DEBUG][test_loop] labels sum in batch = 5.0
+[DEBUG][test_loop] pkt_idx first=[384 385 386 387 388] last=[415 416 417 418 419]
+cri.shape before agg = (32, 5)
+cri_window.shape = (32,)
+[DEBUG][test_loop] batch=13 input_shape=torch.Size([32, 5, 9]) labels_shape=torch.Size([32, 5])
+[DEBUG][test_loop] labels sum in batch = 0.0
+[DEBUG][test_loop] pkt_idx first=[416 417 418 419 420] last=[447 448 449 450 451]
+cri.shape before agg = (32, 5)
+cri_window.shape = (32,)
+[DEBUG][test_loop] batch=14 input_shape=torch.Size([32, 5, 9]) labels_shape=torch.Size([32, 5])
+[DEBUG][test_loop] labels sum in batch = 5.0
+[DEBUG][test_loop] pkt_idx first=[448 449 450 451 452] last=[479 480 481 482 483]
+cri.shape before agg = (32, 5)
+cri_window.shape = (32,)
+[DEBUG][test_loop] batch=15 input_shape=torch.Size([32, 5, 9]) labels_shape=torch.Size([32, 5])
+[DEBUG][test_loop] labels sum in batch = 1.0
+[DEBUG][test_loop] pkt_idx first=[480 481 482 483 484] last=[511 512 513 514 515]
+cri.shape before agg = (32, 5)
+cri_window.shape = (32,)
+[DEBUG][test_loop] batch=16 input_shape=torch.Size([32, 5, 9]) labels_shape=torch.Size([32, 5])
+[DEBUG][test_loop] labels sum in batch = 4.0
+[DEBUG][test_loop] pkt_idx first=[512 513 514 515 516] last=[543 544 545 546 547]
+cri.shape before agg = (32, 5)
+cri_window.shape = (32,)
+[DEBUG][test_loop] batch=17 input_shape=torch.Size([32, 5, 9]) labels_shape=torch.Size([32, 5])
+[DEBUG][test_loop] labels sum in batch = 0.0
+[DEBUG][test_loop] pkt_idx first=[544 545 546 547 548] last=[575 576 577 578 579]
+cri.shape before agg = (32, 5)
+cri_window.shape = (32,)
+[DEBUG][test_loop] batch=18 input_shape=torch.Size([20, 5, 9]) labels_shape=torch.Size([20, 5])
+[DEBUG][test_loop] labels sum in batch = 0.0
+[DEBUG][test_loop] pkt_idx first=[576 577 578 579 580] last=[595 596 597 598 599]
+cri.shape before agg = (20, 5)
+cri_window.shape = (20,)
+len(test_energy) = 596
+test_energy shape = (596,)
+raw anomaly packet idx = [ 53 259 262 390 461 515]
+valid mask on anomaly idx = [ True  True  True  True  True  True]
+
+========== Inspect anomaly-related windows ==========
+Global window score percentiles: p50=0.200564, p90=0.201192, p95=0.201378, p99=0.201776
+
+[Anomaly packet 53] covered by 5 windows
+  local window score stats: min=0.200782, max=0.201231, mean=0.201007, std=0.000175
+    rank=01 window_idx=53 score=0.201231 global_pct~=90.94 packets=[53, 54, 55, 56, 57]
+    rank=02 window_idx=52 score=0.201162 global_pct~=88.59 packets=[52, 53, 54, 55, 56]
+    rank=03 window_idx=49 score=0.201021 global_pct~=83.56 packets=[49, 50, 51, 52, 53]
+    rank=04 window_idx=51 score=0.200841 global_pct~=73.15 packets=[51, 52, 53, 54, 55]
+    rank=05 window_idx=50 score=0.200782 global_pct~=68.62 packets=[50, 51, 52, 53, 54]
+
+[Anomaly packet 259] covered by 5 windows
+  local window score stats: min=0.200533, max=0.200985, mean=0.200793, std=0.000161
+    rank=01 window_idx=257 score=0.200985 global_pct~=81.88 packets=[257, 258, 259, 260, 261]
+    rank=02 window_idx=255 score=0.200919 global_pct~=78.69 packets=[255, 256, 257, 258, 259]
+    rank=03 window_idx=256 score=0.200824 global_pct~=71.81 packets=[256, 257, 258, 259, 260]
+    rank=04 window_idx=259 score=0.200704 global_pct~=63.26 packets=[259, 260, 261, 262, 263]
+    rank=05 window_idx=258 score=0.200533 global_pct~=44.63 packets=[258, 259, 260, 261, 262]
+
+[Anomaly packet 262] covered by 5 windows
+  local window score stats: min=0.200533, max=0.200838, mean=0.200700, std=0.000101
+    rank=01 window_idx=261 score=0.200838 global_pct~=72.82 packets=[261, 262, 263, 264, 265]
+    rank=02 window_idx=260 score=0.200758 global_pct~=67.11 packets=[260, 261, 262, 263, 264]
+    rank=03 window_idx=259 score=0.200704 global_pct~=63.26 packets=[259, 260, 261, 262, 263]
+    rank=04 window_idx=262 score=0.200670 global_pct~=59.56 packets=[262, 263, 264, 265, 266]
+    rank=05 window_idx=258 score=0.200533 global_pct~=44.63 packets=[258, 259, 260, 261, 262]
+
+[Anomaly packet 390] covered by 5 windows
+  local window score stats: min=0.200127, max=0.200347, mean=0.200207, std=0.000082
+    rank=01 window_idx=389 score=0.200347 global_pct~=30.20 packets=[389, 390, 391, 392, 393]
+    rank=02 window_idx=387 score=0.200247 global_pct~=15.27 packets=[387, 388, 389, 390, 391]
+    rank=03 window_idx=386 score=0.200181 global_pct~=12.08 packets=[386, 387, 388, 389, 390]
+    rank=04 window_idx=388 score=0.200132 global_pct~=11.07 packets=[388, 389, 390, 391, 392]
+    rank=05 window_idx=390 score=0.200127 global_pct~=10.91 packets=[390, 391, 392, 393, 394]
+
+[Anomaly packet 461] covered by 5 windows
+  local window score stats: min=0.200022, max=0.200332, mean=0.200193, std=0.000126
+    rank=01 window_idx=457 score=0.200332 global_pct~=28.69 packets=[457, 458, 459, 460, 461]
+    rank=02 window_idx=461 score=0.200315 global_pct~=26.17 packets=[461, 462, 463, 464, 465]
+    rank=03 window_idx=459 score=0.200225 global_pct~=14.26 packets=[459, 460, 461, 462, 463]
+    rank=04 window_idx=460 score=0.200071 global_pct~=8.22 packets=[460, 461, 462, 463, 464]
+    rank=05 window_idx=458 score=0.200022 global_pct~=0.67 packets=[458, 459, 460, 461, 462]
+
+[Anomaly packet 515] covered by 5 windows
+  local window score stats: min=0.200122, max=0.200486, mean=0.200275, std=0.000137
+    rank=01 window_idx=515 score=0.200486 global_pct~=39.77 packets=[515, 516, 517, 518, 519]
+    rank=02 window_idx=514 score=0.200376 global_pct~=32.89 packets=[514, 515, 516, 517, 518]
+    rank=03 window_idx=513 score=0.200225 global_pct~=14.26 packets=[513, 514, 515, 516, 517]
+    rank=04 window_idx=512 score=0.200164 global_pct~=11.74 packets=[512, 513, 514, 515, 516]
+    rank=05 window_idx=511 score=0.200122 global_pct~=10.74 packets=[511, 512, 513, 514, 515]
+
+Top-10 highest-scoring windows globally:
+  global_rank=01 window_idx=128 score=0.202682 packets=[128, 129, 130, 131, 132]
+  global_rank=02 window_idx=131 score=0.202153 packets=[131, 132, 133, 134, 135]
+  global_rank=03 window_idx=123 score=0.202110 packets=[123, 124, 125, 126, 127]
+  global_rank=04 window_idx=129 score=0.202015 packets=[129, 130, 131, 132, 133]
+  global_rank=05 window_idx=125 score=0.201910 packets=[125, 126, 127, 128, 129]
+  global_rank=06 window_idx=242 score=0.201869 packets=[242, 243, 244, 245, 246]
+  global_rank=07 window_idx=135 score=0.201772 packets=[135, 136, 137, 138, 139]
+  global_rank=08 window_idx=547 score=0.201741 packets=[547, 548, 549, 550, 551]
+  global_rank=09 window_idx=197 score=0.201728 packets=[197, 198, 199, 200, 201]
+  global_rank=10 window_idx=339 score=0.201722 packets=[339, 340, 341, 342, 343]
+
+[INFO] Saved anomaly window inspection to: outputs/TNS/20260323_164646_ws5_ps5_bs32_ep10/analysis/anomaly_related_windows.csv
+[INFO] Saved top-10 global windows to: outputs/TNS/20260323_164646_ws5_ps5_bs32_ep10/analysis/top_10_global_windows.csv
+selected packet idx head/tail = [ 0  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15 16 17 18 19] [580 581 582 583 584 585 586 587 588 589 590 591 592 593 594 595 596 597
+ 598 599]
+true anomaly after test_valid_mask = 6
+num anomaly removed by valid mask = 0
+num_valid_test_packets = 600
+num_valid_thre_packets = 500
+=========packet level=============
+num normal packets = 594
+num anomaly packets = 6
+normal packet score: min=0.200129, max=0.201977, mean=0.200634, std=0.000331
+anomaly packet score: min=0.200193, max=0.201007, mean=0.200529, std=0.000319
+[INFO] Saved packet score analysis to outputs/TNS/20260323_164646_ws5_ps5_bs32_ep10/analysis
+TP = 0
+FP = 13
+FN = 6
+TN = 581
+Packet Threshold : 0.201269
+Packet Accuracy : 0.9683, Packet Precision : 0.0000, Packet Recall : 0.0000, Packet F-score : 0.0000

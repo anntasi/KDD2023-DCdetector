@@ -109,6 +109,133 @@ class Solver(object):
             self.criterion = nn.L1Loss()
         elif self.loss_fuc == 'MSE':
             self.criterion = nn.MSELoss()
+    
+    
+    def _inspect_anomaly_related_windows(
+        self,
+        window_scores,
+        window_pkt_idx,
+        anomaly_packet_idx,
+        save_csv=True,
+        top_k=10
+    ):
+        """
+        檢查每個 anomaly packet 被哪些 windows 包到，
+        並列出那些 windows 的 score。
+
+        Parameters
+        ----------
+        window_scores : np.ndarray, shape = (num_windows,)
+            每個 window 的 anomaly score
+        window_pkt_idx : np.ndarray, shape = (num_windows, win_size)
+            每個 window 對應到的 packet index
+        anomaly_packet_idx : np.ndarray, shape = (num_anomaly_packets,)
+            anomaly packet 的原始 index
+        save_csv : bool
+            是否存成 csv
+        top_k : int
+            額外列出全體最高分 windows 的前幾個，方便比較
+        """
+        import pandas as pd
+        import numpy as np
+        import os
+
+        rows = []
+
+        # 全體 window 的分位數，拿來判斷 anomaly windows 是高分還是普通
+        q50 = np.percentile(window_scores, 50)
+        q90 = np.percentile(window_scores, 90)
+        q95 = np.percentile(window_scores, 95)
+        q99 = np.percentile(window_scores, 99)
+
+        print("\n========== Inspect anomaly-related windows ==========", flush=True)
+        print(
+            "Global window score percentiles: "
+            f"p50={q50:.6f}, p90={q90:.6f}, p95={q95:.6f}, p99={q99:.6f}",
+            flush=True
+        )
+
+        for pkt in anomaly_packet_idx:
+            # 找出所有包含這個 anomaly packet 的 windows
+            hit_mask = np.any(window_pkt_idx == pkt, axis=1)
+            hit_windows = np.where(hit_mask)[0]
+
+            print(f"\n[Anomaly packet {pkt}] covered by {len(hit_windows)} windows", flush=True)
+
+            if len(hit_windows) == 0:
+                print("  -> no window covers this packet", flush=True)
+                continue
+
+            local_scores = window_scores[hit_windows]
+
+            print(
+                "  local window score stats: "
+                f"min={local_scores.min():.6f}, "
+                f"max={local_scores.max():.6f}, "
+                f"mean={local_scores.mean():.6f}, "
+                f"std={local_scores.std():.6f}",
+                flush=True
+            )
+
+            # 依 score 由高到低排序，方便看最可疑的那幾個 windows
+            sorted_idx = hit_windows[np.argsort(local_scores)[::-1]]
+
+            for rank, w_idx in enumerate(sorted_idx, start=1):
+                score = float(window_scores[w_idx])
+                pkt_list = window_pkt_idx[w_idx].tolist()
+
+                # score 所在的全域 percentile（近似）
+                percentile = float((window_scores <= score).mean() * 100.0)
+
+                print(
+                    f"    rank={rank:02d} "
+                    f"window_idx={w_idx} "
+                    f"score={score:.6f} "
+                    f"global_pct~={percentile:.2f} "
+                    f"packets={pkt_list}",
+                    flush=True
+                )
+
+                rows.append({
+                    "anomaly_packet_idx": int(pkt),
+                    "window_idx": int(w_idx),
+                    "window_score": score,
+                    "global_percentile_approx": percentile,
+                    "window_pkt_idx": " ".join(map(str, pkt_list)),
+                    "rank_within_this_anomaly_packet": int(rank),
+                })
+
+        # 額外存全體最高分 windows，方便對照 anomaly windows 到底高不高
+        top_idx = np.argsort(window_scores)[::-1][:top_k]
+        top_rows = []
+        print(f"\nTop-{top_k} highest-scoring windows globally:", flush=True)
+        for rank, w_idx in enumerate(top_idx, start=1):
+            score = float(window_scores[w_idx])
+            pkt_list = window_pkt_idx[w_idx].tolist()
+            print(
+                f"  global_rank={rank:02d} window_idx={w_idx} "
+                f"score={score:.6f} packets={pkt_list}",
+                flush=True
+            )
+            top_rows.append({
+                "global_rank": int(rank),
+                "window_idx": int(w_idx),
+                "window_score": score,
+                "window_pkt_idx": " ".join(map(str, pkt_list)),
+            })
+
+        if save_csv:
+            detail_df = pd.DataFrame(rows)
+            top_df = pd.DataFrame(top_rows)
+
+            detail_path = os.path.join(self.analysis_dir, "anomaly_related_windows.csv")
+            top_path = os.path.join(self.analysis_dir, f"top_{top_k}_global_windows.csv")
+
+            detail_df.to_csv(detail_path, index=False, encoding="utf-8-sig")
+            top_df.to_csv(top_path, index=False, encoding="utf-8-sig")
+
+            print(f"\n[INFO] Saved anomaly window inspection to: {detail_path}", flush=True)
+            print(f"[INFO] Saved top-{top_k} global windows to: {top_path}", flush=True)   
         
     def _init_output_dirs(self):
         timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
@@ -367,7 +494,7 @@ class Solver(object):
             # metric = torch.softmax((-series_loss - prior_loss), dim=-1)
             # cri = metric.detach().cpu().numpy()
             cri = (-series_loss - prior_loss).detach().cpu().numpy()
-            cri_window = cri.mean(axis=1)
+            cri_window = cri.max(axis=1)
             attens_energy.append(cri_window)
 
         attens_energy = np.concatenate(attens_energy, axis=0).reshape(-1)
@@ -417,7 +544,7 @@ class Solver(object):
             # metric = torch.softmax((-series_loss - prior_loss), dim=-1)
             # cri = metric.detach().cpu().numpy()
             cri = (-series_loss - prior_loss).detach().cpu().numpy()
-            cri_window = cri.mean(axis=1)
+            cri_window = cri.max(axis=1)
             attens_energy.append(cri_window)
 
         attens_energy = np.concatenate(attens_energy, axis=0).reshape(-1)
@@ -427,7 +554,7 @@ class Solver(object):
         print("Threshold :", thresh)
 
         # (3) evaluation on the test set
-        test_labels = []
+        # test_labels = []
         attens_energy = []
         #for i, batch in enumerate(self.thre_loader):
         test_pkt_idx_all = []
@@ -463,96 +590,99 @@ class Solver(object):
                         (prior[u] / torch.unsqueeze(torch.sum(prior[u], dim=-1), dim=-1).repeat(1, 1, 1,
                                                                                                 self.win_size)),
                         series[u].detach()) * temperature
+            # softmax       
             # metric = torch.softmax((-series_loss - prior_loss), dim=-1)
-            
             # cri = metric.detach().cpu().numpy()
+            
+            #無softmax
             cri = (-series_loss - prior_loss).detach().cpu().numpy()
             print("cri.shape before agg =", cri.shape, flush=True)
 
-            cri_window = cri.mean(axis=1)   # 每個 window 聚合成一個 score
+            cri_window = cri.max(axis=1)   # 每個 window 聚合成一個 score
             print("cri_window.shape =", cri_window.shape, flush=True)
-
             attens_energy.append(cri_window)
-
-            window_labels = labels.max(dim=1)[0]
-            test_labels.append(window_labels.cpu().numpy())
+            # test_labels.append(labels)安安試
+            
+            #windoe level用得
+            # window_labels = labels.max(dim=1)[0]
+            # test_labels.append(window_labels.cpu().numpy())
             
         attens_energy = np.concatenate(attens_energy, axis=0).reshape(-1)
-        test_labels = np.concatenate(test_labels, axis=0).reshape(-1)#每個 test window 的 true label
-        print("test_labels shape =", test_labels.shape, flush=True)
-        print("test_labels sum =", test_labels.sum(), flush=True)
-        print("test_labels tail 30 =", test_labels[-30:], flush=True)
+        # test_labels = np.concatenate(test_labels, axis=0).reshape(-1)#每個 test window 的 true label
+        # print("test_labels shape =", test_labels.shape, flush=True)
+        # print("test_labels sum =", test_labels.sum(), flush=True)
+        # print("test_labels tail 30 =", test_labels[-30:], flush=True)
         test_energy = np.array(attens_energy)
-        test_labels = np.array(test_labels)
+        # test_labels = np.array(test_labels)
         print("len(test_energy) =", len(test_energy), flush=True)
-        print("len(test_labels) =", len(test_labels), flush=True)
+        # print("len(test_labels) =", len(test_labels), flush=True)
         print("test_energy shape =", np.array(test_energy).shape, flush=True)
-        print("test_labels shape =", np.array(test_labels).shape, flush=True)
+        # print("test_labels shape =", np.array(test_labels).shape, flush=True)
         # =========================================================
         # Window-level score analysis
         # =========================================================
-        normal_window_scores = test_energy[test_labels == 0]
-        anomaly_window_scores = test_energy[test_labels == 1]
+        # normal_window_scores = test_energy[test_labels == 0]
+        # anomaly_window_scores = test_energy[test_labels == 1]
 
-        print("num normal windows =", len(normal_window_scores), flush=True)
-        print("num anomaly windows =", len(anomaly_window_scores), flush=True)
+        # print("num normal windows =", len(normal_window_scores), flush=True)
+        # print("num anomaly windows =", len(anomaly_window_scores), flush=True)
 
-        if len(normal_window_scores) > 0:
-            print("normal window score: min={:.6f}, max={:.6f}, mean={:.6f}, std={:.6f}".format(
-                normal_window_scores.min(),
-                normal_window_scores.max(),
-                normal_window_scores.mean(),
-                normal_window_scores.std()
-            ), flush=True)
+        # if len(normal_window_scores) > 0:
+        #     print("normal window score: min={:.6f}, max={:.6f}, mean={:.6f}, std={:.6f}".format(
+        #         normal_window_scores.min(),
+        #         normal_window_scores.max(),
+        #         normal_window_scores.mean(),
+        #         normal_window_scores.std()
+        #     ), flush=True)
 
-        if len(anomaly_window_scores) > 0:
-            print("anomaly window score: min={:.6f}, max={:.6f}, mean={:.6f}, std={:.6f}".format(
-                anomaly_window_scores.min(),
-                anomaly_window_scores.max(),
-                anomaly_window_scores.mean(),
-                anomaly_window_scores.std()
-            ), flush=True)
-
-        
-
-        plt.figure(figsize=(8, 5))
-        plt.hist(normal_window_scores, bins=50, alpha=0.5, label="normal window")
-        plt.hist(anomaly_window_scores, bins=50, alpha=0.5, label="anomaly window")
-        plt.axvline(thresh, linestyle='--', label=f'window threshold={thresh:.4f}')
-        plt.xlabel("window anomaly score")
-        plt.ylabel("count")
-        plt.title("Window Score Distribution")
-        plt.legend()
-        plt.tight_layout()
-        plt.savefig(os.path.join(self.analysis_dir, "window_score_distribution.png"), dpi=200)
-        plt.close()
-
-        window_df = pd.DataFrame({
-            "score": test_energy,
-            "label": test_labels
-        })
-        window_df.to_csv(os.path.join(self.analysis_dir, "window_scores.csv"), index=False)
-        print(f"[INFO] Saved window score analysis to {self.analysis_dir}", flush=True)
+        # if len(anomaly_window_scores) > 0:
+        #     print("anomaly window score: min={:.6f}, max={:.6f}, mean={:.6f}, std={:.6f}".format(
+        #         anomaly_window_scores.min(),
+        #         anomaly_window_scores.max(),
+        #         anomaly_window_scores.mean(),
+        #         anomaly_window_scores.std()
+        #     ), flush=True)
 
         
 
+        # plt.figure(figsize=(8, 5))
+        # plt.hist(normal_window_scores, bins=50, alpha=0.5, label="normal window")
+        # plt.hist(anomaly_window_scores, bins=50, alpha=0.5, label="anomaly window")
+        # plt.axvline(thresh, linestyle='--', label=f'window threshold={thresh:.4f}')
+        # plt.xlabel("window anomaly score")
+        # plt.ylabel("count")
+        # plt.title("Window Score Distribution")
+        # plt.legend()
+        # plt.tight_layout()
+        # plt.savefig(os.path.join(self.analysis_dir, "window_score_distribution.png"), dpi=200)
+        # plt.close()
+
+        # window_df = pd.DataFrame({
+        #     "score": test_energy,
+        #     "label": test_labels
+        # })
+        # window_df.to_csv(os.path.join(self.analysis_dir, "window_scores.csv"), index=False)
+        # print(f"[INFO] Saved window score analysis to {self.analysis_dir}", flush=True)
+
+        
 
 
-        pred = (test_energy > thresh).astype(int)#score > threshold → anomaly (1);否則 → normal (0)
-        gt = test_labels.astype(int)
+
+        # pred = (test_energy > thresh).astype(int)#score > threshold → anomaly (1);否則 → normal (0)
+        # gt = test_labels.astype(int)
         
-        matrix = [self.index]
+        # matrix = [self.index]
         
-        window_pred_df = pd.DataFrame({
-            "window_idx": np.arange(len(test_energy)),
-            "window_score": test_energy,
-            "window_label": gt,
-            "window_pred": pred,
-        })
-        window_pred_df.to_csv(
-            os.path.join(self.inference_dir, "window_predictions.csv"),
-            index=False
-        )
+        # window_pred_df = pd.DataFrame({
+        #     "window_idx": np.arange(len(test_energy)),
+        #     "window_score": test_energy,
+        #     "window_label": gt,
+        #     "window_pred": pred,
+        # })
+        # window_pred_df.to_csv(
+        #     os.path.join(self.inference_dir, "window_predictions.csv"),
+        #     index=False
+        # )
         # scores_simple = combine_all_evaluation_scores(pred, gt, test_energy)
         # for key, value in scores_simple.items():
         #     matrix.append(value)
@@ -566,45 +696,45 @@ class Solver(object):
         # 如果某一段連續 ground truth anomaly 區間裡
         # 模型只抓到其中一個點
         # 那就把整段 anomaly 區間都算成有抓到
-        anomaly_state = False
-        for i in range(len(gt)):
-            if gt[i] == 1 and pred[i] == 1 and not anomaly_state:
-                anomaly_state = True
-                for j in range(i, 0, -1):
-                    if gt[j] == 0:
-                        break
-                    else:
-                        if pred[j] == 0:
-                            pred[j] = 1
-                for j in range(i, len(gt)):
-                    if gt[j] == 0:
-                        break
-                    else:
-                        if pred[j] == 0:
-                            pred[j] = 1
-            elif gt[i] == 0:
-                anomaly_state = False
-            if anomaly_state:
-                pred[i] = 1
+        # anomaly_state = False
+        # for i in range(len(gt)):
+        #     if gt[i] == 1 and pred[i] == 1 and not anomaly_state:
+        #         anomaly_state = True
+        #         for j in range(i, 0, -1):
+        #             if gt[j] == 0:
+        #                 break
+        #             else:
+        #                 if pred[j] == 0:
+        #                     pred[j] = 1
+        #         for j in range(i, len(gt)):
+        #             if gt[j] == 0:
+        #                 break
+        #             else:
+        #                 if pred[j] == 0:
+        #                     pred[j] = 1
+        #     elif gt[i] == 0:
+        #         anomaly_state = False
+        #     if anomaly_state:
+        #         pred[i] = 1
 
-        pred = np.array(pred)
-        gt = np.array(gt)
+        # pred = np.array(pred)
+        # gt = np.array(gt)
 
-        from sklearn.metrics import precision_recall_fscore_support
-        from sklearn.metrics import accuracy_score
+        # from sklearn.metrics import precision_recall_fscore_support
+        # from sklearn.metrics import accuracy_score
 
-        window_TP = np.sum((pred == 1) & (gt == 1))
-        window_FP = np.sum((pred == 1) & (gt == 0))
-        window_FN = np.sum((pred == 0) & (gt == 1))
-        window_TN = np.sum((pred == 0) & (gt == 0))
-        print("===========window level==============")
-        print("TP =", window_TP, flush=True)
-        print("FP =", window_FP, flush=True)
-        print("FN =", window_FN, flush=True)
-        print("TN =", window_TN, flush=True)
-        accuracy = accuracy_score(gt, pred)
-        precision, recall, f_score, support = precision_recall_fscore_support(gt, pred, average='binary')
-        print("Accuracy : {:0.4f}, Precision : {:0.4f}, Recall : {:0.4f}, F-score : {:0.4f} ".format(accuracy, precision, recall, f_score))
+        # window_TP = np.sum((pred == 1) & (gt == 1))
+        # window_FP = np.sum((pred == 1) & (gt == 0))
+        # window_FN = np.sum((pred == 0) & (gt == 1))
+        # window_TN = np.sum((pred == 0) & (gt == 0))
+        # print("===========window level==============")
+        # print("TP =", window_TP, flush=True)
+        # print("FP =", window_FP, flush=True)
+        # print("FN =", window_FN, flush=True)
+        # print("TN =", window_TN, flush=True)
+        # accuracy = accuracy_score(gt, pred)
+        # precision, recall, f_score, support = precision_recall_fscore_support(gt, pred, average='binary')
+        # print("Accuracy : {:0.4f}, Precision : {:0.4f}, Recall : {:0.4f}, F-score : {:0.4f} ".format(accuracy, precision, recall, f_score))
         
         # =========================================================
         # Packet-level scoring
@@ -649,6 +779,18 @@ class Solver(object):
         anom_idx_raw = np.where(test_dataset.packet_labels_raw == 1)[0]
         print("raw anomaly packet idx =", anom_idx_raw, flush=True)
         print("valid mask on anomaly idx =", test_valid_mask[anom_idx_raw], flush=True)
+        
+        # =========================================================
+        # Inspect windows that cover anomaly packets
+        # =========================================================
+        self._inspect_anomaly_related_windows(
+            window_scores=test_energy,
+            window_pkt_idx=test_pkt_idx,
+            anomaly_packet_idx=anom_idx_raw,
+            save_csv=True,
+            top_k=10
+        )
+        
         selected_idx = np.where(test_dataset.selected_packet_mask)[0]
         print("selected packet idx head/tail =", selected_idx[:20], selected_idx[-20:], flush=True)
         
@@ -754,16 +896,16 @@ class Solver(object):
         np.save(os.path.join(self.inference_dir, "dcd_packet_valid_mask.npy"), test_valid_mask.astype(np.int64))
         np.save(os.path.join(self.inference_dir, "dcd_packet_gt.npy"), test_dataset.packet_labels_raw.astype(np.int64))
         summary_metrics = {
-            "window_level": {
-                "accuracy": float(accuracy),
-                "precision": float(precision),
-                "recall": float(recall),
-                "f1": float(f_score),
-                "TP": int(window_TP),
-                "FP": int(window_FP),
-                "FN": int(window_FN),
-                "TN": int(window_TN),
-            },
+            # "window_level": {
+            #     "accuracy": float(accuracy),
+            #     "precision": float(precision),
+            #     "recall": float(recall),
+            #     "f1": float(f_score),
+            #     "TP": int(window_TP),
+            #     "FP": int(window_FP),
+            #     "FN": int(window_FN),
+            #     "TN": int(window_TN),
+            # },
             "packet_level": {
                 "accuracy": float(accuracy_packet),
                 "precision": float(precision_packet),
@@ -785,4 +927,4 @@ class Solver(object):
                 writer = csv.writer(f)
                 writer.writerow(matrix)
 
-        return accuracy, precision, recall, f_score
+        return accuracy_packet, precision_packet, recall_packet, f_score_packet
