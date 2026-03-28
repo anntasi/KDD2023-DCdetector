@@ -93,7 +93,7 @@ class Solver(object):
         self.d_model = config.get('d_model', 256)
         self.e_layers = config.get('e_layers', 3)
         self.patch_size = config.get('patch_size', [5])
-        
+        self.packet_score_mode = config.get("packet_score_mode", "position")
         self.lr = config.get('lr', 1e-4)
         self.num_epochs = config.get('num_epochs', 10)
         self.batch_size = config.get('batch_size', 32)
@@ -110,133 +110,327 @@ class Solver(object):
         elif self.loss_fuc == 'MSE':
             self.criterion = nn.MSELoss()
     
-    
-    def _inspect_anomaly_related_windows(
+    def _pretty_print_packet_windows(
         self,
-        window_scores,
+        position_scores,
         window_pkt_idx,
-        anomaly_packet_idx,
-        save_csv=True,
-        top_k=10
+        packet_idx_list,
+        packet_threshold=None,
+        save_txt=True,
+        max_windows_per_packet=None,
     ):
         """
-        檢查每個 anomaly packet 被哪些 windows 包到，
-        並列出那些 windows 的 score。
+        漂亮列印：
+        對每個指定 packet，找出所有包含它的 windows，
+        並印出該 window 內每個 packet 的 index 與對應 score。
 
         Parameters
         ----------
-        window_scores : np.ndarray, shape = (num_windows,)
-            每個 window 的 anomaly score
+        position_scores : np.ndarray, shape = (num_windows, win_size)
+            每個 window 每個位置的分數（例如 test_pos_energy）
+
         window_pkt_idx : np.ndarray, shape = (num_windows, win_size)
-            每個 window 對應到的 packet index
+            每個 window 對應到哪些 packet index
+
+        packet_idx_list : array-like
+            想檢查的 packet index 列表（例如 anomaly packet indices）
+
+        packet_threshold : float or None
+            若有提供，會一起印出方便比對
+
+        save_txt : bool
+            是否把輸出也存成 txt
+
+        max_windows_per_packet : int or None
+            若不是 None，則每個 packet 最多只印前幾個 windows
+        """
+        import os
+        import numpy as np
+
+        lines = []
+        sep_major = "=" * 110
+        sep_minor = "-" * 110
+
+        def add(line=""):
+            print(line, flush=True)
+            lines.append(line)
+
+        add("\n" + sep_major)
+        add("Pretty Inspect: packet-in-window position scores")
+        if packet_threshold is not None:
+            add(f"packet_threshold = {packet_threshold:.6f}")
+        add(sep_major)
+
+        for pkt in packet_idx_list:
+            hit_windows = np.where(np.any(window_pkt_idx == pkt, axis=1))[0]
+
+            add(f"\n[Target packet {pkt}] covered by {len(hit_windows)} windows")
+
+            if len(hit_windows) == 0:
+                add("  -> no window covers this packet")
+                add(sep_minor)
+                continue
+
+            # 依照該 packet 在各 window 對應位置的 score 由高到低排序
+            packet_hits = []
+            for w in hit_windows:
+                pos = np.where(window_pkt_idx[w] == pkt)[0]
+                if len(pos) == 0:
+                    continue
+                pos = int(pos[0])
+                target_score = float(position_scores[w, pos])
+                packet_hits.append((w, pos, target_score))
+
+            packet_hits.sort(key=lambda x: x[2], reverse=True)
+
+            if max_windows_per_packet is not None:
+                packet_hits = packet_hits[:max_windows_per_packet]
+
+            add(sep_minor)
+
+            for rank, (w, pos, target_score) in enumerate(packet_hits, start=1):
+                pkt_list = window_pkt_idx[w]
+                score_list = position_scores[w]
+
+                add(
+                    f"window_rank={rank:02d} | window_idx={w:4d} | "
+                    f"target_pos={pos} | target_score={target_score:10.6f}"
+                )
+                add(" pos | packet_idx | score       | mark ")
+                add("-----+------------+-------------+------")
+
+                for t in range(len(pkt_list)):
+                    p = int(pkt_list[t])
+                    s = float(score_list[t])
+
+                    marks = []
+                    if p == pkt:
+                        marks.append("TARGET")
+                    if packet_threshold is not None and s > packet_threshold:
+                        marks.append(">thr")
+
+                    mark_str = ",".join(marks) if marks else ""
+
+                    add(f"{t:>4d} | {p:>10d} | {s:>11.6f} | {mark_str}")
+
+                add(sep_minor)
+
+        if save_txt:
+            out_path = os.path.join(self.analysis_dir, "pretty_packet_window_scores.txt")
+            with open(out_path, "w", encoding="utf-8") as f:
+                f.write("\n".join(lines))
+            add(f"[INFO] Saved pretty print to: {out_path}")
+    def _inspect_anomaly_related_windows(
+        self,
+        scores,
+        window_pkt_idx,
+        anomaly_packet_idx,
+        score_type="window",
+        save_csv=True,
+        top_k=10,
+    ):
+        """
+        檢查 anomaly packet 相關的分數資訊。
+
+        Parameters
+        ----------
+        scores : np.ndarray
+            - 若 score_type="window": shape = (num_windows,)
+            每個 window 的 anomaly score
+            - 若 score_type="packet": shape = (total_packets,)
+            每個 packet 的 anomaly score
+
+        window_pkt_idx : np.ndarray, shape = (num_windows, win_size)
+            每個 window 對應到哪些 packet index
+
         anomaly_packet_idx : np.ndarray, shape = (num_anomaly_packets,)
             anomaly packet 的原始 index
+
+        score_type : str
+            "window" 或 "packet"
+
         save_csv : bool
             是否存成 csv
+
         top_k : int
-            額外列出全體最高分 windows 的前幾個，方便比較
+            額外列出全體最高分的前幾個，方便比較
         """
         import pandas as pd
         import numpy as np
         import os
 
+        if score_type not in ["window", "packet"]:
+            raise ValueError(f"Unknown score_type: {score_type}")
+
         rows = []
 
-        # 全體 window 的分位數，拿來判斷 anomaly windows 是高分還是普通
-        q50 = np.percentile(window_scores, 50)
-        q90 = np.percentile(window_scores, 90)
-        q95 = np.percentile(window_scores, 95)
-        q99 = np.percentile(window_scores, 99)
+        print(f"\n========== Inspect anomaly-related {score_type} scores ==========", flush=True)
 
-        print("\n========== Inspect anomaly-related windows ==========", flush=True)
-        print(
-            "Global window score percentiles: "
-            f"p50={q50:.6f}, p90={q90:.6f}, p95={q95:.6f}, p99={q99:.6f}",
-            flush=True
-        )
+        # =========================================================
+        # WINDOW MODE
+        # =========================================================
+        if score_type == "window":
+            window_scores = scores
 
-        for pkt in anomaly_packet_idx:
-            # 找出所有包含這個 anomaly packet 的 windows
-            hit_mask = np.any(window_pkt_idx == pkt, axis=1)
-            hit_windows = np.where(hit_mask)[0]
-
-            print(f"\n[Anomaly packet {pkt}] covered by {len(hit_windows)} windows", flush=True)
-
-            if len(hit_windows) == 0:
-                print("  -> no window covers this packet", flush=True)
-                continue
-
-            local_scores = window_scores[hit_windows]
+            q50 = np.percentile(window_scores, 50)
+            q90 = np.percentile(window_scores, 90)
+            q95 = np.percentile(window_scores, 95)
+            q99 = np.percentile(window_scores, 99)
 
             print(
-                "  local window score stats: "
-                f"min={local_scores.min():.6f}, "
-                f"max={local_scores.max():.6f}, "
-                f"mean={local_scores.mean():.6f}, "
-                f"std={local_scores.std():.6f}",
+                "Global window score percentiles: "
+                f"p50={q50:.6f}, p90={q90:.6f}, p95={q95:.6f}, p99={q99:.6f}",
                 flush=True
             )
 
-            # 依 score 由高到低排序，方便看最可疑的那幾個 windows
-            sorted_idx = hit_windows[np.argsort(local_scores)[::-1]]
+            for pkt in anomaly_packet_idx:
+                hit_mask = np.any(window_pkt_idx == pkt, axis=1)
+                hit_windows = np.where(hit_mask)[0]
 
-            for rank, w_idx in enumerate(sorted_idx, start=1):
-                score = float(window_scores[w_idx])
-                pkt_list = window_pkt_idx[w_idx].tolist()
+                print(f"\n[Anomaly packet {pkt}] covered by {len(hit_windows)} windows", flush=True)
 
-                # score 所在的全域 percentile（近似）
-                percentile = float((window_scores <= score).mean() * 100.0)
+                if len(hit_windows) == 0:
+                    print("  -> no window covers this packet", flush=True)
+                    continue
+
+                local_scores = window_scores[hit_windows]
 
                 print(
-                    f"    rank={rank:02d} "
-                    f"window_idx={w_idx} "
-                    f"score={score:.6f} "
+                    "  local window score stats: "
+                    f"min={local_scores.min():.6f}, "
+                    f"max={local_scores.max():.6f}, "
+                    f"mean={local_scores.mean():.6f}, "
+                    f"std={local_scores.std():.6f}",
+                    flush=True
+                )
+
+                sorted_idx = hit_windows[np.argsort(local_scores)[::-1]]
+
+                for rank, w_idx in enumerate(sorted_idx, start=1):
+                    score = float(window_scores[w_idx])
+                    pkt_list = window_pkt_idx[w_idx].tolist()
+                    percentile = float((window_scores <= score).mean() * 100.0)
+
+                    print(
+                        f"    rank={rank:02d} "
+                        f"window_idx={w_idx} "
+                        f"score={score:.6f} "
+                        f"global_pct~={percentile:.2f} "
+                        f"packets={pkt_list}",
+                        flush=True
+                    )
+
+                    rows.append({
+                        "anomaly_packet_idx": int(pkt),
+                        "window_idx": int(w_idx),
+                        "window_score": score,
+                        "global_percentile_approx": percentile,
+                        "window_pkt_idx": " ".join(map(str, pkt_list)),
+                        "rank_within_this_anomaly_packet": int(rank),
+                    })
+
+            top_idx = np.argsort(window_scores)[::-1][:top_k]
+            top_rows = []
+
+            print(f"\nTop-{top_k} highest-scoring windows globally:", flush=True)
+            for rank, w_idx in enumerate(top_idx, start=1):
+                score = float(window_scores[w_idx])
+                pkt_list = window_pkt_idx[w_idx].tolist()
+                print(
+                    f"  global_rank={rank:02d} window_idx={w_idx} "
+                    f"score={score:.6f} packets={pkt_list}",
+                    flush=True
+                )
+                top_rows.append({
+                    "global_rank": int(rank),
+                    "window_idx": int(w_idx),
+                    "window_score": score,
+                    "window_pkt_idx": " ".join(map(str, pkt_list)),
+                })
+
+            if save_csv:
+                detail_df = pd.DataFrame(rows)
+                top_df = pd.DataFrame(top_rows)
+
+                detail_path = os.path.join(self.analysis_dir, "anomaly_related_windows.csv")
+                top_path = os.path.join(self.analysis_dir, f"top_{top_k}_global_windows.csv")
+
+                detail_df.to_csv(detail_path, index=False, encoding="utf-8-sig")
+                top_df.to_csv(top_path, index=False, encoding="utf-8-sig")
+
+                print(f"\n[INFO] Saved anomaly window inspection to: {detail_path}", flush=True)
+                print(f"[INFO] Saved top-{top_k} global windows to: {top_path}", flush=True)
+
+        # =========================================================
+        # PACKET MODE
+        # =========================================================
+        elif score_type == "packet":
+            packet_scores = scores
+
+            q50 = np.percentile(packet_scores, 50)
+            q90 = np.percentile(packet_scores, 90)
+            q95 = np.percentile(packet_scores, 95)
+            q99 = np.percentile(packet_scores, 99)
+
+            print(
+                "Global packet score percentiles: "
+                f"p50={q50:.6f}, p90={q90:.6f}, p95={q95:.6f}, p99={q99:.6f}",
+                flush=True
+            )
+
+            for rank, pkt in enumerate(anomaly_packet_idx, start=1):
+                score = float(packet_scores[pkt])
+                percentile = float((packet_scores <= score).mean() * 100.0)
+
+                hit_mask = np.any(window_pkt_idx == pkt, axis=1)
+                hit_windows = np.where(hit_mask)[0]
+
+                print(
+                    f"\n[Anomaly packet {pkt}] "
+                    f"packet_score={score:.6f} "
                     f"global_pct~={percentile:.2f} "
-                    f"packets={pkt_list}",
+                    f"covered_by_windows={len(hit_windows)}",
                     flush=True
                 )
 
                 rows.append({
+                    "rank_within_anomaly_packets": int(rank),
                     "anomaly_packet_idx": int(pkt),
-                    "window_idx": int(w_idx),
-                    "window_score": score,
+                    "packet_score": score,
                     "global_percentile_approx": percentile,
-                    "window_pkt_idx": " ".join(map(str, pkt_list)),
-                    "rank_within_this_anomaly_packet": int(rank),
+                    "covered_by_windows": int(len(hit_windows)),
                 })
 
-        # 額外存全體最高分 windows，方便對照 anomaly windows 到底高不高
-        top_idx = np.argsort(window_scores)[::-1][:top_k]
-        top_rows = []
-        print(f"\nTop-{top_k} highest-scoring windows globally:", flush=True)
-        for rank, w_idx in enumerate(top_idx, start=1):
-            score = float(window_scores[w_idx])
-            pkt_list = window_pkt_idx[w_idx].tolist()
-            print(
-                f"  global_rank={rank:02d} window_idx={w_idx} "
-                f"score={score:.6f} packets={pkt_list}",
-                flush=True
-            )
-            top_rows.append({
-                "global_rank": int(rank),
-                "window_idx": int(w_idx),
-                "window_score": score,
-                "window_pkt_idx": " ".join(map(str, pkt_list)),
-            })
+            top_idx = np.argsort(packet_scores)[::-1][:top_k]
+            top_rows = []
 
-        if save_csv:
-            detail_df = pd.DataFrame(rows)
-            top_df = pd.DataFrame(top_rows)
+            print(f"\nTop-{top_k} highest-scoring packets globally:", flush=True)
+            for rank, pkt in enumerate(top_idx, start=1):
+                score = float(packet_scores[pkt])
+                print(
+                    f"  global_rank={rank:02d} packet_idx={pkt} "
+                    f"score={score:.6f}",
+                    flush=True
+                )
+                top_rows.append({
+                    "global_rank": int(rank),
+                    "packet_idx": int(pkt),
+                    "packet_score": score,
+                })
 
-            detail_path = os.path.join(self.analysis_dir, "anomaly_related_windows.csv")
-            top_path = os.path.join(self.analysis_dir, f"top_{top_k}_global_windows.csv")
+            if save_csv:
+                detail_df = pd.DataFrame(rows)
+                top_df = pd.DataFrame(top_rows)
 
-            detail_df.to_csv(detail_path, index=False, encoding="utf-8-sig")
-            top_df.to_csv(top_path, index=False, encoding="utf-8-sig")
+                detail_path = os.path.join(self.analysis_dir, "anomaly_related_packets.csv")
+                top_path = os.path.join(self.analysis_dir, f"top_{top_k}_global_packets.csv")
 
-            print(f"\n[INFO] Saved anomaly window inspection to: {detail_path}", flush=True)
-            print(f"[INFO] Saved top-{top_k} global windows to: {top_path}", flush=True)   
-        
+                detail_df.to_csv(detail_path, index=False, encoding="utf-8-sig")
+                top_df.to_csv(top_path, index=False, encoding="utf-8-sig")
+
+                print(f"\n[INFO] Saved anomaly packet inspection to: {detail_path}", flush=True)
+                print(f"[INFO] Saved top-{top_k} global packets to: {top_path}", flush=True)
+                
     def _init_output_dirs(self):
         timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
 
@@ -272,6 +466,7 @@ class Solver(object):
             "batch_size": self.batch_size,
             "anormly_ratio": self.anormly_ratio,
             "model_save_path": self.model_save_path,
+            "packet_score_mode": self.packet_score_mode,
         }
 
         with open(os.path.join(self.output_root, "config.json"), "w", encoding="utf-8") as f:
@@ -288,7 +483,48 @@ class Solver(object):
             self.model.cuda()
             
         self.optimizer = torch.optim.Adam(self.model.parameters(), lr=self.lr)
-        
+    def _aggregate_position_scores_to_packets(self, position_scores, window_pkt_idx, total_packets):
+        """
+        將 position-aware scores 聚合成 packet-level scores。
+
+        參數
+        ----
+        position_scores : np.ndarray, shape = (num_windows, win_size)
+            每個 window 內每個位置的分數
+
+        window_pkt_idx : np.ndarray, shape = (num_windows, win_size)
+            每個 window 對應到哪些 packet index
+
+        total_packets : int
+            dataset 總 packet 數
+
+        回傳
+        ----
+        packet_scores : np.ndarray, shape = (total_packets,)
+            每個 packet 的平均分數
+
+        valid_mask : np.ndarray, shape = (total_packets,)
+            哪些 packet 至少被一個 window 覆蓋到
+        """
+        score_sum = np.zeros(total_packets, dtype=np.float64)
+        score_count = np.zeros(total_packets, dtype=np.int64)
+
+        num_windows, win_size = window_pkt_idx.shape
+
+        for w in range(num_windows):
+            for t in range(win_size):
+                p = int(window_pkt_idx[w, t])
+
+                if 0 <= p < total_packets:
+                    s = float(position_scores[w, t])
+                    score_sum[p] += s
+                    score_count[p] += 1
+
+        packet_scores = np.zeros(total_packets, dtype=np.float64)
+        valid_mask = score_count > 0
+        packet_scores[valid_mask] = score_sum[valid_mask] / score_count[valid_mask]
+
+        return packet_scores, valid_mask    
     def _aggregate_window_scores_to_packets(self, window_scores, window_pkt_idx, total_packets):
         """
         將 window-level scores 聚合成 packet-level scores。
@@ -461,8 +697,9 @@ class Solver(object):
         temperature = 50
 
         # (1) stastic on the train set:用 train set 蒐集一批「正常資料的 score」
-        attens_energy = []
+        train_window_energy = []
         train_pkt_idx_all = []
+        train_pos_energy = []
         for i, batch in enumerate(self.train_loader):
             if len(batch) == 3:
                 input_data, labels, pkt_idx = batch
@@ -494,23 +731,34 @@ class Solver(object):
             # metric = torch.softmax((-series_loss - prior_loss), dim=-1)
             # cri = metric.detach().cpu().numpy()
             cri = (-series_loss - prior_loss).detach().cpu().numpy()
-            cri_window = cri.max(axis=1)
-            attens_energy.append(cri_window)
+            train_pos_energy.append(cri)
+            
+            cri_window = cri.max(axis=1)#該window分數是window內所有分數的最大值嗎
+            train_window_energy.append(cri_window)
+            
 
-        attens_energy = np.concatenate(attens_energy, axis=0).reshape(-1)
-        train_energy = np.array(attens_energy)#train set 所有 window 的 score
+        train_energy = np.concatenate(train_window_energy, axis=0).reshape(-1)           # window-level
+        train_pos_energy = np.concatenate(train_pos_energy, axis=0)       
+        
         train_pkt_idx = np.concatenate(train_pkt_idx_all, axis=0)
         train_dataset = self.train_loader.dataset
-
-        train_packet_scores, train_valid_mask = self._aggregate_window_scores_to_packets(
+        if self.packet_score_mode == "window":
+            train_packet_scores, train_valid_mask = self._aggregate_window_scores_to_packets(
             window_scores=train_energy,
             window_pkt_idx=train_pkt_idx,
             total_packets=len(train_dataset.packet_labels_raw)
         )
-
+        elif self.packet_score_mode == "position":
+            train_packet_scores, train_valid_mask = self._aggregate_position_scores_to_packets(
+                position_scores=train_pos_energy,
+                window_pkt_idx=train_pkt_idx,
+                total_packets=len(train_dataset.packet_labels_raw)
+            )
+            
         train_valid_mask = train_valid_mask & train_dataset.selected_packet_mask
         # (2) find the threshold
-        attens_energy = []
+        thre_window_energy = []
+        thre_pos_energy = []
         thre_pkt_idx_all = []
         
         for i, batch in enumerate(self.thre_loader):
@@ -545,19 +793,51 @@ class Solver(object):
             # cri = metric.detach().cpu().numpy()
             cri = (-series_loss - prior_loss).detach().cpu().numpy()
             cri_window = cri.max(axis=1)
-            attens_energy.append(cri_window)
+            thre_window_energy.append(cri_window)
+            thre_pos_energy.append(cri)
 
-        attens_energy = np.concatenate(attens_energy, axis=0).reshape(-1)
-        thre_energy = np.array(attens_energy)
-        combined_energy = np.concatenate([train_energy, thre_energy], axis=0)
+        thre_energy = np.concatenate(thre_window_energy, axis=0).reshape(-1)
+        thre_pos_energy = np.concatenate(thre_pos_energy, axis=0)
+        print(f"[INFO] packet_score_mode = {self.packet_score_mode}", flush=True)
+        thre_pkt_idx = np.concatenate(thre_pkt_idx_all, axis=0)
+        thre_dataset = self.thre_loader.dataset
+        if self.packet_score_mode == "window":
+            thre_packet_scores, thre_valid_mask = self._aggregate_window_scores_to_packets(
+            window_scores=thre_energy,
+            window_pkt_idx=thre_pkt_idx,
+            total_packets=len(thre_dataset.packet_labels_raw)
+        )
+
+            combined_energy = np.concatenate(
+                [train_energy, thre_energy],
+                axis=0
+            )
+
+        elif self.packet_score_mode == "position":
+            thre_packet_scores, thre_valid_mask = self._aggregate_position_scores_to_packets(
+            position_scores=thre_pos_energy,
+            window_pkt_idx=thre_pkt_idx,
+            total_packets=len(thre_dataset.packet_labels_raw)
+        )
+            combined_energy = np.concatenate(
+                [
+                    train_packet_scores[train_valid_mask],
+                    thre_packet_scores[thre_valid_mask]
+                ],
+                axis=0
+            )
+
+        else:
+            raise ValueError(f"Unknown packet_score_mode: {self.packet_score_mode}")
         thresh = np.percentile(combined_energy, 100 - self.anormly_ratio)#只有分數最高的 self.anormly_ratio% 會被當成 anomaly
         print("Threshold :", thresh)
 
         # (3) evaluation on the test set
-        # test_labels = []
-        attens_energy = []
-        #for i, batch in enumerate(self.thre_loader):
+        test_window_energy = []
+        test_pos_energy = []
         test_pkt_idx_all = []
+       
+      
         for i, batch in enumerate(self.test_loader):#一個batch有batch size個window
             if len(batch) == 3:
                 input_data, labels, pkt_idx = batch
@@ -600,19 +880,20 @@ class Solver(object):
 
             cri_window = cri.max(axis=1)   # 每個 window 聚合成一個 score
             print("cri_window.shape =", cri_window.shape, flush=True)
-            attens_energy.append(cri_window)
-            # test_labels.append(labels)安安試
+            test_window_energy.append(cri_window)
+            test_pos_energy.append(cri)
             
             #windoe level用得
             # window_labels = labels.max(dim=1)[0]
             # test_labels.append(window_labels.cpu().numpy())
             
-        attens_energy = np.concatenate(attens_energy, axis=0).reshape(-1)
+        test_energy = np.concatenate(test_window_energy, axis=0).reshape(-1)   # window-level
+        test_pos_energy = np.concatenate(test_pos_energy, axis=0)               # position-level
         # test_labels = np.concatenate(test_labels, axis=0).reshape(-1)#每個 test window 的 true label
         # print("test_labels shape =", test_labels.shape, flush=True)
         # print("test_labels sum =", test_labels.sum(), flush=True)
         # print("test_labels tail 30 =", test_labels[-30:], flush=True)
-        test_energy = np.array(attens_energy)
+        
         # test_labels = np.array(test_labels)
         print("len(test_energy) =", len(test_energy), flush=True)
         # print("len(test_labels) =", len(test_labels), flush=True)
@@ -739,24 +1020,33 @@ class Solver(object):
         # =========================================================
         # Packet-level scoring
         # =========================================================
-        thre_pkt_idx = np.concatenate(thre_pkt_idx_all, axis=0)
+       
         test_pkt_idx = np.concatenate(test_pkt_idx_all, axis=0)
 
-        thre_dataset = self.thre_loader.dataset
+        
         test_dataset = self.test_loader.dataset
 
-        thre_packet_scores, thre_valid_mask = self._aggregate_window_scores_to_packets(
-            window_scores=thre_energy,
-            window_pkt_idx=thre_pkt_idx,
-            total_packets=len(thre_dataset.packet_labels_raw)
-        )
+        print(f"[INFO] packet_score_mode = {self.packet_score_mode}", flush=True)
 
-        test_packet_scores, test_valid_mask = self._aggregate_window_scores_to_packets(
-            window_scores=test_energy,
-            window_pkt_idx=test_pkt_idx,
-            total_packets=len(test_dataset.packet_labels_raw)
-        )
-       
+        if self.packet_score_mode == "window":
+            
+            test_packet_scores, test_valid_mask = self._aggregate_window_scores_to_packets(
+                window_scores=test_energy,
+                window_pkt_idx=test_pkt_idx,
+                total_packets=len(test_dataset.packet_labels_raw)
+            )
+
+        elif self.packet_score_mode == "position":
+
+            test_packet_scores, test_valid_mask = self._aggregate_position_scores_to_packets(
+                position_scores=test_pos_energy,
+                window_pkt_idx=test_pkt_idx,
+                total_packets=len(test_dataset.packet_labels_raw)
+            )
+
+        else:
+            raise ValueError(f"Unknown packet_score_mode: {self.packet_score_mode}")
+            
         # 再跟 loader 內建的 selected_packet_mask 取交集
         thre_valid_mask = thre_valid_mask & thre_dataset.selected_packet_mask
         test_valid_mask = test_valid_mask & test_dataset.selected_packet_mask
@@ -783,14 +1073,35 @@ class Solver(object):
         # =========================================================
         # Inspect windows that cover anomaly packets
         # =========================================================
-        self._inspect_anomaly_related_windows(
-            window_scores=test_energy,
-            window_pkt_idx=test_pkt_idx,
-            anomaly_packet_idx=anom_idx_raw,
-            save_csv=True,
-            top_k=10
-        )
         
+
+        # print("\n=== WINDOW VIEW ===", flush=True)
+        # self._inspect_anomaly_related_windows(
+        #     scores=test_energy,
+        #     window_pkt_idx=test_pkt_idx,
+        #     anomaly_packet_idx=anom_idx_raw,
+        #     score_type="window",
+        #     save_csv=True,
+        #     top_k=10
+        # )
+
+        # print("\n=== PACKET VIEW ===", flush=True)
+        # self._inspect_anomaly_related_windows(
+        #     scores=test_packet_scores,
+        #     window_pkt_idx=test_pkt_idx,
+        #     anomaly_packet_idx=anom_idx_raw,
+        #     score_type="packet",
+        #     save_csv=True,
+        #     top_k=10
+        # )
+        self._pretty_print_packet_windows(
+            position_scores=test_pos_energy,
+            window_pkt_idx=test_pkt_idx,
+            packet_idx_list=anom_idx_raw,
+            packet_threshold=threshold_packet,
+            save_txt=True,
+            max_windows_per_packet=None,   # 想限制就改成 5
+        )
         selected_idx = np.where(test_dataset.selected_packet_mask)[0]
         print("selected packet idx head/tail =", selected_idx[:20], selected_idx[-20:], flush=True)
         
@@ -866,7 +1177,11 @@ class Solver(object):
             os.path.join(self.inference_dir, "packet_predictions.csv"),
             index=False
         )
-        
+        tp_indices = np.where(
+            (pred_packet == 1) & (gt_packet == 1)
+        )[0]
+
+        print("TP packet indices:", tp_indices)
         packet_TP = np.sum((pred_packet == 1) & (gt_packet == 1))
         packet_FP = np.sum((pred_packet == 1) & (gt_packet == 0))
         packet_FN = np.sum((pred_packet == 0) & (gt_packet == 1))
