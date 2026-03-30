@@ -1,0 +1,28 @@
+
+
+
+2026-03-30 16:31:18
+================ Hyperparameters ===============
+anormly_ratio: 4.0
+batch_size: 32
+d_model: 256
+data_path: /home/dbsecure/project/DCexpdata/10dim_v3/type6/train
+dataset: TNS
+devices: 0,1,2,3
+e_layers: 3
+gpu: 0
+index: 137
+input_c: 10
+k: 3
+loss_fuc: MSE
+lr: 0.0001
+mode: train
+model_save_path: checkpoints
+num_epochs: 40
+output_c: 10
+patch_size: [5]
+rec_timeseries: True
+use_gpu: False
+use_multi_gpu: True
+win_size: 5
+====================  Train  ===================

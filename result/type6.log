@@ -4502,3 +4502,1088 @@ FN = 5
 TN = 574
 Packet Threshold : -965.425488
 Packet Accuracy : 0.9583, Packet Precision : 0.0476, Packet Recall : 0.1667, Packet F-score : 0.0741
+
+
+
+2026-03-30 16:28:30
+================ Hyperparameters ===============
+anormly_ratio: 4.0
+batch_size: 32
+d_model: 256
+data_path: ../Dcexpdata/10dim_v3/type6
+dataset: TNS
+devices: 0,1,2,3
+e_layers: 3
+gpu: 0
+index: 137
+input_c: 10
+k: 3
+loss_fuc: MSE
+lr: 0.0001
+mode: train
+model_save_path: checkpoints
+num_epochs: 40
+output_c: 10
+patch_size: [5]
+rec_timeseries: True
+use_gpu: False
+use_multi_gpu: True
+win_size: 5
+====================  Train  ===================
+
+
+
+2026-03-30 16:31:51
+================ Hyperparameters ===============
+anormly_ratio: 4.0
+batch_size: 32
+d_model: 256
+data_path: /home/dbsecure/project/DCexpdata/10dim_v3/type6
+dataset: TNS
+devices: 0,1,2,3
+e_layers: 3
+gpu: 0
+index: 137
+input_c: 10
+k: 3
+loss_fuc: MSE
+lr: 0.0001
+mode: train
+model_save_path: checkpoints
+num_epochs: 40
+output_c: 10
+patch_size: [5]
+rec_timeseries: True
+use_gpu: False
+use_multi_gpu: True
+win_size: 5
+====================  Train  ===================
+[TNS_V2:train] split=train
+[TNS_V2:train] total_packets=3900
+[TNS_V2:train] num_windows=3896
+[TNS_V2:train] anomaly_packets=0
+[TNS_V2:train] first window shape=(5, 10)
+[TNS_V2:train] first pkt_idx=[0 1 2 3 4]
+[TNS_V2:val] split=val
+[TNS_V2:val] total_packets=500
+[TNS_V2:val] num_windows=496
+[TNS_V2:val] anomaly_packets=0
+[TNS_V2:val] first window shape=(5, 10)
+[TNS_V2:val] first pkt_idx=[0 1 2 3 4]
+[TNS_V2:test] split=test_mixed
+[TNS_V2:test] total_packets=600
+[TNS_V2:test] num_windows=596
+[TNS_V2:test] anomaly_packets=6
+[TNS_V2:test] first window shape=(5, 10)
+[TNS_V2:test] first pkt_idx=[0 1 2 3 4]
+[TNS_V2:thre] split=val
+[TNS_V2:thre] total_packets=500
+[TNS_V2:thre] num_windows=496
+[TNS_V2:thre] anomaly_packets=0
+[TNS_V2:thre] first window shape=(5, 10)
+[TNS_V2:thre] first pkt_idx=[0 1 2 3 4]
+[INFO] Output directory: outputs/TNS/20260330_163151_ws5_ps5_bs32_ep40
+	speed: 0.1214s/iter; left time: 575.3766s
+Epoch: 1, Cost time: 15.833s 
+[INFO] Saved checkpoint to: outputs/TNS/shared_checkpoints/checkpoint.pth
+	speed: 0.1389s/iter; left time: 641.9180s
+Epoch: 2, Cost time: 12.931s 
+[INFO] Saved checkpoint to: outputs/TNS/shared_checkpoints/checkpoint.pth
+	speed: 0.1329s/iter; left time: 597.8012s
+Epoch: 3, Cost time: 13.314s 
+[INFO] Saved checkpoint to: outputs/TNS/shared_checkpoints/checkpoint.pth
+	speed: 0.1344s/iter; left time: 588.4754s
+Epoch: 4, Cost time: 12.930s 
+[INFO] Saved checkpoint to: outputs/TNS/shared_checkpoints/checkpoint.pth
+	speed: 0.1238s/iter; left time: 527.2070s
+Epoch: 5, Cost time: 12.442s 
+[INFO] Saved checkpoint to: outputs/TNS/shared_checkpoints/checkpoint.pth
+	speed: 0.1192s/iter; left time: 492.8597s
+Epoch: 6, Cost time: 12.626s 
+[INFO] Saved checkpoint to: outputs/TNS/shared_checkpoints/checkpoint.pth
+	speed: 0.1479s/iter; left time: 593.6481s
+Epoch: 7, Cost time: 14.819s 
+[INFO] Saved checkpoint to: outputs/TNS/shared_checkpoints/checkpoint.pth
+	speed: 0.1420s/iter; left time: 552.8730s
+Epoch: 8, Cost time: 12.847s 
+[INFO] Saved checkpoint to: outputs/TNS/shared_checkpoints/checkpoint.pth
+	speed: 0.1192s/iter; left time: 449.8590s
+Epoch: 9, Cost time: 12.926s 
+[INFO] Saved checkpoint to: outputs/TNS/shared_checkpoints/checkpoint.pth
+	speed: 0.1388s/iter; left time: 506.9663s
+Epoch: 10, Cost time: 13.055s 
+[INFO] Saved checkpoint to: outputs/TNS/shared_checkpoints/checkpoint.pth
+	speed: 0.1203s/iter; left time: 424.9555s
+Epoch: 11, Cost time: 12.104s 
+[INFO] Saved checkpoint to: outputs/TNS/shared_checkpoints/checkpoint.pth
+	speed: 0.1294s/iter; left time: 441.1517s
+Epoch: 12, Cost time: 13.280s 
+[INFO] Saved checkpoint to: outputs/TNS/shared_checkpoints/checkpoint.pth
+	speed: 0.1270s/iter; left time: 417.8063s
+Epoch: 13, Cost time: 12.393s 
+[INFO] Saved checkpoint to: outputs/TNS/shared_checkpoints/checkpoint.pth
+	speed: 0.1409s/iter; left time: 446.3698s
+Epoch: 14, Cost time: 14.031s 
+[INFO] Saved checkpoint to: outputs/TNS/shared_checkpoints/checkpoint.pth
+	speed: 0.1302s/iter; left time: 396.8593s
+Epoch: 15, Cost time: 12.930s 
+[INFO] Saved checkpoint to: outputs/TNS/shared_checkpoints/checkpoint.pth
+	speed: 0.1378s/iter; left time: 403.2466s
+Epoch: 16, Cost time: 14.573s 
+[INFO] Saved checkpoint to: outputs/TNS/shared_checkpoints/checkpoint.pth
+	speed: 0.1397s/iter; left time: 391.7572s
+Epoch: 17, Cost time: 12.916s 
+[INFO] Saved checkpoint to: outputs/TNS/shared_checkpoints/checkpoint.pth
+	speed: 0.1303s/iter; left time: 349.6576s
+Epoch: 18, Cost time: 13.733s 
+[INFO] Saved checkpoint to: outputs/TNS/shared_checkpoints/checkpoint.pth
+	speed: 0.1421s/iter; left time: 364.2188s
+Epoch: 19, Cost time: 13.523s 
+[INFO] Saved checkpoint to: outputs/TNS/shared_checkpoints/checkpoint.pth
+	speed: 0.1316s/iter; left time: 321.4681s
+Epoch: 20, Cost time: 13.918s 
+[INFO] Saved checkpoint to: outputs/TNS/shared_checkpoints/checkpoint.pth
+	speed: 0.1324s/iter; left time: 307.2577s
+Epoch: 21, Cost time: 11.486s 
+[INFO] Saved checkpoint to: outputs/TNS/shared_checkpoints/checkpoint.pth
+	speed: 0.1117s/iter; left time: 245.7340s
+Epoch: 22, Cost time: 12.013s 
+[INFO] Saved checkpoint to: outputs/TNS/shared_checkpoints/checkpoint.pth
+	speed: 0.1267s/iter; left time: 263.4245s
+Epoch: 23, Cost time: 11.765s 
+[INFO] Saved checkpoint to: outputs/TNS/shared_checkpoints/checkpoint.pth
+	speed: 0.1209s/iter; left time: 236.7583s
+Epoch: 24, Cost time: 13.089s 
+[INFO] Saved checkpoint to: outputs/TNS/shared_checkpoints/checkpoint.pth
+	speed: 0.1426s/iter; left time: 261.8974s
+Epoch: 25, Cost time: 13.665s 
+[INFO] Saved checkpoint to: outputs/TNS/shared_checkpoints/checkpoint.pth
+	speed: 0.1385s/iter; left time: 237.6239s
+Epoch: 26, Cost time: 13.275s 
+[INFO] Saved checkpoint to: outputs/TNS/shared_checkpoints/checkpoint.pth
+	speed: 0.1279s/iter; left time: 204.0096s
+Epoch: 27, Cost time: 12.788s 
+[INFO] Saved checkpoint to: outputs/TNS/shared_checkpoints/checkpoint.pth
+	speed: 0.1352s/iter; left time: 199.2948s
+Epoch: 28, Cost time: 13.914s 
+[INFO] Saved checkpoint to: outputs/TNS/shared_checkpoints/checkpoint.pth
+	speed: 0.1308s/iter; left time: 177.0377s
+Epoch: 29, Cost time: 12.881s 
+[INFO] Saved checkpoint to: outputs/TNS/shared_checkpoints/checkpoint.pth
+	speed: 0.1143s/iter; left time: 140.8538s
+Epoch: 30, Cost time: 11.212s 
+[INFO] Saved checkpoint to: outputs/TNS/shared_checkpoints/checkpoint.pth
+	speed: 0.1253s/iter; left time: 139.2114s
+Epoch: 31, Cost time: 12.160s 
+[INFO] Saved checkpoint to: outputs/TNS/shared_checkpoints/checkpoint.pth
+	speed: 0.1092s/iter; left time: 108.1188s
+Epoch: 32, Cost time: 10.781s 
+[INFO] Saved checkpoint to: outputs/TNS/shared_checkpoints/checkpoint.pth
+	speed: 0.1334s/iter; left time: 115.9127s
+Epoch: 33, Cost time: 13.988s 
+[INFO] Saved checkpoint to: outputs/TNS/shared_checkpoints/checkpoint.pth
+	speed: 0.1555s/iter; left time: 116.3033s
+Epoch: 34, Cost time: 15.468s 
+[INFO] Saved checkpoint to: outputs/TNS/shared_checkpoints/checkpoint.pth
+	speed: 0.1117s/iter; left time: 70.0532s
+Epoch: 35, Cost time: 10.176s 
+[INFO] Saved checkpoint to: outputs/TNS/shared_checkpoints/checkpoint.pth
+	speed: 0.1187s/iter; left time: 60.0528s
+Epoch: 36, Cost time: 12.458s 
+[INFO] Saved checkpoint to: outputs/TNS/shared_checkpoints/checkpoint.pth
+	speed: 0.1244s/iter; left time: 47.8984s
+Epoch: 37, Cost time: 12.423s 
+[INFO] Saved checkpoint to: outputs/TNS/shared_checkpoints/checkpoint.pth
+	speed: 0.1469s/iter; left time: 38.7818s
+Epoch: 38, Cost time: 14.444s 
+[INFO] Saved checkpoint to: outputs/TNS/shared_checkpoints/checkpoint.pth
+	speed: 0.1219s/iter; left time: 17.4382s
+Epoch: 39, Cost time: 11.342s 
+[INFO] Saved checkpoint to: outputs/TNS/shared_checkpoints/checkpoint.pth
+	speed: 0.1105s/iter; left time: 2.4318s
+Epoch: 40, Cost time: 12.021s 
+[INFO] Saved checkpoint to: outputs/TNS/shared_checkpoints/checkpoint.pth
+[TNS_V2:train] split=train
+[TNS_V2:train] total_packets=3900
+[TNS_V2:train] num_windows=3896
+[TNS_V2:train] anomaly_packets=0
+[TNS_V2:train] first window shape=(5, 10)
+[TNS_V2:train] first pkt_idx=[0 1 2 3 4]
+[TNS_V2:val] split=val
+[TNS_V2:val] total_packets=500
+[TNS_V2:val] num_windows=496
+[TNS_V2:val] anomaly_packets=0
+[TNS_V2:val] first window shape=(5, 10)
+[TNS_V2:val] first pkt_idx=[0 1 2 3 4]
+[TNS_V2:test] split=test_mixed
+[TNS_V2:test] total_packets=600
+[TNS_V2:test] num_windows=596
+[TNS_V2:test] anomaly_packets=6
+[TNS_V2:test] first window shape=(5, 10)
+[TNS_V2:test] first pkt_idx=[0 1 2 3 4]
+[TNS_V2:thre] split=val
+[TNS_V2:thre] total_packets=500
+[TNS_V2:thre] num_windows=496
+[TNS_V2:thre] anomaly_packets=0
+[TNS_V2:thre] first window shape=(5, 10)
+[TNS_V2:thre] first pkt_idx=[0 1 2 3 4]
+[INFO] Output directory: outputs/TNS/20260330_170950_ws5_ps5_bs32_ep10
+dataset window_labels shape = (596, 5)
+dataset last window pkt_idx = [595 596 597 598 599]
+[INFO] packet_score_mode = position
+Threshold : -965.4277587890625
+[DEBUG][test_loop] batch=0 input_shape=torch.Size([32, 5, 10]) labels_shape=torch.Size([32, 5])
+[DEBUG][test_loop] labels sum in batch = 0.0
+[DEBUG][test_loop] pkt_idx first=[0 1 2 3 4] last=[31 32 33 34 35]
+cri.shape before agg = (32, 5)
+cri_window.shape = (32,)
+[DEBUG][test_loop] batch=1 input_shape=torch.Size([32, 5, 10]) labels_shape=torch.Size([32, 5])
+[DEBUG][test_loop] labels sum in batch = 5.0
+[DEBUG][test_loop] pkt_idx first=[32 33 34 35 36] last=[63 64 65 66 67]
+cri.shape before agg = (32, 5)
+cri_window.shape = (32,)
+[DEBUG][test_loop] batch=2 input_shape=torch.Size([32, 5, 10]) labels_shape=torch.Size([32, 5])
+[DEBUG][test_loop] labels sum in batch = 0.0
+[DEBUG][test_loop] pkt_idx first=[64 65 66 67 68] last=[95 96 97 98 99]
+cri.shape before agg = (32, 5)
+cri_window.shape = (32,)
+[DEBUG][test_loop] batch=3 input_shape=torch.Size([32, 5, 10]) labels_shape=torch.Size([32, 5])
+[DEBUG][test_loop] labels sum in batch = 0.0
+[DEBUG][test_loop] pkt_idx first=[ 96  97  98  99 100] last=[127 128 129 130 131]
+cri.shape before agg = (32, 5)
+cri_window.shape = (32,)
+[DEBUG][test_loop] batch=4 input_shape=torch.Size([32, 5, 10]) labels_shape=torch.Size([32, 5])
+[DEBUG][test_loop] labels sum in batch = 0.0
+[DEBUG][test_loop] pkt_idx first=[128 129 130 131 132] last=[159 160 161 162 163]
+cri.shape before agg = (32, 5)
+cri_window.shape = (32,)
+[DEBUG][test_loop] batch=5 input_shape=torch.Size([32, 5, 10]) labels_shape=torch.Size([32, 5])
+[DEBUG][test_loop] labels sum in batch = 0.0
+[DEBUG][test_loop] pkt_idx first=[160 161 162 163 164] last=[191 192 193 194 195]
+cri.shape before agg = (32, 5)
+cri_window.shape = (32,)
+[DEBUG][test_loop] batch=6 input_shape=torch.Size([32, 5, 10]) labels_shape=torch.Size([32, 5])
+[DEBUG][test_loop] labels sum in batch = 0.0
+[DEBUG][test_loop] pkt_idx first=[192 193 194 195 196] last=[223 224 225 226 227]
+cri.shape before agg = (32, 5)
+cri_window.shape = (32,)
+[DEBUG][test_loop] batch=7 input_shape=torch.Size([32, 5, 10]) labels_shape=torch.Size([32, 5])
+[DEBUG][test_loop] labels sum in batch = 1.0
+[DEBUG][test_loop] pkt_idx first=[224 225 226 227 228] last=[255 256 257 258 259]
+cri.shape before agg = (32, 5)
+cri_window.shape = (32,)
+[DEBUG][test_loop] batch=8 input_shape=torch.Size([32, 5, 10]) labels_shape=torch.Size([32, 5])
+[DEBUG][test_loop] labels sum in batch = 9.0
+[DEBUG][test_loop] pkt_idx first=[256 257 258 259 260] last=[287 288 289 290 291]
+cri.shape before agg = (32, 5)
+cri_window.shape = (32,)
+[DEBUG][test_loop] batch=9 input_shape=torch.Size([32, 5, 10]) labels_shape=torch.Size([32, 5])
+[DEBUG][test_loop] labels sum in batch = 0.0
+[DEBUG][test_loop] pkt_idx first=[288 289 290 291 292] last=[319 320 321 322 323]
+cri.shape before agg = (32, 5)
+cri_window.shape = (32,)
+[DEBUG][test_loop] batch=10 input_shape=torch.Size([32, 5, 10]) labels_shape=torch.Size([32, 5])
+[DEBUG][test_loop] labels sum in batch = 0.0
+[DEBUG][test_loop] pkt_idx first=[320 321 322 323 324] last=[351 352 353 354 355]
+cri.shape before agg = (32, 5)
+cri_window.shape = (32,)
+[DEBUG][test_loop] batch=11 input_shape=torch.Size([32, 5, 10]) labels_shape=torch.Size([32, 5])
+[DEBUG][test_loop] labels sum in batch = 0.0
+[DEBUG][test_loop] pkt_idx first=[352 353 354 355 356] last=[383 384 385 386 387]
+cri.shape before agg = (32, 5)
+cri_window.shape = (32,)
+[DEBUG][test_loop] batch=12 input_shape=torch.Size([32, 5, 10]) labels_shape=torch.Size([32, 5])
+[DEBUG][test_loop] labels sum in batch = 5.0
+[DEBUG][test_loop] pkt_idx first=[384 385 386 387 388] last=[415 416 417 418 419]
+cri.shape before agg = (32, 5)
+cri_window.shape = (32,)
+[DEBUG][test_loop] batch=13 input_shape=torch.Size([32, 5, 10]) labels_shape=torch.Size([32, 5])
+[DEBUG][test_loop] labels sum in batch = 0.0
+[DEBUG][test_loop] pkt_idx first=[416 417 418 419 420] last=[447 448 449 450 451]
+cri.shape before agg = (32, 5)
+cri_window.shape = (32,)
+[DEBUG][test_loop] batch=14 input_shape=torch.Size([32, 5, 10]) labels_shape=torch.Size([32, 5])
+[DEBUG][test_loop] labels sum in batch = 5.0
+[DEBUG][test_loop] pkt_idx first=[448 449 450 451 452] last=[479 480 481 482 483]
+cri.shape before agg = (32, 5)
+cri_window.shape = (32,)
+[DEBUG][test_loop] batch=15 input_shape=torch.Size([32, 5, 10]) labels_shape=torch.Size([32, 5])
+[DEBUG][test_loop] labels sum in batch = 1.0
+[DEBUG][test_loop] pkt_idx first=[480 481 482 483 484] last=[511 512 513 514 515]
+cri.shape before agg = (32, 5)
+cri_window.shape = (32,)
+[DEBUG][test_loop] batch=16 input_shape=torch.Size([32, 5, 10]) labels_shape=torch.Size([32, 5])
+[DEBUG][test_loop] labels sum in batch = 4.0
+[DEBUG][test_loop] pkt_idx first=[512 513 514 515 516] last=[543 544 545 546 547]
+cri.shape before agg = (32, 5)
+cri_window.shape = (32,)
+[DEBUG][test_loop] batch=17 input_shape=torch.Size([32, 5, 10]) labels_shape=torch.Size([32, 5])
+[DEBUG][test_loop] labels sum in batch = 0.0
+[DEBUG][test_loop] pkt_idx first=[544 545 546 547 548] last=[575 576 577 578 579]
+cri.shape before agg = (32, 5)
+cri_window.shape = (32,)
+[DEBUG][test_loop] batch=18 input_shape=torch.Size([20, 5, 10]) labels_shape=torch.Size([20, 5])
+[DEBUG][test_loop] labels sum in batch = 0.0
+[DEBUG][test_loop] pkt_idx first=[576 577 578 579 580] last=[595 596 597 598 599]
+cri.shape before agg = (20, 5)
+cri_window.shape = (20,)
+len(test_energy) = 596
+test_energy shape = (596,)
+[INFO] packet_score_mode = position
+raw anomaly packet idx = [ 53 259 262 390 461 515]
+valid mask on anomaly idx = [ True  True  True  True  True  True]
+
+==============================================================================================================
+Pretty Inspect: packet-in-window position scores
+packet_threshold = -965.427759
+==============================================================================================================
+
+[Target packet 53] covered by 5 windows
+--------------------------------------------------------------------------------------------------------------
+window_rank=01 | window_idx=  51 | target_pos=2 | target_score=-965.426636
+ pos | packet_idx | score       | mark 
+-----+------------+-------------+------
+   0 |         51 | -965.433716 | 
+   1 |         52 | -965.432129 | 
+   2 |         53 | -965.426636 | TARGET,>thr
+   3 |         54 | -965.438416 | 
+   4 |         55 | -965.436340 | 
+--------------------------------------------------------------------------------------------------------------
+window_rank=02 | window_idx=  50 | target_pos=3 | target_score=-965.430176
+ pos | packet_idx | score       | mark 
+-----+------------+-------------+------
+   0 |         50 | -965.437988 | 
+   1 |         51 | -965.431213 | 
+   2 |         52 | -965.425659 | >thr
+   3 |         53 | -965.430176 | TARGET
+   4 |         54 | -965.430481 | 
+--------------------------------------------------------------------------------------------------------------
+window_rank=03 | window_idx=  53 | target_pos=0 | target_score=-965.431030
+ pos | packet_idx | score       | mark 
+-----+------------+-------------+------
+   0 |         53 | -965.431030 | TARGET
+   1 |         54 | -965.436035 | 
+   2 |         55 | -965.425171 | >thr
+   3 |         56 | -965.435303 | 
+   4 |         57 | -965.434570 | 
+--------------------------------------------------------------------------------------------------------------
+window_rank=04 | window_idx=  52 | target_pos=1 | target_score=-965.431396
+ pos | packet_idx | score       | mark 
+-----+------------+-------------+------
+   0 |         52 | -965.427979 | 
+   1 |         53 | -965.431396 | TARGET
+   2 |         54 | -965.426514 | >thr
+   3 |         55 | -965.431641 | 
+   4 |         56 | -965.427246 | >thr
+--------------------------------------------------------------------------------------------------------------
+window_rank=05 | window_idx=  49 | target_pos=4 | target_score=-965.438538
+ pos | packet_idx | score       | mark 
+-----+------------+-------------+------
+   0 |         49 | -965.436218 | 
+   1 |         50 | -965.433716 | 
+   2 |         51 | -965.426086 | >thr
+   3 |         52 | -965.432129 | 
+   4 |         53 | -965.438538 | TARGET
+--------------------------------------------------------------------------------------------------------------
+
+[Target packet 259] covered by 5 windows
+--------------------------------------------------------------------------------------------------------------
+window_rank=01 | window_idx= 257 | target_pos=2 | target_score=-965.425049
+ pos | packet_idx | score       | mark 
+-----+------------+-------------+------
+   0 |        257 | -965.428711 | 
+   1 |        258 | -965.428284 | 
+   2 |        259 | -965.425049 | TARGET,>thr
+   3 |        260 | -965.432556 | 
+   4 |        261 | -965.427551 | >thr
+--------------------------------------------------------------------------------------------------------------
+window_rank=02 | window_idx= 258 | target_pos=1 | target_score=-965.428467
+ pos | packet_idx | score       | mark 
+-----+------------+-------------+------
+   0 |        258 | -965.428406 | 
+   1 |        259 | -965.428467 | TARGET
+   2 |        260 | -965.431946 | 
+   3 |        261 | -965.428284 | 
+   4 |        262 | -965.430481 | 
+--------------------------------------------------------------------------------------------------------------
+window_rank=03 | window_idx= 255 | target_pos=4 | target_score=-965.431641
+ pos | packet_idx | score       | mark 
+-----+------------+-------------+------
+   0 |        255 | -965.433411 | 
+   1 |        256 | -965.433716 | 
+   2 |        257 | -965.428162 | 
+   3 |        258 | -965.430481 | 
+   4 |        259 | -965.431641 | TARGET
+--------------------------------------------------------------------------------------------------------------
+window_rank=04 | window_idx= 259 | target_pos=0 | target_score=-965.434143
+ pos | packet_idx | score       | mark 
+-----+------------+-------------+------
+   0 |        259 | -965.434143 | TARGET
+   1 |        260 | -965.433105 | 
+   2 |        261 | -965.426697 | >thr
+   3 |        262 | -965.435181 | 
+   4 |        263 | -965.430481 | 
+--------------------------------------------------------------------------------------------------------------
+window_rank=05 | window_idx= 256 | target_pos=3 | target_score=-965.434448
+ pos | packet_idx | score       | mark 
+-----+------------+-------------+------
+   0 |        256 | -965.432251 | 
+   1 |        257 | -965.431030 | 
+   2 |        258 | -965.426208 | >thr
+   3 |        259 | -965.434448 | TARGET
+   4 |        260 | -965.431946 | 
+--------------------------------------------------------------------------------------------------------------
+
+[Target packet 262] covered by 5 windows
+--------------------------------------------------------------------------------------------------------------
+window_rank=01 | window_idx= 260 | target_pos=2 | target_score=-965.427551
+ pos | packet_idx | score       | mark 
+-----+------------+-------------+------
+   0 |        260 | -965.430481 | 
+   1 |        261 | -965.431030 | 
+   2 |        262 | -965.427551 | TARGET,>thr
+   3 |        263 | -965.432800 | 
+   4 |        264 | -965.432495 | 
+--------------------------------------------------------------------------------------------------------------
+window_rank=02 | window_idx= 258 | target_pos=4 | target_score=-965.430481
+ pos | packet_idx | score       | mark 
+-----+------------+-------------+------
+   0 |        258 | -965.428406 | 
+   1 |        259 | -965.428467 | 
+   2 |        260 | -965.431946 | 
+   3 |        261 | -965.428284 | 
+   4 |        262 | -965.430481 | TARGET
+--------------------------------------------------------------------------------------------------------------
+window_rank=03 | window_idx= 261 | target_pos=1 | target_score=-965.431091
+ pos | packet_idx | score       | mark 
+-----+------------+-------------+------
+   0 |        261 | -965.433228 | 
+   1 |        262 | -965.431091 | TARGET
+   2 |        263 | -965.425537 | >thr
+   3 |        264 | -965.429749 | 
+   4 |        265 | -965.431519 | 
+--------------------------------------------------------------------------------------------------------------
+window_rank=04 | window_idx= 262 | target_pos=0 | target_score=-965.433289
+ pos | packet_idx | score       | mark 
+-----+------------+-------------+------
+   0 |        262 | -965.433289 | TARGET
+   1 |        263 | -965.429016 | 
+   2 |        264 | -965.427734 | >thr
+   3 |        265 | -965.430481 | 
+   4 |        266 | -965.435303 | 
+--------------------------------------------------------------------------------------------------------------
+window_rank=05 | window_idx= 259 | target_pos=3 | target_score=-965.435181
+ pos | packet_idx | score       | mark 
+-----+------------+-------------+------
+   0 |        259 | -965.434143 | 
+   1 |        260 | -965.433105 | 
+   2 |        261 | -965.426697 | >thr
+   3 |        262 | -965.435181 | TARGET
+   4 |        263 | -965.430481 | 
+--------------------------------------------------------------------------------------------------------------
+
+[Target packet 390] covered by 5 windows
+--------------------------------------------------------------------------------------------------------------
+window_rank=01 | window_idx= 388 | target_pos=2 | target_score=-965.426208
+ pos | packet_idx | score       | mark 
+-----+------------+-------------+------
+   0 |        388 | -965.434265 | 
+   1 |        389 | -965.431519 | 
+   2 |        390 | -965.426208 | TARGET,>thr
+   3 |        391 | -965.436462 | 
+   4 |        392 | -965.439819 | 
+--------------------------------------------------------------------------------------------------------------
+window_rank=02 | window_idx= 390 | target_pos=0 | target_score=-965.426392
+ pos | packet_idx | score       | mark 
+-----+------------+-------------+------
+   0 |        390 | -965.426392 | TARGET,>thr
+   1 |        391 | -965.431946 | 
+   2 |        392 | -965.425476 | >thr
+   3 |        393 | -965.431030 | 
+   4 |        394 | -965.431091 | 
+--------------------------------------------------------------------------------------------------------------
+window_rank=03 | window_idx= 389 | target_pos=1 | target_score=-965.434570
+ pos | packet_idx | score       | mark 
+-----+------------+-------------+------
+   0 |        389 | -965.437256 | 
+   1 |        390 | -965.434570 | TARGET
+   2 |        391 | -965.426270 | >thr
+   3 |        392 | -965.433716 | 
+   4 |        393 | -965.434570 | 
+--------------------------------------------------------------------------------------------------------------
+window_rank=04 | window_idx= 387 | target_pos=3 | target_score=-965.435181
+ pos | packet_idx | score       | mark 
+-----+------------+-------------+------
+   0 |        387 | -965.433594 | 
+   1 |        388 | -965.431946 | 
+   2 |        389 | -965.425171 | >thr
+   3 |        390 | -965.435181 | TARGET
+   4 |        391 | -965.428894 | 
+--------------------------------------------------------------------------------------------------------------
+window_rank=05 | window_idx= 386 | target_pos=4 | target_score=-965.442078
+ pos | packet_idx | score       | mark 
+-----+------------+-------------+------
+   0 |        386 | -965.435425 | 
+   1 |        387 | -965.431763 | 
+   2 |        388 | -965.427551 | >thr
+   3 |        389 | -965.433289 | 
+   4 |        390 | -965.442078 | TARGET
+--------------------------------------------------------------------------------------------------------------
+
+[Target packet 461] covered by 5 windows
+--------------------------------------------------------------------------------------------------------------
+window_rank=01 | window_idx= 458 | target_pos=3 | target_score=-965.427124
+ pos | packet_idx | score       | mark 
+-----+------------+-------------+------
+   0 |        458 | -965.427551 | >thr
+   1 |        459 | -965.430664 | 
+   2 |        460 | -965.427124 | >thr
+   3 |        461 | -965.427124 | TARGET,>thr
+   4 |        462 | -965.425049 | >thr
+--------------------------------------------------------------------------------------------------------------
+window_rank=02 | window_idx= 459 | target_pos=2 | target_score=-965.427368
+ pos | packet_idx | score       | mark 
+-----+------------+-------------+------
+   0 |        459 | -965.430786 | 
+   1 |        460 | -965.430481 | 
+   2 |        461 | -965.427368 | TARGET,>thr
+   3 |        462 | -965.431824 | 
+   4 |        463 | -965.444580 | 
+--------------------------------------------------------------------------------------------------------------
+window_rank=03 | window_idx= 457 | target_pos=4 | target_score=-965.427551
+ pos | packet_idx | score       | mark 
+-----+------------+-------------+------
+   0 |        457 | -965.428467 | 
+   1 |        458 | -965.425171 | >thr
+   2 |        459 | -965.427368 | >thr
+   3 |        460 | -965.432129 | 
+   4 |        461 | -965.427551 | TARGET,>thr
+--------------------------------------------------------------------------------------------------------------
+window_rank=04 | window_idx= 461 | target_pos=0 | target_score=-965.428101
+ pos | packet_idx | score       | mark 
+-----+------------+-------------+------
+   0 |        461 | -965.428101 | TARGET
+   1 |        462 | -965.434692 | 
+   2 |        463 | -965.434753 | 
+   3 |        464 | -965.436218 | 
+   4 |        465 | -965.429443 | 
+--------------------------------------------------------------------------------------------------------------
+window_rank=05 | window_idx= 460 | target_pos=1 | target_score=-965.431641
+ pos | packet_idx | score       | mark 
+-----+------------+-------------+------
+   0 |        460 | -965.427368 | >thr
+   1 |        461 | -965.431641 | TARGET
+   2 |        462 | -965.427002 | >thr
+   3 |        463 | -965.465332 | 
+   4 |        464 | -965.430786 | 
+--------------------------------------------------------------------------------------------------------------
+
+[Target packet 515] covered by 5 windows
+--------------------------------------------------------------------------------------------------------------
+window_rank=01 | window_idx= 513 | target_pos=2 | target_score=-965.426697
+ pos | packet_idx | score       | mark 
+-----+------------+-------------+------
+   0 |        513 | -965.431885 | 
+   1 |        514 | -965.429443 | 
+   2 |        515 | -965.426697 | TARGET,>thr
+   3 |        516 | -965.439575 | 
+   4 |        517 | -965.433716 | 
+--------------------------------------------------------------------------------------------------------------
+window_rank=02 | window_idx= 515 | target_pos=0 | target_score=-965.426941
+ pos | packet_idx | score       | mark 
+-----+------------+-------------+------
+   0 |        515 | -965.426941 | TARGET,>thr
+   1 |        516 | -965.433228 | 
+   2 |        517 | -965.426270 | >thr
+   3 |        518 | -965.431335 | 
+   4 |        519 | -965.435181 | 
+--------------------------------------------------------------------------------------------------------------
+window_rank=03 | window_idx= 511 | target_pos=4 | target_score=-965.429871
+ pos | packet_idx | score       | mark 
+-----+------------+-------------+------
+   0 |        511 | -965.425537 | >thr
+   1 |        512 | -965.427856 | 
+   2 |        513 | -965.424438 | >thr
+   3 |        514 | -965.427979 | 
+   4 |        515 | -965.429871 | TARGET
+--------------------------------------------------------------------------------------------------------------
+window_rank=04 | window_idx= 514 | target_pos=1 | target_score=-965.430054
+ pos | packet_idx | score       | mark 
+-----+------------+-------------+------
+   0 |        514 | -965.429321 | 
+   1 |        515 | -965.430054 | TARGET
+   2 |        516 | -965.429443 | 
+   3 |        517 | -965.430481 | 
+   4 |        518 | -965.431030 | 
+--------------------------------------------------------------------------------------------------------------
+window_rank=05 | window_idx= 512 | target_pos=3 | target_score=-965.433411
+ pos | packet_idx | score       | mark 
+-----+------------+-------------+------
+   0 |        512 | -965.435181 | 
+   1 |        513 | -965.432251 | 
+   2 |        514 | -965.425049 | >thr
+   3 |        515 | -965.433411 | TARGET
+   4 |        516 | -965.430908 | 
+--------------------------------------------------------------------------------------------------------------
+[INFO] Saved pretty print to: outputs/TNS/20260330_170950_ws5_ps5_bs32_ep10/analysis/pretty_packet_window_scores.txt
+selected packet idx head/tail = [ 0  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15 16 17 18 19] [580 581 582 583 584 585 586 587 588 589 590 591 592 593 594 595 596 597
+ 598 599]
+true anomaly after test_valid_mask = 6
+num anomaly removed by valid mask = 0
+num_valid_test_packets = 600
+num_valid_thre_packets = 500
+=========packet level=============
+num normal packets = 594
+num anomaly packets = 6
+normal packet score: min=-965.447424, max=-965.425781, mean=-965.432167, std=0.003287
+anomaly packet score: min=-965.432886, max=-965.428357, mean=-965.430743, std=0.001492
+[INFO] Saved packet score analysis to outputs/TNS/20260330_170950_ws5_ps5_bs32_ep10/analysis
+TP packet indices: []
+TP = 0
+FP = 12
+FN = 6
+TN = 582
+Packet Threshold : -965.427759
+Packet Accuracy : 0.9700, Packet Precision : 0.0000, Packet Recall : 0.0000, Packet F-score : 0.0000
+[TNS_V2:train] split=train
+[TNS_V2:train] total_packets=3900
+[TNS_V2:train] num_windows=3896
+[TNS_V2:train] anomaly_packets=0
+[TNS_V2:train] first window shape=(5, 10)
+[TNS_V2:train] first pkt_idx=[0 1 2 3 4]
+[TNS_V2:val] split=val
+[TNS_V2:val] total_packets=500
+[TNS_V2:val] num_windows=496
+[TNS_V2:val] anomaly_packets=0
+[TNS_V2:val] first window shape=(5, 10)
+[TNS_V2:val] first pkt_idx=[0 1 2 3 4]
+[TNS_V2:test] split=test_mixed
+[TNS_V2:test] total_packets=600
+[TNS_V2:test] num_windows=596
+[TNS_V2:test] anomaly_packets=6
+[TNS_V2:test] first window shape=(5, 10)
+[TNS_V2:test] first pkt_idx=[0 1 2 3 4]
+[TNS_V2:thre] split=val
+[TNS_V2:thre] total_packets=500
+[TNS_V2:thre] num_windows=496
+[TNS_V2:thre] anomaly_packets=0
+[TNS_V2:thre] first window shape=(5, 10)
+[TNS_V2:thre] first pkt_idx=[0 1 2 3 4]
+[INFO] Output directory: outputs/TNS/20260330_171326_ws5_ps5_bs32_ep10
+dataset window_labels shape = (596, 5)
+dataset last window pkt_idx = [595 596 597 598 599]
+[INFO] packet_score_mode = window
+Threshold : -965.4244384765625
+[DEBUG][test_loop] batch=0 input_shape=torch.Size([32, 5, 10]) labels_shape=torch.Size([32, 5])
+[DEBUG][test_loop] labels sum in batch = 0.0
+[DEBUG][test_loop] pkt_idx first=[0 1 2 3 4] last=[31 32 33 34 35]
+cri.shape before agg = (32, 5)
+cri_window.shape = (32,)
+[DEBUG][test_loop] batch=1 input_shape=torch.Size([32, 5, 10]) labels_shape=torch.Size([32, 5])
+[DEBUG][test_loop] labels sum in batch = 5.0
+[DEBUG][test_loop] pkt_idx first=[32 33 34 35 36] last=[63 64 65 66 67]
+cri.shape before agg = (32, 5)
+cri_window.shape = (32,)
+[DEBUG][test_loop] batch=2 input_shape=torch.Size([32, 5, 10]) labels_shape=torch.Size([32, 5])
+[DEBUG][test_loop] labels sum in batch = 0.0
+[DEBUG][test_loop] pkt_idx first=[64 65 66 67 68] last=[95 96 97 98 99]
+cri.shape before agg = (32, 5)
+cri_window.shape = (32,)
+[DEBUG][test_loop] batch=3 input_shape=torch.Size([32, 5, 10]) labels_shape=torch.Size([32, 5])
+[DEBUG][test_loop] labels sum in batch = 0.0
+[DEBUG][test_loop] pkt_idx first=[ 96  97  98  99 100] last=[127 128 129 130 131]
+cri.shape before agg = (32, 5)
+cri_window.shape = (32,)
+[DEBUG][test_loop] batch=4 input_shape=torch.Size([32, 5, 10]) labels_shape=torch.Size([32, 5])
+[DEBUG][test_loop] labels sum in batch = 0.0
+[DEBUG][test_loop] pkt_idx first=[128 129 130 131 132] last=[159 160 161 162 163]
+cri.shape before agg = (32, 5)
+cri_window.shape = (32,)
+[DEBUG][test_loop] batch=5 input_shape=torch.Size([32, 5, 10]) labels_shape=torch.Size([32, 5])
+[DEBUG][test_loop] labels sum in batch = 0.0
+[DEBUG][test_loop] pkt_idx first=[160 161 162 163 164] last=[191 192 193 194 195]
+cri.shape before agg = (32, 5)
+cri_window.shape = (32,)
+[DEBUG][test_loop] batch=6 input_shape=torch.Size([32, 5, 10]) labels_shape=torch.Size([32, 5])
+[DEBUG][test_loop] labels sum in batch = 0.0
+[DEBUG][test_loop] pkt_idx first=[192 193 194 195 196] last=[223 224 225 226 227]
+cri.shape before agg = (32, 5)
+cri_window.shape = (32,)
+[DEBUG][test_loop] batch=7 input_shape=torch.Size([32, 5, 10]) labels_shape=torch.Size([32, 5])
+[DEBUG][test_loop] labels sum in batch = 1.0
+[DEBUG][test_loop] pkt_idx first=[224 225 226 227 228] last=[255 256 257 258 259]
+cri.shape before agg = (32, 5)
+cri_window.shape = (32,)
+[DEBUG][test_loop] batch=8 input_shape=torch.Size([32, 5, 10]) labels_shape=torch.Size([32, 5])
+[DEBUG][test_loop] labels sum in batch = 9.0
+[DEBUG][test_loop] pkt_idx first=[256 257 258 259 260] last=[287 288 289 290 291]
+cri.shape before agg = (32, 5)
+cri_window.shape = (32,)
+[DEBUG][test_loop] batch=9 input_shape=torch.Size([32, 5, 10]) labels_shape=torch.Size([32, 5])
+[DEBUG][test_loop] labels sum in batch = 0.0
+[DEBUG][test_loop] pkt_idx first=[288 289 290 291 292] last=[319 320 321 322 323]
+cri.shape before agg = (32, 5)
+cri_window.shape = (32,)
+[DEBUG][test_loop] batch=10 input_shape=torch.Size([32, 5, 10]) labels_shape=torch.Size([32, 5])
+[DEBUG][test_loop] labels sum in batch = 0.0
+[DEBUG][test_loop] pkt_idx first=[320 321 322 323 324] last=[351 352 353 354 355]
+cri.shape before agg = (32, 5)
+cri_window.shape = (32,)
+[DEBUG][test_loop] batch=11 input_shape=torch.Size([32, 5, 10]) labels_shape=torch.Size([32, 5])
+[DEBUG][test_loop] labels sum in batch = 0.0
+[DEBUG][test_loop] pkt_idx first=[352 353 354 355 356] last=[383 384 385 386 387]
+cri.shape before agg = (32, 5)
+cri_window.shape = (32,)
+[DEBUG][test_loop] batch=12 input_shape=torch.Size([32, 5, 10]) labels_shape=torch.Size([32, 5])
+[DEBUG][test_loop] labels sum in batch = 5.0
+[DEBUG][test_loop] pkt_idx first=[384 385 386 387 388] last=[415 416 417 418 419]
+cri.shape before agg = (32, 5)
+cri_window.shape = (32,)
+[DEBUG][test_loop] batch=13 input_shape=torch.Size([32, 5, 10]) labels_shape=torch.Size([32, 5])
+[DEBUG][test_loop] labels sum in batch = 0.0
+[DEBUG][test_loop] pkt_idx first=[416 417 418 419 420] last=[447 448 449 450 451]
+cri.shape before agg = (32, 5)
+cri_window.shape = (32,)
+[DEBUG][test_loop] batch=14 input_shape=torch.Size([32, 5, 10]) labels_shape=torch.Size([32, 5])
+[DEBUG][test_loop] labels sum in batch = 5.0
+[DEBUG][test_loop] pkt_idx first=[448 449 450 451 452] last=[479 480 481 482 483]
+cri.shape before agg = (32, 5)
+cri_window.shape = (32,)
+[DEBUG][test_loop] batch=15 input_shape=torch.Size([32, 5, 10]) labels_shape=torch.Size([32, 5])
+[DEBUG][test_loop] labels sum in batch = 1.0
+[DEBUG][test_loop] pkt_idx first=[480 481 482 483 484] last=[511 512 513 514 515]
+cri.shape before agg = (32, 5)
+cri_window.shape = (32,)
+[DEBUG][test_loop] batch=16 input_shape=torch.Size([32, 5, 10]) labels_shape=torch.Size([32, 5])
+[DEBUG][test_loop] labels sum in batch = 4.0
+[DEBUG][test_loop] pkt_idx first=[512 513 514 515 516] last=[543 544 545 546 547]
+cri.shape before agg = (32, 5)
+cri_window.shape = (32,)
+[DEBUG][test_loop] batch=17 input_shape=torch.Size([32, 5, 10]) labels_shape=torch.Size([32, 5])
+[DEBUG][test_loop] labels sum in batch = 0.0
+[DEBUG][test_loop] pkt_idx first=[544 545 546 547 548] last=[575 576 577 578 579]
+cri.shape before agg = (32, 5)
+cri_window.shape = (32,)
+[DEBUG][test_loop] batch=18 input_shape=torch.Size([20, 5, 10]) labels_shape=torch.Size([20, 5])
+[DEBUG][test_loop] labels sum in batch = 0.0
+[DEBUG][test_loop] pkt_idx first=[576 577 578 579 580] last=[595 596 597 598 599]
+cri.shape before agg = (20, 5)
+cri_window.shape = (20,)
+len(test_energy) = 596
+test_energy shape = (596,)
+[INFO] packet_score_mode = window
+raw anomaly packet idx = [ 53 259 262 390 461 515]
+valid mask on anomaly idx = [ True  True  True  True  True  True]
+
+==============================================================================================================
+Pretty Inspect: packet-in-window position scores
+packet_threshold = -965.425427
+==============================================================================================================
+
+[Target packet 53] covered by 5 windows
+--------------------------------------------------------------------------------------------------------------
+window_rank=01 | window_idx=  51 | target_pos=2 | target_score=-965.426636
+ pos | packet_idx | score       | mark 
+-----+------------+-------------+------
+   0 |         51 | -965.433716 | 
+   1 |         52 | -965.432129 | 
+   2 |         53 | -965.426636 | TARGET
+   3 |         54 | -965.438416 | 
+   4 |         55 | -965.436340 | 
+--------------------------------------------------------------------------------------------------------------
+window_rank=02 | window_idx=  50 | target_pos=3 | target_score=-965.430176
+ pos | packet_idx | score       | mark 
+-----+------------+-------------+------
+   0 |         50 | -965.437988 | 
+   1 |         51 | -965.431213 | 
+   2 |         52 | -965.425659 | 
+   3 |         53 | -965.430176 | TARGET
+   4 |         54 | -965.430481 | 
+--------------------------------------------------------------------------------------------------------------
+window_rank=03 | window_idx=  53 | target_pos=0 | target_score=-965.431030
+ pos | packet_idx | score       | mark 
+-----+------------+-------------+------
+   0 |         53 | -965.431030 | TARGET
+   1 |         54 | -965.436035 | 
+   2 |         55 | -965.425171 | >thr
+   3 |         56 | -965.435303 | 
+   4 |         57 | -965.434570 | 
+--------------------------------------------------------------------------------------------------------------
+window_rank=04 | window_idx=  52 | target_pos=1 | target_score=-965.431396
+ pos | packet_idx | score       | mark 
+-----+------------+-------------+------
+   0 |         52 | -965.427979 | 
+   1 |         53 | -965.431396 | TARGET
+   2 |         54 | -965.426514 | 
+   3 |         55 | -965.431641 | 
+   4 |         56 | -965.427246 | 
+--------------------------------------------------------------------------------------------------------------
+window_rank=05 | window_idx=  49 | target_pos=4 | target_score=-965.438538
+ pos | packet_idx | score       | mark 
+-----+------------+-------------+------
+   0 |         49 | -965.436218 | 
+   1 |         50 | -965.433716 | 
+   2 |         51 | -965.426086 | 
+   3 |         52 | -965.432129 | 
+   4 |         53 | -965.438538 | TARGET
+--------------------------------------------------------------------------------------------------------------
+
+[Target packet 259] covered by 5 windows
+--------------------------------------------------------------------------------------------------------------
+window_rank=01 | window_idx= 257 | target_pos=2 | target_score=-965.425049
+ pos | packet_idx | score       | mark 
+-----+------------+-------------+------
+   0 |        257 | -965.428711 | 
+   1 |        258 | -965.428284 | 
+   2 |        259 | -965.425049 | TARGET,>thr
+   3 |        260 | -965.432556 | 
+   4 |        261 | -965.427551 | 
+--------------------------------------------------------------------------------------------------------------
+window_rank=02 | window_idx= 258 | target_pos=1 | target_score=-965.428467
+ pos | packet_idx | score       | mark 
+-----+------------+-------------+------
+   0 |        258 | -965.428406 | 
+   1 |        259 | -965.428467 | TARGET
+   2 |        260 | -965.431946 | 
+   3 |        261 | -965.428284 | 
+   4 |        262 | -965.430481 | 
+--------------------------------------------------------------------------------------------------------------
+window_rank=03 | window_idx= 255 | target_pos=4 | target_score=-965.431641
+ pos | packet_idx | score       | mark 
+-----+------------+-------------+------
+   0 |        255 | -965.433411 | 
+   1 |        256 | -965.433716 | 
+   2 |        257 | -965.428162 | 
+   3 |        258 | -965.430481 | 
+   4 |        259 | -965.431641 | TARGET
+--------------------------------------------------------------------------------------------------------------
+window_rank=04 | window_idx= 259 | target_pos=0 | target_score=-965.434143
+ pos | packet_idx | score       | mark 
+-----+------------+-------------+------
+   0 |        259 | -965.434143 | TARGET
+   1 |        260 | -965.433105 | 
+   2 |        261 | -965.426697 | 
+   3 |        262 | -965.435181 | 
+   4 |        263 | -965.430481 | 
+--------------------------------------------------------------------------------------------------------------
+window_rank=05 | window_idx= 256 | target_pos=3 | target_score=-965.434448
+ pos | packet_idx | score       | mark 
+-----+------------+-------------+------
+   0 |        256 | -965.432251 | 
+   1 |        257 | -965.431030 | 
+   2 |        258 | -965.426208 | 
+   3 |        259 | -965.434448 | TARGET
+   4 |        260 | -965.431946 | 
+--------------------------------------------------------------------------------------------------------------
+
+[Target packet 262] covered by 5 windows
+--------------------------------------------------------------------------------------------------------------
+window_rank=01 | window_idx= 260 | target_pos=2 | target_score=-965.427551
+ pos | packet_idx | score       | mark 
+-----+------------+-------------+------
+   0 |        260 | -965.430481 | 
+   1 |        261 | -965.431030 | 
+   2 |        262 | -965.427551 | TARGET
+   3 |        263 | -965.432800 | 
+   4 |        264 | -965.432495 | 
+--------------------------------------------------------------------------------------------------------------
+window_rank=02 | window_idx= 258 | target_pos=4 | target_score=-965.430481
+ pos | packet_idx | score       | mark 
+-----+------------+-------------+------
+   0 |        258 | -965.428406 | 
+   1 |        259 | -965.428467 | 
+   2 |        260 | -965.431946 | 
+   3 |        261 | -965.428284 | 
+   4 |        262 | -965.430481 | TARGET
+--------------------------------------------------------------------------------------------------------------
+window_rank=03 | window_idx= 261 | target_pos=1 | target_score=-965.431091
+ pos | packet_idx | score       | mark 
+-----+------------+-------------+------
+   0 |        261 | -965.433228 | 
+   1 |        262 | -965.431091 | TARGET
+   2 |        263 | -965.425537 | 
+   3 |        264 | -965.429749 | 
+   4 |        265 | -965.431519 | 
+--------------------------------------------------------------------------------------------------------------
+window_rank=04 | window_idx= 262 | target_pos=0 | target_score=-965.433289
+ pos | packet_idx | score       | mark 
+-----+------------+-------------+------
+   0 |        262 | -965.433289 | TARGET
+   1 |        263 | -965.429016 | 
+   2 |        264 | -965.427734 | 
+   3 |        265 | -965.430481 | 
+   4 |        266 | -965.435303 | 
+--------------------------------------------------------------------------------------------------------------
+window_rank=05 | window_idx= 259 | target_pos=3 | target_score=-965.435181
+ pos | packet_idx | score       | mark 
+-----+------------+-------------+------
+   0 |        259 | -965.434143 | 
+   1 |        260 | -965.433105 | 
+   2 |        261 | -965.426697 | 
+   3 |        262 | -965.435181 | TARGET
+   4 |        263 | -965.430481 | 
+--------------------------------------------------------------------------------------------------------------
+
+[Target packet 390] covered by 5 windows
+--------------------------------------------------------------------------------------------------------------
+window_rank=01 | window_idx= 388 | target_pos=2 | target_score=-965.426208
+ pos | packet_idx | score       | mark 
+-----+------------+-------------+------
+   0 |        388 | -965.434265 | 
+   1 |        389 | -965.431519 | 
+   2 |        390 | -965.426208 | TARGET
+   3 |        391 | -965.436462 | 
+   4 |        392 | -965.439819 | 
+--------------------------------------------------------------------------------------------------------------
+window_rank=02 | window_idx= 390 | target_pos=0 | target_score=-965.426392
+ pos | packet_idx | score       | mark 
+-----+------------+-------------+------
+   0 |        390 | -965.426392 | TARGET
+   1 |        391 | -965.431946 | 
+   2 |        392 | -965.425476 | 
+   3 |        393 | -965.431030 | 
+   4 |        394 | -965.431091 | 
+--------------------------------------------------------------------------------------------------------------
+window_rank=03 | window_idx= 389 | target_pos=1 | target_score=-965.434570
+ pos | packet_idx | score       | mark 
+-----+------------+-------------+------
+   0 |        389 | -965.437256 | 
+   1 |        390 | -965.434570 | TARGET
+   2 |        391 | -965.426270 | 
+   3 |        392 | -965.433716 | 
+   4 |        393 | -965.434570 | 
+--------------------------------------------------------------------------------------------------------------
+window_rank=04 | window_idx= 387 | target_pos=3 | target_score=-965.435181
+ pos | packet_idx | score       | mark 
+-----+------------+-------------+------
+   0 |        387 | -965.433594 | 
+   1 |        388 | -965.431946 | 
+   2 |        389 | -965.425171 | >thr
+   3 |        390 | -965.435181 | TARGET
+   4 |        391 | -965.428894 | 
+--------------------------------------------------------------------------------------------------------------
+window_rank=05 | window_idx= 386 | target_pos=4 | target_score=-965.442078
+ pos | packet_idx | score       | mark 
+-----+------------+-------------+------
+   0 |        386 | -965.435425 | 
+   1 |        387 | -965.431763 | 
+   2 |        388 | -965.427551 | 
+   3 |        389 | -965.433289 | 
+   4 |        390 | -965.442078 | TARGET
+--------------------------------------------------------------------------------------------------------------
+
+[Target packet 461] covered by 5 windows
+--------------------------------------------------------------------------------------------------------------
+window_rank=01 | window_idx= 458 | target_pos=3 | target_score=-965.427124
+ pos | packet_idx | score       | mark 
+-----+------------+-------------+------
+   0 |        458 | -965.427551 | 
+   1 |        459 | -965.430664 | 
+   2 |        460 | -965.427124 | 
+   3 |        461 | -965.427124 | TARGET
+   4 |        462 | -965.425049 | >thr
+--------------------------------------------------------------------------------------------------------------
+window_rank=02 | window_idx= 459 | target_pos=2 | target_score=-965.427368
+ pos | packet_idx | score       | mark 
+-----+------------+-------------+------
+   0 |        459 | -965.430786 | 
+   1 |        460 | -965.430481 | 
+   2 |        461 | -965.427368 | TARGET
+   3 |        462 | -965.431824 | 
+   4 |        463 | -965.444580 | 
+--------------------------------------------------------------------------------------------------------------
+window_rank=03 | window_idx= 457 | target_pos=4 | target_score=-965.427551
+ pos | packet_idx | score       | mark 
+-----+------------+-------------+------
+   0 |        457 | -965.428467 | 
+   1 |        458 | -965.425171 | >thr
+   2 |        459 | -965.427368 | 
+   3 |        460 | -965.432129 | 
+   4 |        461 | -965.427551 | TARGET
+--------------------------------------------------------------------------------------------------------------
+window_rank=04 | window_idx= 461 | target_pos=0 | target_score=-965.428101
+ pos | packet_idx | score       | mark 
+-----+------------+-------------+------
+   0 |        461 | -965.428101 | TARGET
+   1 |        462 | -965.434692 | 
+   2 |        463 | -965.434753 | 
+   3 |        464 | -965.436218 | 
+   4 |        465 | -965.429443 | 
+--------------------------------------------------------------------------------------------------------------
+window_rank=05 | window_idx= 460 | target_pos=1 | target_score=-965.431641
+ pos | packet_idx | score       | mark 
+-----+------------+-------------+------
+   0 |        460 | -965.427368 | 
+   1 |        461 | -965.431641 | TARGET
+   2 |        462 | -965.427002 | 
+   3 |        463 | -965.465332 | 
+   4 |        464 | -965.430786 | 
+--------------------------------------------------------------------------------------------------------------
+
+[Target packet 515] covered by 5 windows
+--------------------------------------------------------------------------------------------------------------
+window_rank=01 | window_idx= 513 | target_pos=2 | target_score=-965.426697
+ pos | packet_idx | score       | mark 
+-----+------------+-------------+------
+   0 |        513 | -965.431885 | 
+   1 |        514 | -965.429443 | 
+   2 |        515 | -965.426697 | TARGET
+   3 |        516 | -965.439575 | 
+   4 |        517 | -965.433716 | 
+--------------------------------------------------------------------------------------------------------------
+window_rank=02 | window_idx= 515 | target_pos=0 | target_score=-965.426941
+ pos | packet_idx | score       | mark 
+-----+------------+-------------+------
+   0 |        515 | -965.426941 | TARGET
+   1 |        516 | -965.433228 | 
+   2 |        517 | -965.426270 | 
+   3 |        518 | -965.431335 | 
+   4 |        519 | -965.435181 | 
+--------------------------------------------------------------------------------------------------------------
+window_rank=03 | window_idx= 511 | target_pos=4 | target_score=-965.429871
+ pos | packet_idx | score       | mark 
+-----+------------+-------------+------
+   0 |        511 | -965.425537 | 
+   1 |        512 | -965.427856 | 
+   2 |        513 | -965.424438 | >thr
+   3 |        514 | -965.427979 | 
+   4 |        515 | -965.429871 | TARGET
+--------------------------------------------------------------------------------------------------------------
+window_rank=04 | window_idx= 514 | target_pos=1 | target_score=-965.430054
+ pos | packet_idx | score       | mark 
+-----+------------+-------------+------
+   0 |        514 | -965.429321 | 
+   1 |        515 | -965.430054 | TARGET
+   2 |        516 | -965.429443 | 
+   3 |        517 | -965.430481 | 
+   4 |        518 | -965.431030 | 
+--------------------------------------------------------------------------------------------------------------
+window_rank=05 | window_idx= 512 | target_pos=3 | target_score=-965.433411
+ pos | packet_idx | score       | mark 
+-----+------------+-------------+------
+   0 |        512 | -965.435181 | 
+   1 |        513 | -965.432251 | 
+   2 |        514 | -965.425049 | >thr
+   3 |        515 | -965.433411 | TARGET
+   4 |        516 | -965.430908 | 
+--------------------------------------------------------------------------------------------------------------
+[INFO] Saved pretty print to: outputs/TNS/20260330_171326_ws5_ps5_bs32_ep10/analysis/pretty_packet_window_scores.txt
+selected packet idx head/tail = [ 0  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15 16 17 18 19] [580 581 582 583 584 585 586 587 588 589 590 591 592 593 594 595 596 597
+ 598 599]
+true anomaly after test_valid_mask = 6
+num anomaly removed by valid mask = 0
+num_valid_test_packets = 600
+num_valid_thre_packets = 500
+=========packet level=============
+num normal packets = 594
+num anomaly packets = 6
+normal packet score: min=-965.431299, max=-965.424438, mean=-965.427212, std=0.001003
+anomaly packet score: min=-965.427161, max=-965.426013, mean=-965.426514, std=0.000403
+[INFO] Saved packet score analysis to outputs/TNS/20260330_171326_ws5_ps5_bs32_ep10/analysis
+TP packet indices: []
+TP = 0
+FP = 11
+FN = 6
+TN = 583
+Packet Threshold : -965.425427
+Packet Accuracy : 0.9717, Packet Precision : 0.0000, Packet Recall : 0.0000, Packet F-score : 0.0000

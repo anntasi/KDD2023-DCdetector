@@ -93,7 +93,7 @@ class Solver(object):
         self.d_model = config.get('d_model', 256)
         self.e_layers = config.get('e_layers', 3)
         self.patch_size = config.get('patch_size', [5])
-        self.packet_score_mode = config.get("packet_score_mode", "position")
+        self.packet_score_mode = config.get("packet_score_mode", "window")
         self.lr = config.get('lr', 1e-4)
         self.num_epochs = config.get('num_epochs', 10)
         self.batch_size = config.get('batch_size', 32)
